@@ -1,0 +1,141 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Wed Jan  9 21:21:01 2019",
+    "version": "eosio::abi/1.1",
+    "structs": [
+        {
+            "name": "addtokenmax",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                },
+                {
+                    "name": "contract_account",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "hello",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "reg",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "config_public_key",
+                    "type": "string"
+                },
+                {
+                    "name": "chestnut_public_key",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "rmtokenmax",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "sym",
+                    "type": "symbol"
+                }
+            ]
+        },
+        {
+            "name": "token_max",
+            "base": "",
+            "fields": [
+                {
+                    "name": "max_transfer",
+                    "type": "asset"
+                },
+                {
+                    "name": "contract_account",
+                    "type": "name"
+                },
+                {
+                    "name": "is_locked",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "transfer",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                },
+                {
+                    "name": "memo",
+                    "type": "string"
+                }
+            ]
+        }
+    ],
+    "types": [],
+    "actions": [
+        {
+            "name": "addtokenmax",
+            "type": "addtokenmax",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "hello",
+            "type": "hello",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "reg",
+            "type": "reg",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "rmtokenmax",
+            "type": "rmtokenmax",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "transfer",
+            "type": "transfer",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "tokensmax",
+            "type": "token_max",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "variants": [],
+    "abi_extensions": []
+}
