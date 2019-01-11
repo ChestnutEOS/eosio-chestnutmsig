@@ -22,7 +22,7 @@ and kept offline if the user wishes for a higher level of security.  Finally, th
 smart contract without ever having to worry about making a mistake.
 
 
-To run
+### To run
 ```bash
 ./start_eosio_docker.sh
 ```
