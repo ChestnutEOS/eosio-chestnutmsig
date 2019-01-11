@@ -18,7 +18,7 @@ When a new user signs up with chestnut, they receive a custom configured eosio a
 new account and are ment to be kept safely offline and used as backup keys for the account.  The third key is associated with a new `config` permission that will be used for
 setting up the parameters of the account.  This key/permission cannot transfer tokens or perform any other eosio action.  The fourth key is associated with a new `chestnut`
 permission that is then linked to token transfers on the chestnut smart contract.  The `config` key can be placed into a wallet and used to configure the parameters then removed
-and kept offline if the user wishes for a higher level of security.  Then the `chestnut` key can placed into any wallet and the user can safely transfer EOS through the chestnut
+and kept offline if the user wishes for a higher level of security.  Finally, the `chestnut` key can placed into any wallet and the user can safely transfer EOS through the chestnut
 smart contract without ever having to worry about making a mistake.
 
 
