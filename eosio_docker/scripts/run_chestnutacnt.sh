@@ -11,9 +11,13 @@ echo '=== New User daniel ==='
 ## This needs to all be done external to the smart contract
 echo '=== MODIFY PERMISSIONS  ==='
 echo 'temporarily give chestnutacnt@eosio.code access to daniel@active'
-cleos set account permission daniel active \
-'{"threshold": 1,"keys": [{"key": "EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b","weight": 1}],"accounts": [{"permission":{"actor":"chestnutacnt","permission":"eosio.code"},"weight":1}], "waits":[]}' \
-owner -p daniel
+## TODO: 
+# cleos push action eosio updateauth '["daniel","active","owner","1,EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b"]'
+# cleos set account permission daniel active \
+# '{"threshold": 1,"keys": [{"key": "EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b","weight": 1}],"accounts": [{"permission":{"actor":"chestnutacnt","permission":"eosio.code"},"weight":1}], "waits":[]}' \
+# owner -p daniel
+
+cleos push action eosio updateauth '{"account":"daniel","permission":"active","parent":"owner","auth":{"keys":[{"key":"EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b", "weight":1}],"threshold":1,"accounts":[{"permission":{"actor":"chestnutacnt","permission":"eosio.code"},"weight":1}],"waits":[]}}' -p daniel
 
 sleep 1
 
