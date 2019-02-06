@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Wed Jan  9 21:21:01 2019",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Wed Feb  6 08:09:02 2019",
     "version": "eosio::abi/1.1",
     "structs": [
         {
@@ -32,10 +32,6 @@
                 {
                     "name": "user",
                     "type": "name"
-                },
-                {
-                    "name": "config_public_key",
-                    "type": "string"
                 },
                 {
                     "name": "chestnut_public_key",
