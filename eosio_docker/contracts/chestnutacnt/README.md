@@ -34,11 +34,6 @@ delegating cpu & net, therefore keeping the user extra secure
 from accidents or malicious behavior)
 
 ```bash
-# for 'config' permission
-cleos create key --to-console
-Private key: 5KXKxwkmvFHffqLVMcopKvJiGArQLUtZfZj5LV43Un3yX2t5kMQ
-Public key: EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
-
 # for 'chestnut' permission
 cleos create key --to-console
 Private key: 5JjnmnZba51EemGQudn5n9v791mfaPnSvQHiXyGei9kiiEtrMGi
@@ -58,7 +53,7 @@ Next `daniel` associates the new public keys and the chestnut
 smart contract with his account, creating the smart account
 
 ```bash
-cleos push action chestnutacnt reg '["daniel","EOS8GK...","EOS6XN..."]' -p daniel@active
+cleos push action chestnutacnt reg '["daniel","EOS8GK..."]' -p daniel@active
 ```
 
 Now `daniel`'s smart account should look like
@@ -66,11 +61,10 @@ Now `daniel`'s smart account should look like
 ```bash
 cleos get account daniel
 
-permissions:
+permissions: 
      owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
         active     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b, 1 chestnutacnt@eosio.code
-           chestnut     1:    1 EOS6XN6iTUSfW6wf87sQMTpMG4viKZpYDrRiWdQPuBmJd2jQThtcL
-           config     1:    1 EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
+           chestnut     1:    1 EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
            transfer     1:    1 chestnutacnt@eosio.code
 ```
 

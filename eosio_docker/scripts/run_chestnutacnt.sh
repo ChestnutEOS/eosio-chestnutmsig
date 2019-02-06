@@ -23,7 +23,7 @@ sleep 1
 
 # DO IT HERE
 echo 'cleos push action chestnutacnt reg ["daniel","EOS8GKM..."] -p daniel@active'
-cleos push action chestnutacnt reg '["daniel","EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39","EOS6XN6iTUSfW6wf87sQMTpMG4viKZpYDrRiWdQPuBmJd2jQThtcL"]' -p daniel@active
+cleos push action chestnutacnt reg '["daniel","EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39"]' -p daniel@active
 
 sleep 1
 
@@ -50,8 +50,8 @@ sleep 1
 echo '=== ADD NEW EOS TRANSFER LIMIT ==='
 echo 'daniel adds a new EOS token spending limit'
 echo 'he does not wish to send more than 100 EOS per transfer'
-echo 'cleos push action chestnutacnt addtokenmax ["daniel","100.0000 EOS","eosio.token"] -p daniel@config'
-cleos push action chestnutacnt addtokenmax '["daniel","100.0000 EOS","eosio.token"]' -p daniel@config
+echo 'cleos push action chestnutacnt addtokenmax ["daniel","100.0000 EOS","eosio.token"] -p daniel@chestnut'
+cleos push action chestnutacnt addtokenmax '["daniel","100.0000 EOS","eosio.token"]' -p daniel@chestnut
 sleep 1
 echo 'cleos get table chestnutacnt daniel tokensmax'
 cleos get table chestnutacnt daniel tokensmax
@@ -78,8 +78,8 @@ cleos get table eosio.token sally accounts
 
 echo '=== CLEAN UP ==='
 sleep 1
-echo 'cleos push action chestnutacnt rmtokenmax ["daniel","4,EOS"] -p daniel@config'
-cleos push action chestnutacnt rmtokenmax '["daniel","4,EOS"]' -p daniel@config
+echo 'cleos push action chestnutacnt rmtokenmax ["daniel","4,EOS"] -p daniel@chestnut'
+cleos push action chestnutacnt rmtokenmax '["daniel","4,EOS"]' -p daniel@chestnut
 echo 'cleos get table chestnutacnt daniel tokensmax'
 cleos get table chestnutacnt daniel tokensmax
 
