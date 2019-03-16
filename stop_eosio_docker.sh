@@ -1,1 +1,0 @@
-docker stop eosio_notechain_container

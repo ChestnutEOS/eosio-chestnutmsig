@@ -1,37 +1,53 @@
 #!/usr/bin/env bash
 set -o errexit
 
-echo "=== start of first time setup ==="
+ARCH=$( uname )
+SOURCE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# change to script's directory
-cd "$(dirname "$0")"
+if [ "$ARCH" == "Linux" ]; then
 
-# make sure Docker and Node.js is installed
-if [ ! -x "$(command -v docker)" ] ||
-   [ ! -x "$(command -v npm)" ]; then
-    echo ""
-    echo -e "\033[0;31m[Error with Exception]\033[0m"
-    echo "Please make sure Docker and Node.js are installed"
-    echo ""
-    echo "Install Docker: https://docs.docker.com/docker-for-mac/install/"
-    echo "Install Node.js: https://nodejs.org/en/"
-    echo ""
-    exit
+    if [ ! -e /etc/os-release ]; then
+        printf "\\n\\tThis boilerplate only supports MacOS and Debian based operating systems.\\n"
+        printf "\\tPlease install on the latest version of one of these Linux distributions.\\n"
+        printf "\\thttps://linuxmint.com/\\n"
+        printf "\\thttps://www.ubuntu.com/\\n"
+        printf "\\tExiting now.\\n"
+        exit 1
+    fi
+
+    OS_NAME=$( cat /etc/os-release | grep ^NAME | cut -d'=' -f2 | sed 's/\"//gI' )
+
+    case "$OS_NAME" in
+        "elementary OS")
+        FILE="${SOURCE_DIR}/scripts/install_ubuntu.sh"
+        ;;
+        "Linux Mint")
+        FILE="${SOURCE_DIR}/scripts/install_ubuntu.sh"
+        ;;
+        "Ubuntu")
+        FILE="${SOURCE_DIR}/scripts/install_ubuntu.sh"
+        ;;
+        "Debian GNU/Linux")
+        FILE="${SOURCE_DIR}/scripts/install_ubuntu.sh"
+        ;;
+        *)
+        printf "\\n\\tUnsupported Linux Distribution. Exiting now.\\n\\n"
+        exit 1
+    esac
 fi
 
-# download eosio/eos-dev:v1.4.2 image
-echo "=== pull eosio/eos-dev image v1.4.4 from docker hub ==="
-docker pull eosio/eos-dev:v1.4.4
+if [ "$ARCH" == "Darwin" ]; then
+    FILE="${SOURCE_DIR}/scripts/install_darwin.sh"
+fi
 
-# force remove the perivous container if any
-# create a clean data folder in eosio_docker to preserve block data
-echo "=== setup/reset data for eosio_docker ==="
-docker stop eosio_notechain_container || true && docker rm --force eosio_notechain_container || true
-rm -rf "./eosio_docker/data"
-mkdir -p "./eosio_docker/data"
+echo "=== start of first time setup ==="
+
+. "$FILE"
 
 # set up node_modules for frontend
-echo "=== npm install packpage for frontend react app ==="
+echo "=== npm install package for frontend react app ==="
 # change directory to ./frontend
 cd "./frontend"
 npm install
+
+echo "First time setup is complete."
