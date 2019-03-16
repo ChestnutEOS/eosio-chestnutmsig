@@ -76,8 +76,13 @@ cleos wallet import -n appwallet --private-key 5JpWT4ehouB2FF9aCfdfnZ5AwbQbTtHBA
 # Active key for appwallet wallet
 cleos wallet import -n appwallet --private-key 5JD9AGTuTeD5BXZwGQ5AtwBqHK21aHmYnTetHgk1B3pjj7krT8N
 
-# `daniels` private key
+# `daniels` active/owner private key (see accounts.json)
 cleos wallet import -n appwallet --private-key 5K7mtrinTFrVTduSxizUc5hjXJEtTjVTsqSHeBHes1Viep86FP5
+
+# `danels` new chestnut private key
+# Private key: 5KXKxwkmvFHffqLVMcopKvJiGArQLUtZfZj5LV43Un3yX2t5kMQ
+# Public key: EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
+cleos wallet import -n appwallet --private-key 5KXKxwkmvFHffqLVMcopKvJiGArQLUtZfZj5LV43Un3yX2t5kMQ
 
 # * Replace "appwallet" by your own wallet name when you start your own project
 
@@ -88,6 +93,14 @@ cleos wallet import -n appwallet --private-key 5K7mtrinTFrVTduSxizUc5hjXJEtTjVTs
 #       contract name "chestnutacnt" with the smart contract name
 #
 ###############################################################################
+
+# create account for eosio.token
+cleos create account eosio eosio.token EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9
+
+# create the EOS token
+${SOURCE_DIR}/blockchain/scripts/deploy_system_contract.sh eosio.token eosio.token appwallet $(cat "${SOURCE_DIR}/blockchain/data/appwallet_wallet_password.txt")
+cleos push action eosio.token create '[ "eosio", "1000000000.0000 EOS"]' -p eosio.token; sleep 1
+cleos push action eosio.token issue '[ "eosio", "1000000000.0000 EOS", "init" ]' -p eosio eosio.token; sleep 1
 
 # create account for chestnutacnt with above wallet's public keys
 cleos create account eosio chestnutacnt EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9

@@ -4,6 +4,9 @@ echo '===         C H E S T N U T  S M A R T  A C C O U N T S         ==='
 echo '===                                                             ==='
 echo '==================================================================='
 
+echo 'Give daniel an initial EOS balance of 1000.0000 EOS'
+cleos push action eosio.token transfer '[ "eosio","daniel","1000000000.0000 EOS", "starting balance" ]' -p eosio eosio.token; sleep 1
+
 echo 'get account chestnutacnt'
 cleos get account chestnutacnt
 
@@ -42,41 +45,42 @@ sleep 1
 # echo 'cleos push action chestnutacnt hello '
 # cleos push action chestnutacnt hello '[""]' -p daniel@chestnut
 
-# echo '=== ADD NEW EOS TRANSFER LIMIT ==='
-# echo 'daniel adds a new EOS token spending limit'
-# echo 'he does not wish to send more than 100 EOS per transfer'
-# echo 'cleos push action chestnutacnt addtokenmax ["daniel","100.0000 EOS","eosio.token"] -p daniel@chestnut'
-# cleos push action chestnutacnt addtokenmax '["daniel","100.0000 EOS","eosio.token"]' -p daniel@chestnut
-# sleep 1
-# echo 'cleos get table chestnutacnt daniel tokensmax'
-# cleos get table chestnutacnt daniel tokensmax
+echo '=== ADD NEW EOS TRANSFER LIMIT ==='
+echo 'daniel adds a new EOS token spending limit'
+echo 'he does not wish to send more than 100 EOS per transfer'
+echo 'cleos push action chestnutacnt addtokenmax ["daniel","100.0000 EOS","eosio.token"] -p daniel@chestnut'
+cleos push action chestnutacnt addtokenmax '["daniel","100.0000 EOS","eosio.token"]' -p daniel@chestnut
+sleep 1
+echo 'cleos get table chestnutacnt daniel tokensmax'
+cleos get table chestnutacnt daniel tokensmax
 
-# echo '=== daniel transfers 99 EOS through chestnutacnt to sally ==='
+echo '=== daniel transfers 99 EOS through chestnutacnt to sally ==='
 # echo 'this should fail'
 # echo 'cleos push action chestnutacnt transfer ["daniel","sally","100.0001 EOS","finding memo"] -p daniel@chestnut'
 # cleos push action chestnutacnt transfer '["daniel","sally","100.0001 EOS","finding memo"]' -p daniel@chestnut
 # sleep 1
-# echo 'this should pass'
-# echo 'before: '
-# echo 'cleos get table eosio.token daniel accounts'
-# cleos get table eosio.token daniel accounts
-# echo 'cleos get table eosio.token sally accounts'
-# cleos get table eosio.token sally accounts
-# echo 'cleos push action chestnutacnt transfer ["daniel","sally","99.0000 EOS","finding memo"] -p daniel@chestnut'
-# cleos push action chestnutacnt transfer '["daniel","sally","99.0000 EOS","finding memo"]' -p daniel@chestnut
-# sleep 1
-# echo 'after: '
-# echo 'cleos get table eosio.token daniel accounts'
-# cleos get table eosio.token daniel accounts
-# echo 'cleos get table eosio.token sally accounts'
-# cleos get table eosio.token sally accounts
+echo 'this should pass'
+echo 'before: '
+echo 'cleos get table eosio.token daniel accounts'
+cleos get table eosio.token daniel accounts
+echo 'cleos get table eosio.token sally accounts'
+cleos get table eosio.token sally accounts
+sleep 1
+echo 'cleos push action chestnutacnt transfer ["daniel","sally","99.0000 EOS","finding memo"] -p daniel@chestnut'
+cleos push action chestnutacnt transfer '["daniel","sally","99.0000 EOS","finding memo"]' -p daniel@chestnut
+sleep 1
+echo 'after: '
+echo 'cleos get table eosio.token daniel accounts'
+cleos get table eosio.token daniel accounts
+echo 'cleos get table eosio.token sally accounts'
+cleos get table eosio.token sally accounts
 
-# echo '=== CLEAN UP ==='
-# sleep 1
-# echo 'cleos push action chestnutacnt rmtokenmax ["daniel","4,EOS"] -p daniel@chestnut'
-# cleos push action chestnutacnt rmtokenmax '["daniel","4,EOS"]' -p daniel@chestnut
-# echo 'cleos get table chestnutacnt daniel tokensmax'
-# cleos get table chestnutacnt daniel tokensmax
+echo '=== CLEAN UP ==='
+sleep 1
+echo 'cleos push action chestnutacnt rmtokenmax ["daniel","4,EOS"] -p daniel@chestnut'
+cleos push action chestnutacnt rmtokenmax '["daniel","4,EOS"]' -p daniel@chestnut
+echo 'cleos get table chestnutacnt daniel tokensmax'
+cleos get table chestnutacnt daniel tokensmax
 
 echo '==================================================================='
 echo '===                                                             ==='
