@@ -1,4 +1,4 @@
-# chestnut smart accounts
+# Chestnut Smart Accounts
 
 We offer a multi-signature, smart contract enabled "Smart Account" which helps you create a set of rules and safeguards so that your EOS account secures and automates your finances.
 
@@ -12,26 +12,65 @@ At no point does Chestnut require private information and we cannot make changes
 
 Chestnut provides the peace of mind that so many blockchain curious members of the general public desire before taking the leap into the world of crypto assets.
 
+
 ### How It Works
 
-When a new user signs up with chestnut, they receive a custom configured eosio account with four key pairs.  Two keys are associated with the owner and active permissions of the
-new account and are ment to be kept safely offline and used as backup keys for the account.  The third key is associated with a new `config` permission that will be used for
-setting up the parameters of the account.  This key/permission cannot transfer tokens or perform any other eosio action.  The fourth key is associated with a new `chestnut`
-permission that is then linked to token transfers on the chestnut smart contract.  The `config` key can be placed into a wallet and used to configure the parameters then removed
-and kept offline if the user wishes for a higher level of security.  Finally, the `chestnut` key can placed into any wallet and the user can safely transfer EOS through the chestnut
-smart contract without ever having to worry about making a mistake.
+
+Full Smart Account
+```bash
+cleos get account daniel
+
+permissions: 
+     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+        active     1:    1 chestnutacnt@eosio.code
+           chestnut     1:    1 EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
+```
+Features:
+* account is fully secured and protected by chestnut smart contact
+    * all interaction with blockchain must go through the chestnut smart contract
+* you as a user cannot interact with other dApps or smart contracts that chestnut has yet to integrate with
+
+
+Full Smart Account + Chestnut Support
+```bash
+cleos get account daniel
+
+permissions:
+     owner     1:    1 chestnutacnt@support
+        active     1:    1 chestnutacnt@eosio.code
+           chestnut     1:    1 EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
+```
+Enables the following additional features:
+* freeze account
+* account recovery
+
+
+Partial Smart Account
+```bash
+cleos get account daniel
+
+permissions: 
+     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+        active     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b, 1 chestnutacnt@eosio.code
+           chestnut     1:    1 EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
+```
+Features:
+* user can switch between two account permissions
+    * active: using their active key users can interact with any dApp or smart contract
+        **NOTE: when using this permission, tokens can be transferred without the security of the chestnut smart contract**
+    * chestnut: using their chestnut key users can only use send secure transactions through the chestnut smart contract
 
 
 ### To run
 ```bash
-./start_eosio_docker.sh
+./start_blockchain.sh
 ```
 
 To shut down press Ctrl+C and run
 
 ```bash
-./stop_eosio_docker.sh
+./reset_everything.sh
 ```
 
 
-See eosio_docker/contracts/chestnutacnt/README.md for contract details.
+See `blockchain/contracts/chestnutacnt/README.md` for contract details.
