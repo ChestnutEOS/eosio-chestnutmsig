@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sun Mar 17 12:44:55 2019",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sun Mar 17 16:12:39 2019",
     "version": "eosio::abi/1.1",
     "structs": [
         {
@@ -17,6 +17,28 @@
                 {
                     "name": "contract_account",
                     "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "addxfrmax",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "sym",
+                    "type": "symbol"
+                },
+                {
+                    "name": "max_tx",
+                    "type": "uint64"
+                },
+                {
+                    "name": "minutes",
+                    "type": "uint64"
                 }
             ]
         },
@@ -92,6 +114,32 @@
                     "type": "string"
                 }
             ]
+        },
+        {
+            "name": "xfr_max",
+            "base": "",
+            "fields": [
+                {
+                    "name": "sym",
+                    "type": "symbol"
+                },
+                {
+                    "name": "current_tx",
+                    "type": "uint64"
+                },
+                {
+                    "name": "max_tx",
+                    "type": "uint64"
+                },
+                {
+                    "name": "minutes",
+                    "type": "uint64"
+                },
+                {
+                    "name": "is_locked",
+                    "type": "bool"
+                }
+            ]
         }
     ],
     "types": [],
@@ -99,6 +147,11 @@
         {
             "name": "addtokenmax",
             "type": "addtokenmax",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "addxfrmax",
+            "type": "addxfrmax",
             "ricardian_contract": ""
         },
         {
@@ -126,6 +179,13 @@
         {
             "name": "tokensmax",
             "type": "token_max",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "xfrmax",
+            "type": "xfr_max",
             "index_type": "i64",
             "key_names": [],
             "key_types": []
