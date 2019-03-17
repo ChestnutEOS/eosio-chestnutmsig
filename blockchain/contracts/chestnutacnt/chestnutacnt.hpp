@@ -35,7 +35,7 @@ using eosio::same_payer;
 
 #define CONTRACT_ACCOUNT "chestnutacnt"_n
 
-CONTRACT chestnutacnt : public eosio::contract {
+class [[eosio::contract("chestnutacnt")]] chestnutacnt : public eosio::contract {
 private:
 
    /****************************************************************************
