@@ -15,8 +15,6 @@ void chestnutacnt::reg( name user,
    require_auth( user );
 
    set_auth_with_key( user, "chestnut"_n, "active"_n, chestnut_public_key );
-   set_auth_with_code( user, "active"_n, "owner"_n, CONTRACT_ACCOUNT,
-                                                       "eosio.code"_n );
 
    // link auth of user@chestnut to
    //   config::addtokenmax
