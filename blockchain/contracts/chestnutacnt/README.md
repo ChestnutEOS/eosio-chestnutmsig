@@ -1,18 +1,115 @@
-# Chestnut - Smart EOS accounts for automation and security.
+# chestnutacnt
 
-We offer a multi-signature, smart contract enabled "Smart Account" which helps you create a set of rules and safeguards so that your EOS account secures and automates your finances.
 
-One big obstacle to widespread adoption of crypto assets is the fear users have in taking responsibility for managing and protecting their own money. Chestnut takes some of the best security practices from the traditional banking system and bridges them over to the blockchain space, With this, users can feel the same level of safety they have become accustomed to with the autonomy and transparency that the blockchain offers.
+## Tables
 
-Chestnut utilizes a smart contract within a multi-sig account to enable users to set specific and customizable rules or restrictions on the activity, size or type of transactions that can be executed on the account.
+### chestnutacnt::tokensmax
+   - **asset**: **balance** amount of tokens deposited in account
+   - **name**: **contract_account** amount of tokens deposited in account
+   - **bool**: **is_locked** toggles action on/off
 
-Similar to security and fraud protection offerings by traditional credit card companies, Chestnut users can set spending limits, whitelist/ blacklist recipients, freeze the account or nominate beneficiaries in case of emergencies. With Chestnut, users have the benefit of setting their own account rules rather than rules being imposed by a third party institution.
+ex:
+```
+cleos get table chestnutacnt alice tokensmax
+```
 
-Each account transaction will be cross referenced through our smart contract and if it does not fit the set parameters, Chestnut will not sign off on the transaction as a multi-sig.
+### chestnutacnt::xfrmax    [ TODO ]
+   - **uint64_t**: **current_tx** current amount of transactions within time frame
+   - **uint64_t**: **max_tx** maximum amount of transactions within time frame
+   - **uint64_t**: **minutes** time frame in minutes
+   - **bool**: **is_locked** toggles action on/off
 
-At no point does Chestnut require private information and we cannot make changes to a customer’s account unless the change was initiated by the customer.
+ex:
+```
+cleos get table chestnutacnt alice xfrmax
+```
 
-Chestnut will provide the peace of mind that so many blockchain curious members of the general public desire before taking the leap into the world of crypto assets.
+### chestnutacnt::whitelist     [ TODO ]
+   - **name[]**: **whitelisted_account** maximum amount of transactions within time frame
+   - **bool**: **is_locked** toggles action on/off
+
+ex:
+```
+cleos get table chestnutacnt alice whitelist
+```
+
+### chestnutacnt::unstaketime   [ TODO ]
+    - **uint32_t**: **days** 0, 1, 3, 7, or 30 days
+   - **bool**: **is_locked** toggles action on/off
+
+ex:
+```
+cleos get table chestnutacnt alice unstaketime
+```
+
+## Actions
+
+### chestnutacnt::create    user chestnut_public_key
+   - **user** the smart account user
+   - **chestnut_public_key** smart account `chestnut` public key
+
+   - creates new smart account
+
+ex:
+```
+cleos push action chestnutacnt create '["alice","EOS_ACTIVE_PUBILC_KEY"]' -p alice@chestnut
+```
+
+### chestnutacnt::transfer    from to quantity memo
+   - **from** sender
+   - **to** receiver
+   - **quantity** amount and symbol
+   - **memo** optional memo
+
+   - transfer tokens (smart contract will send if security check passes)
+
+ex:
+```
+cleos push action chestnutacnt transfer '["alice","bob","100.0000 EOS","memo"]' -p alice@chestnut
+```
+
+### chestnutacnt::unstake    todo
+   - **from** sender
+
+ex:
+```
+cleos push action chestnutacnt unstake '["",""]' -p alice@chestnut
+```
+
+Token Security Settings
+### chestnutacnt::addtokenmax
+   - **user** user
+   - **quantity** maximum token quantity that can be transfered at once
+   - **contract_account** account name running the token
+
+   - Set maximum single token transfer
+
+### chestnutacnt::addxfrmax     [ TODO ]
+   - **user** user
+   - **max_tx** maximum amount of transactions within time frame
+   - **minutes** time in minutes
+
+   - Set a maxium amount of transfers that can take place within a give time frame
+
+### chestnutacnt::rmxfrmax      [ TODO ]
+
+### chestnutacnt::addwhitelist  [ TODO ]
+   - **user** user
+   - **account_to_whitelist** account to whitelist
+
+   - Whitelist receiving accounts
+
+### chestnutacnt::rmwhitelist   [ TODO ]
+   - **user** user
+   - **account_to_remove_from_whitelist**
+
+   - Remove account from whitelist
+
+### chestnutacnt::setunstake    [ TODO ]
+   - **user** user
+   - **days** 0, 1, 3, 7, or 30 days
+
+   - Set unstaking time
 
 
 ### User Story
