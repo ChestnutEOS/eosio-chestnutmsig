@@ -55,6 +55,19 @@ sleep 1
 echo 'cleos get table chestnutacnt daniel tokensmax'
 cleos get table chestnutacnt daniel tokensmax
 
+echo '========================================================'
+echo '===              ADD XFR (TRANSFER) MAX              ==='
+echo '========================================================'
+echo 'cleos push action chestnutacnt addxfrmax ["daniel","4,EOS","4","1"] -p daniel@chestnut'
+cleos push action chestnutacnt addxfrmax '["daniel","4,EOS","4","1"]' -p daniel@chestnut
+sleep 1
+echo 'cleos get table chestnutacnt daniel xfrmax'
+cleos get table chestnutacnt daniel xfrmax
+sleep 1
+
+echo '========================================================'
+echo '===                 SEND EOS TRANSFER                ==='
+echo '========================================================'
 echo '`daniel` transfers 99 EOS through chestnutacnt to sally'
 # echo 'this should fail'
 # echo 'cleos push action chestnutacnt transfer ["daniel","sally","100.0001 EOS","finding memo"] -p daniel@chestnut'

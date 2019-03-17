@@ -56,6 +56,18 @@ private:
 
    typedef eosio::multi_index< name("tokensmax"), token_max > tokens_max;
 
+   struct [[eosio::table]] xfr_max {
+      symbol      sym;
+      uint64_t    current_tx;
+      uint64_t    max_tx;
+      uint64_t    minutes;
+      bool        is_locked{false};
+
+      auto primary_key() const { return sym.code().raw(); }
+   };
+
+   typedef eosio::multi_index< name("xfrmax"), xfr_max > xfr_max_table;
+
     /****************************************************************************
      *                            F U N C T I O N S
      ***************************************************************************/
@@ -98,5 +110,7 @@ public:
                        name  contract_account );
 
    ACTION rmtokenmax( name user, symbol sym );
+
+   ACTION addxfrmax( name user, symbol sym, uint64_t max_tx, uint64_t minutes );
 
 };

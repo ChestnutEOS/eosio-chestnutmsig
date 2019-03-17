@@ -19,7 +19,10 @@ void chestnutacnt::create( name user,
    // link auth of user@chestnut to
    //   config::addtokenmax
    //   config::rmtokenmax
-   name action_names[3] = { "addtokenmax"_n, "rmtokenmax"_n, "transfer"_n };
+   name action_names[4] = { "addtokenmax"_n,
+                            "rmtokenmax"_n,
+                            "addxfrmax"_n,
+                            "transfer"_n };
 
    for ( int i = 0; i < sizeof(action_names)/sizeof(name); i++ ) {
       action(
@@ -75,6 +78,34 @@ void chestnutacnt::rmtokenmax( name user, symbol sym ) {
 }
 
 
+void chestnutacnt::addxfrmax( name user,
+                              symbol sym,
+                              uint64_t max_tx,
+                              uint64_t minutes ) {
+   print("ChestnutAcnt - addxfrmax");
+
+   require_auth( user );
+   eosio::check( sym.is_valid(), "invalid symbol name" );
+
+   xfr_max_table xfr_table( _self, user.value );
+   auto xfr = xfr_table.find( sym.code().raw() );
+
+   if ( xfr == xfr_table.end() ) {
+      xfr = xfr_table.emplace( user/* RAM payer */, [&]( auto& x ) {
+         x.sym     = sym;
+         x.max_tx  = max_tx;
+         x.minutes = minutes;
+      });
+   } else {
+      xfr_table.modify( xfr, same_payer, [&]( auto& x ) {
+         x.max_tx  = max_tx;
+         x.minutes = minutes;
+      });
+   }
+
+}
+
+
 void chestnutacnt::transfer( name      from,
                              name      to,
                              asset     quantity,
@@ -103,4 +134,4 @@ void chestnutacnt::transfer( name      from,
 }
 
 
-EOSIO_DISPATCH( chestnutacnt, (hello)(transfer)(create)(addtokenmax)(rmtokenmax) )
+EOSIO_DISPATCH( chestnutacnt, (hello)(transfer)(create)(addtokenmax)(rmtokenmax)(addxfrmax) )
