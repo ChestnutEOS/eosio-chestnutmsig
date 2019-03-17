@@ -16,8 +16,8 @@ echo 'Give chestnutacnt@eosio.code access to daniel@active'
 cleos push action eosio updateauth '{"account":"daniel","permission":"active","parent":"owner","auth":{"keys":[{"key":"EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b", "weight":1}],"threshold":1,"accounts":[{"permission":{"actor":"chestnutacnt","permission":"eosio.code"},"weight":1}],"waits":[]}}' -p daniel
 sleep 1
 echo 'Create the smart account'
-echo 'cleos push action chestnutacnt reg ["daniel","EOS8GKM..."] -p daniel@active'
-cleos push action chestnutacnt reg '["daniel","EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39"]' -p daniel@active
+echo 'cleos push action chestnutacnt create ["daniel","EOS8GKM..."] -p daniel@active'
+cleos push action chestnutacnt create '["daniel","EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39"]' -p daniel@active
 sleep 1
 
 echo '======================================================'

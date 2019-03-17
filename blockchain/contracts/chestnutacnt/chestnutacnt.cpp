@@ -10,8 +10,8 @@ void chestnutacnt::hello( void ) {
    print("hello world\n");
 }
 
-void chestnutacnt::reg( name user,
-                        const string& chestnut_public_key ) {
+void chestnutacnt::create( name user,
+                           const string& chestnut_public_key ) {
    require_auth( user );
 
    set_auth_with_key( user, "chestnut"_n, "active"_n, chestnut_public_key );
@@ -103,4 +103,4 @@ void chestnutacnt::transfer( name      from,
 }
 
 
-EOSIO_DISPATCH( chestnutacnt, (hello)(transfer)(reg)(addtokenmax)(rmtokenmax) )
+EOSIO_DISPATCH( chestnutacnt, (hello)(transfer)(create)(addtokenmax)(rmtokenmax) )

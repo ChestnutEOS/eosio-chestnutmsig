@@ -22,7 +22,7 @@ to pervent him from ever spending more than 100.0000 EOS
 
 1. `daniel` turns his normal eos account into a smart account by
 adding the `chestnutacnt@eosio.code` (chestnut smart contract) to
- the acitve permission and calling the `reg` action.
+ the acitve permission and calling the `create` action.
 
 `daniel` first adds `chestnutact@eosio.code` to his active permission
 ```bash
@@ -43,7 +43,7 @@ Public key: EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
 Finally `daniel` creates the smart account.
 
 ```bash
-cleos push action chestnutacnt reg '["daniel","EOS8GK..."]' -p daniel@active
+cleos push action chestnutacnt create '["daniel","EOS8GK..."]' -p daniel@active
 ```
 
 Now `daniel`'s smart account should look like

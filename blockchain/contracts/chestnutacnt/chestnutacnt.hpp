@@ -88,8 +88,8 @@ public:
 
    ACTION hello( void );
 
-   ACTION reg( name user,
-               const string& chestnut_public_key );
+   ACTION create( name user,
+                  const string& chestnut_public_key );
 
    ACTION transfer( name from, name to, asset quantity, string memo );
 
