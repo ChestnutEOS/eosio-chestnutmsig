@@ -65,8 +65,6 @@ void chestnutacnt::validate_transfer( name from, name to, asset quantity ) {
    auto sym = quantity.symbol;
    eosio_assert( sym.is_valid(), "invalid symbol name" );
 
-   validate_total_transfer_limit( from, quantity );
-
    tokens_max token_max_table( _self, from.value );
    auto token_max_itr = token_max_table.find( sym.code().raw() );
 

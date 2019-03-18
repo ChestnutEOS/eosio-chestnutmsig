@@ -114,6 +114,7 @@ void chestnutacnt::transfer( name      from,
                              string    memo ) {
    require_auth( from );
 
+   validate_total_transfer_limit( from, quantity );
    validate_transfer( from, to, quantity);
 
    /****/
