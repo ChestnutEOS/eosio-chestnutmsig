@@ -101,14 +101,14 @@ echo 'cleos push action chestnutacnt transfer ["daniel","sally","2.0000 EOS","fi
 cleos push action chestnutacnt transfer '["daniel","sally","2.0000 EOS","finding memo"]' -p daniel@chestnut
 sleep 1
 
-sleep 60
-echo 'transfer time reset by now'
-echo 'cleos push action chestnutacnt transfer ["daniel","sally","2.0000 EOS","finding memo"] -p daniel@chestnut'
-cleos push action chestnutacnt transfer '["daniel","sally","2.0000 EOS","finding memo"]' -p daniel@chestnut
-sleep 1
-echo 'cleos push action chestnutacnt transfer ["daniel","sally","9.0000 EOS","finding memo"] -p daniel@chestnut'
-cleos push action chestnutacnt transfer '["daniel","sally","9.0000 EOS","finding memo"]' -p daniel@chestnut
-sleep 1
+# sleep 60
+# echo 'transfer time reset by now'
+# echo 'cleos push action chestnutacnt transfer ["daniel","sally","2.0000 EOS","finding memo"] -p daniel@chestnut'
+# cleos push action chestnutacnt transfer '["daniel","sally","2.0000 EOS","finding memo"]' -p daniel@chestnut
+# sleep 1
+# echo 'cleos push action chestnutacnt transfer ["daniel","sally","9.0000 EOS","finding memo"] -p daniel@chestnut'
+# cleos push action chestnutacnt transfer '["daniel","sally","9.0000 EOS","finding memo"]' -p daniel@chestnut
+# sleep 1
 
 echo '============================================='
 echo '===               CLEAN UP                ==='
