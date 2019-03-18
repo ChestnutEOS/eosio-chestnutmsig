@@ -18,6 +18,23 @@ time_point chestnutacnt::current_time_point() {
 }
 
 
+void chestnutacnt::set_auth_with_key( const name   user,
+                                      const name   permission_name,
+                                      const name   permission_parent_name,
+                                      const string new_owner_pubkey ) {
+   abieos::set_auth_with_key( user, permission_name, permission_parent_name, new_owner_pubkey );
+}
+
+
+void chestnutacnt::set_auth_with_code( const name   user,
+                                       const name   permission_name,
+                                       const name   permission_parent_name,
+                                       const name   code_account,
+                                       const name   code_auth ) {
+   abieos::set_auth_with_code( user, permission_name, permission_parent_name, code_account, code_auth );
+}
+
+
 void chestnutacnt::validate_total_transfer_limit( name from, asset quantity ) {
    auto sym = quantity.symbol;
 
@@ -87,20 +104,3 @@ void chestnutacnt::validate_single_transfer( name from, asset quantity ) {
       // print("no token limit imposed\n");
    }
 }
-
-
-void chestnutacnt::set_auth_with_key( const name   user,
-                                      const name   permission_name,
-                                      const name   permission_parent_name,
-                                      const string new_owner_pubkey ) {
-   abieos::set_auth_with_key( user, permission_name, permission_parent_name, new_owner_pubkey );
-}
-
-void chestnutacnt::set_auth_with_code( const name   user,
-                                       const name   permission_name,
-                                       const name   permission_parent_name,
-                                       const name   code_account,
-                                       const name   code_auth ) {
-   abieos::set_auth_with_code( user, permission_name, permission_parent_name, code_account, code_auth );
-}
-
