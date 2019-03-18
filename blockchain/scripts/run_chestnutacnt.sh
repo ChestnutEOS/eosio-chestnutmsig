@@ -58,8 +58,8 @@ cleos get table chestnutacnt daniel tokensmax
 echo '========================================================'
 echo '===              ADD XFR (TRANSFER) MAX              ==='
 echo '========================================================'
-echo 'cleos push action chestnutacnt addxfrmax ["daniel","4,EOS","4","1"] -p daniel@chestnut'
-cleos push action chestnutacnt addxfrmax '["daniel","4,EOS","4","1"]' -p daniel@chestnut
+echo 'cleos push action chestnutacnt addxfrmax ["daniel","10.0000 EOS","1"] -p daniel@chestnut'
+cleos push action chestnutacnt addxfrmax '["daniel","10.0000 EOS","1"]' -p daniel@chestnut
 sleep 1
 echo 'cleos get table chestnutacnt daniel xfrmax'
 cleos get table chestnutacnt daniel xfrmax
@@ -80,8 +80,8 @@ cleos get table eosio.token daniel accounts
 echo 'cleos get table eosio.token sally accounts'
 cleos get table eosio.token sally accounts
 sleep 1
-echo 'cleos push action chestnutacnt transfer ["daniel","sally","99.0000 EOS","finding memo"] -p daniel@chestnut'
-cleos push action chestnutacnt transfer '["daniel","sally","99.0000 EOS","finding memo"]' -p daniel@chestnut
+echo 'cleos push action chestnutacnt transfer ["daniel","sally","5.0000 EOS","finding memo"] -p daniel@chestnut'
+cleos push action chestnutacnt transfer '["daniel","sally","5.0000 EOS","finding memo"]' -p daniel@chestnut
 sleep 1
 echo 'after: '
 echo 'cleos get table eosio.token daniel accounts'
@@ -90,11 +90,35 @@ echo 'cleos get table eosio.token sally accounts'
 cleos get table eosio.token sally accounts
 
 echo '============================================='
+echo '===           TEST MAX TRASNFERS          ==='
+echo '============================================='
+echo '2.'
+echo 'cleos push action chestnutacnt transfer ["daniel","sally","4.0000 EOS","finding memo"] -p daniel@chestnut'
+cleos push action chestnutacnt transfer '["daniel","sally","4.0000 EOS","finding memo"]' -p daniel@chestnut
+sleep 1
+echo 'Block the third'
+echo 'cleos push action chestnutacnt transfer ["daniel","sally","2.0000 EOS","finding memo"] -p daniel@chestnut'
+cleos push action chestnutacnt transfer '["daniel","sally","2.0000 EOS","finding memo"]' -p daniel@chestnut
+sleep 1
+
+sleep 60
+echo 'transfer time reset by now'
+echo 'cleos push action chestnutacnt transfer ["daniel","sally","2.0000 EOS","finding memo"] -p daniel@chestnut'
+cleos push action chestnutacnt transfer '["daniel","sally","2.0000 EOS","finding memo"]' -p daniel@chestnut
+sleep 1
+echo 'cleos push action chestnutacnt transfer ["daniel","sally","9.0000 EOS","finding memo"] -p daniel@chestnut'
+cleos push action chestnutacnt transfer '["daniel","sally","9.0000 EOS","finding memo"]' -p daniel@chestnut
+sleep 1
+
+echo '============================================='
 echo '===               CLEAN UP                ==='
 echo '============================================='
+echo 'cleos get table chestnutacnt daniel xfrmax'
+cleos get table chestnutacnt daniel xfrmax
 sleep 1
 echo 'cleos push action chestnutacnt rmtokenmax ["daniel","4,EOS"] -p daniel@chestnut'
 cleos push action chestnutacnt rmtokenmax '["daniel","4,EOS"]' -p daniel@chestnut
+sleep 1
 echo 'cleos get table chestnutacnt daniel tokensmax'
 cleos get table chestnutacnt daniel tokensmax
 

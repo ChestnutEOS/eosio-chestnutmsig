@@ -57,13 +57,13 @@ private:
    typedef eosio::multi_index< name("tokensmax"), token_max > tokens_max;
 
    struct [[eosio::table]] xfr_max {
-      symbol      sym;
-      uint64_t    current_tx;
-      uint64_t    max_tx;
+      asset       total_tokens_allowed_to_spend;
+      asset       current_tokens_spent;
       uint64_t    minutes;
+      time_point  end_time;
       bool        is_locked{false};
 
-      auto primary_key() const { return sym.code().raw(); }
+      auto primary_key() const { return total_tokens_allowed_to_spend.symbol.code().raw(); }
    };
 
    typedef eosio::multi_index< name("xfrmax"), xfr_max > xfr_max_table;
@@ -73,6 +73,8 @@ private:
      ***************************************************************************/
 
    time_point current_time_point();
+
+   void validate_exceeded_transfer_limit( const name from, const asset quantity );
 
    void validate_transfer( const name from, const name to, const asset quantity );
 
@@ -111,6 +113,6 @@ public:
 
    ACTION rmtokenmax( name user, symbol sym );
 
-   ACTION addxfrmax( name user, symbol sym, uint64_t max_tx, uint64_t minutes );
+   ACTION addxfrmax( name user, asset max_tx, uint64_t minutes );
 
 };

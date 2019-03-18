@@ -5,6 +5,11 @@
  */
 #include "chestnutacnt.hpp"
 #include "abieos_numeric.hpp"
+#include "utilities.hpp"
+
+
+const int64_t  useconds_per_day      = 24 * 3600 * int64_t(1000000);
+const int64_t  useconds_per_minute   = 60 * int64_t(1000000);
 
 
 time_point chestnutacnt::current_time_point() {
@@ -13,9 +18,54 @@ time_point chestnutacnt::current_time_point() {
 }
 
 
+void chestnutacnt::validate_exceeded_transfer_limit( name from, asset quantity ) {
+   auto sym = quantity.symbol;
+
+   xfr_max_table xfr_table( _self, from.value );
+   auto xfr = xfr_table.find( sym.code().raw() );
+
+   if ( xfr == xfr_table.end() ) {
+      const char *error = ( "no transfer limit set for "
+                            + symbol_to_string( quantity.symbol )
+                            + " token" ).c_str();
+      eosio::check( false, error );
+   } else {
+      // check to see if transfer is within current time frame
+      if ( current_time_point() <= xfr->end_time ) {
+
+         const char *error = ( "exceeded maxmimun spending limit of "
+                              + xfr->total_tokens_allowed_to_spend.to_string()
+                              + " over " + std::to_string(xfr->minutes)
+                              + " minute(s), attempted to send "
+                              + quantity.to_string() ).c_str();
+
+         eosio::check( quantity + xfr->current_tokens_spent <= xfr->total_tokens_allowed_to_spend, error );
+
+         // increase spent tokens
+         xfr_table.modify( xfr, same_payer, [&]( auto& x ) { 
+            x.current_tokens_spent = x.current_tokens_spent + quantity;
+         });
+
+      } else {
+         // current time frame has ended
+         time_point ct{ microseconds{ static_cast<int64_t>( current_time() ) } };
+         time_point duration{ microseconds{ static_cast<int64_t>( xfr->minutes * useconds_per_minute ) } };
+
+         // reset spent tokens
+         xfr_table.modify( xfr, same_payer, [&]( auto& x ) {
+            x.current_tokens_spent           = quantity;
+            x.end_time                       = ct + duration;
+         });
+      }
+   }
+}
+
+
 void chestnutacnt::validate_transfer( name from, name to, asset quantity ) {
    auto sym = quantity.symbol;
    eosio_assert( sym.is_valid(), "invalid symbol name" );
+
+   validate_exceeded_transfer_limit( from, quantity );
 
    tokens_max token_max_table( _self, from.value );
    auto token_max_itr = token_max_table.find( sym.code().raw() );
@@ -26,7 +76,7 @@ void chestnutacnt::validate_transfer( name from, name to, asset quantity ) {
          // eosio_assert( quantity <= token_max_itr->max_transfer,
          //               error );
          if ( quantity > token_max_itr->max_transfer ) {
-            const char *error = ( "exceeded maxmimun transfer limit of "
+            const char *error = ( "exceeded maxmimum transfer limit of "
                                   + std::to_string(
                                     token_max_itr->max_transfer.amount )
                                   + " : attempting to send "

@@ -79,30 +79,32 @@ void chestnutacnt::rmtokenmax( name user, symbol sym ) {
 
 
 void chestnutacnt::addxfrmax( name user,
-                              symbol sym,
-                              uint64_t max_tx,
+                              asset max_tx,
                               uint64_t minutes ) {
-   print("ChestnutAcnt - addxfrmax");
-
    require_auth( user );
-   eosio::check( sym.is_valid(), "invalid symbol name" );
+   eosio::check( max_tx.symbol.is_valid(), "invalid symbol name" );
+
+   time_point ct{ microseconds{ static_cast<int64_t>( current_time() ) } };
+   time_point duration{ microseconds{ static_cast<int64_t>( minutes * useconds_per_minute ) } };
 
    xfr_max_table xfr_table( _self, user.value );
-   auto xfr = xfr_table.find( sym.code().raw() );
+   auto xfr = xfr_table.find( max_tx.symbol.code().raw() );
 
    if ( xfr == xfr_table.end() ) {
       xfr = xfr_table.emplace( user/* RAM payer */, [&]( auto& x ) {
-         x.sym     = sym;
-         x.max_tx  = max_tx;
-         x.minutes = minutes;
+         x.total_tokens_allowed_to_spend  = max_tx;
+         x.current_tokens_spent           = asset(0, max_tx.symbol);
+         x.minutes                        = minutes;
+         x.end_time                       = ct + duration;
       });
    } else {
       xfr_table.modify( xfr, same_payer, [&]( auto& x ) {
-         x.max_tx  = max_tx;
-         x.minutes = minutes;
+         x.total_tokens_allowed_to_spend  = max_tx;
+         x.current_tokens_spent           = asset(0, max_tx.symbol);
+         x.minutes                        = minutes;
+         x.end_time                       = ct + duration;
       });
    }
-
 }
 
 
