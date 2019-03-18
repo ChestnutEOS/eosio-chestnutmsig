@@ -14,10 +14,10 @@ cleos get table chestnutacnt alice tokensmax
 ```
 
 ### chestnutacnt::xfrmax    [ TODO ]
-   - **symbol**: **sym** token symbol to be protected
-   - **uint64_t**: **current_tx** current amount of transactions within time frame
-   - **uint64_t**: **max_tx** maximum amount of transactions within time frame
-   - **uint64_t**: **minutes** time frame in minutes
+   - **asset**: **total_tokens_allowed_to_spend** maximum amount of tokens that can be spent within the time frame
+   - **asset**: **current_EOS_spent** current amount of tokens spent
+   - **uint64_t**: **minutes**
+   - **time_point**: **end_time**
    - **bool**: **is_locked** toggles action on/off
 
 ex:
@@ -87,8 +87,7 @@ Token Security Settings
 
 ### chestnutacnt::addxfrmax     [ TODO ]
    - **user** user
-   - **sym** token symbol to protect
-   - **max_tx** maximum amount of transactions within time frame
+   - **max_tx** total tokens allowed to spend in given time frame
    - **minutes** time in minutes
 
    - Set a maxium amount of transfers that can take place within a give time frame
