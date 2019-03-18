@@ -74,10 +74,6 @@ private:
 
    time_point current_time_point();
 
-   void validate_total_transfer_limit( const name from, const asset quantity );
-
-   void validate_single_transfer( const name from, const asset quantity );
-
    void set_auth_with_key( const name   user,
                            const name   permission_name,
                            const name   permission_parent_name,
@@ -88,6 +84,10 @@ private:
                             const name   permission_parent_name,
                             const name   code_account,
                             const name   code_auth );
+
+   void validate_total_transfer_limit( const name from, const asset quantity );
+
+   void validate_single_transfer( const name from, const asset quantity );
 
 public:
    using contract::contract;
