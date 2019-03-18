@@ -88,6 +88,7 @@ void chestnutacnt::validate_single_transfer( name from, asset quantity ) {
    }
 }
 
+
 void chestnutacnt::set_auth_with_key( const name   user,
                                       const name   permission_name,
                                       const name   permission_parent_name,
