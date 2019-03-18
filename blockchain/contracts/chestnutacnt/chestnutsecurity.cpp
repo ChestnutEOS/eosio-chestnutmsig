@@ -18,7 +18,7 @@ time_point chestnutacnt::current_time_point() {
 }
 
 
-void chestnutacnt::validate_exceeded_transfer_limit( name from, asset quantity ) {
+void chestnutacnt::validate_total_transfer_limit( name from, asset quantity ) {
    auto sym = quantity.symbol;
 
    xfr_max_table xfr_table( _self, from.value );
@@ -65,7 +65,7 @@ void chestnutacnt::validate_transfer( name from, name to, asset quantity ) {
    auto sym = quantity.symbol;
    eosio_assert( sym.is_valid(), "invalid symbol name" );
 
-   validate_exceeded_transfer_limit( from, quantity );
+   validate_total_transfer_limit( from, quantity );
 
    tokens_max token_max_table( _self, from.value );
    auto token_max_itr = token_max_table.find( sym.code().raw() );

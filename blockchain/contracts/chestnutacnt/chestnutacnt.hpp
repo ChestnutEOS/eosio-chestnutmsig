@@ -74,7 +74,7 @@ private:
 
    time_point current_time_point();
 
-   void validate_exceeded_transfer_limit( const name from, const asset quantity );
+   void validate_total_transfer_limit( const name from, const asset quantity );
 
    void validate_transfer( const name from, const name to, const asset quantity );
 
