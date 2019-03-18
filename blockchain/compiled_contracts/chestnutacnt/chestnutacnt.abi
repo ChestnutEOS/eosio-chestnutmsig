@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sun Mar 17 16:12:39 2019",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Mon Mar 18 12:18:18 2019",
     "version": "eosio::abi/1.1",
     "structs": [
         {
@@ -29,12 +29,8 @@
                     "type": "name"
                 },
                 {
-                    "name": "sym",
-                    "type": "symbol"
-                },
-                {
                     "name": "max_tx",
-                    "type": "uint64"
+                    "type": "asset"
                 },
                 {
                     "name": "minutes",
@@ -120,20 +116,20 @@
             "base": "",
             "fields": [
                 {
-                    "name": "sym",
-                    "type": "symbol"
+                    "name": "total_tokens_allowed_to_spend",
+                    "type": "asset"
                 },
                 {
-                    "name": "current_tx",
-                    "type": "uint64"
-                },
-                {
-                    "name": "max_tx",
-                    "type": "uint64"
+                    "name": "current_tokens_spent",
+                    "type": "asset"
                 },
                 {
                     "name": "minutes",
                     "type": "uint64"
+                },
+                {
+                    "name": "end_time",
+                    "type": "time_point"
                 },
                 {
                     "name": "is_locked",
