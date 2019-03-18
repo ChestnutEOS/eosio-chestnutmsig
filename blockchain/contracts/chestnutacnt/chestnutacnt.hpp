@@ -12,9 +12,6 @@
 
 #include <string>
 
-// #include "../eosio.contracts/eosio.token/include/eosio.token/eosio.token.hpp"
-// #include "../eosio.contracts/eosio.token/src/eosio.token.cpp"
-
 using std::string;
 
 using eosio::action;
