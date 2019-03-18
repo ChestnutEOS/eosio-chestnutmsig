@@ -61,7 +61,7 @@ void chestnutacnt::validate_total_transfer_limit( name from, asset quantity ) {
 }
 
 
-void chestnutacnt::validate_transfer( name from, name to, asset quantity ) {
+void chestnutacnt::validate_single_transfer( name from, asset quantity ) {
    auto sym = quantity.symbol;
    eosio_assert( sym.is_valid(), "invalid symbol name" );
 

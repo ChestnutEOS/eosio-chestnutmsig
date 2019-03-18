@@ -76,7 +76,7 @@ private:
 
    void validate_total_transfer_limit( const name from, const asset quantity );
 
-   void validate_transfer( const name from, const name to, const asset quantity );
+   void validate_single_transfer( const name from, const asset quantity );
 
    void set_auth_with_key( const name   user,
                            const name   permission_name,

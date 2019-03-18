@@ -115,7 +115,7 @@ void chestnutacnt::transfer( name      from,
    require_auth( from );
 
    validate_total_transfer_limit( from, quantity );
-   validate_transfer( from, to, quantity);
+   validate_single_transfer( from, quantity);
 
    /****/
    auto sym = quantity.symbol;
