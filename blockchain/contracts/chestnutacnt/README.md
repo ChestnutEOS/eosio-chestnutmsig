@@ -13,7 +13,7 @@ ex:
 cleos get table chestnutacnt alice tokensmax
 ```
 
-### chestnutacnt::xfrmax    [ TODO ]
+### chestnutacnt::xfrmax
    - **asset**: **total_tokens_allowed_to_spend** maximum amount of tokens that can be spent within the time frame
    - **asset**: **current_EOS_spent** current amount of tokens spent
    - **uint64_t**: **minutes**
