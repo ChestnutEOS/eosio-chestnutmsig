@@ -51,6 +51,7 @@ private:
 
    typedef eosio::multi_index< name("tokensmax"), token_max > tokens_max_table;
 
+
    struct [[eosio::table]] xfr_max {
       asset       total_tokens_allowed_to_spend;
       asset       current_tokens_spent;
