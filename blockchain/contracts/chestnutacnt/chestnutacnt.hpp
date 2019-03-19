@@ -26,11 +26,9 @@ using eosio::milliseconds;
 using eosio::microseconds;
 using eosio::same_payer;
 
-#define EOS_SYMBOL symbol("EOS", 4)
-#define RAMCORE_SYMBOL symbol("RAMCORE", 4)
-#define RAM_SYMBOL symbol("RAM", 0)
 
 #define CONTRACT_ACCOUNT "chestnutacnt"_n
+
 
 class [[eosio::contract("chestnutacnt")]] chestnutacnt : public eosio::contract {
 private:
@@ -43,7 +41,7 @@ private:
     *                                T A B L E S
     ***************************************************************************/
 
-   TABLE token_max {
+   struct [[eosio::table]] token_max {
       asset       max_transfer;
       name        contract_account;
       bool        is_locked{false};
@@ -51,7 +49,7 @@ private:
       uint64_t primary_key() const { return max_transfer.symbol.code().raw(); }
    };
 
-   typedef eosio::multi_index< name("tokensmax"), token_max > tokens_max;
+   typedef eosio::multi_index< name("tokensmax"), token_max > tokens_max_table;
 
    struct [[eosio::table]] xfr_max {
       asset       total_tokens_allowed_to_spend;
@@ -74,9 +72,9 @@ private:
 
    typedef eosio::multi_index< name("whitelist"), whitelist > whitelist_table;
 
-    /****************************************************************************
-     *                            F U N C T I O N S
-     ***************************************************************************/
+   /****************************************************************************
+    *                            F U N C T I O N S
+    ***************************************************************************/
 
    time_point current_time_point();
 

@@ -47,7 +47,7 @@ void chestnutacnt::validate_whitelist( const name from, const name to ) {
 }
 
 
-void chestnutacnt::validate_total_transfer_limit( name from, asset quantity ) {
+void chestnutacnt::validate_total_transfer_limit( const name from, const asset quantity ) {
    auto sym = quantity.symbol;
 
    xfr_max_table xfr_table( _self, from.value );
@@ -90,14 +90,14 @@ void chestnutacnt::validate_total_transfer_limit( name from, asset quantity ) {
 }
 
 
-void chestnutacnt::validate_single_transfer( name from, asset quantity ) {
+void chestnutacnt::validate_single_transfer( const name from, const asset quantity ) {
    auto sym = quantity.symbol;
    eosio_assert( sym.is_valid(), "invalid symbol name" );
 
-   tokens_max token_max_table( _self, from.value );
-   auto token_max_itr = token_max_table.find( sym.code().raw() );
+   tokens_max_table user_tokens_max( _self, from.value );
+   auto token_max_itr = user_tokens_max.find( sym.code().raw() );
 
-   if ( token_max_itr != token_max_table.end() ) {
+   if ( token_max_itr != user_tokens_max.end() ) {
       // only check if token_max_itr is "unlocked"
       if ( !token_max_itr->is_locked ) {
          // eosio_assert( quantity <= token_max_itr->max_transfer,

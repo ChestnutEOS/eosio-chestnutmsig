@@ -10,6 +10,7 @@ void chestnutacnt::hello( void ) {
    print("hello world\n");
 }
 
+
 void chestnutacnt::create( name user,
                            const string& chestnut_public_key ) {
    require_auth( user );
@@ -74,16 +75,16 @@ void chestnutacnt::addtokenmax( name  user,
    auto sym = quantity.symbol;
    eosio_assert( sym.is_valid(), "invalid symbol name" );
 
-   tokens_max token_max_table( _self, user.value );
-   auto token_max_itr = token_max_table.find( sym.code().raw() );
+   tokens_max_table user_tokens_max( _self, user.value );
+   auto token_max_itr = user_tokens_max.find( sym.code().raw() );
 
-   if ( token_max_itr == token_max_table.end() ) {
-      token_max_itr = token_max_table.emplace( user, [&]( auto& tk ) {
+   if ( token_max_itr == user_tokens_max.end() ) {
+      token_max_itr = user_tokens_max.emplace( user, [&]( auto& tk ) {
          tk.max_transfer      = quantity;
          tk.contract_account  = contract_account;
       });
    } else {
-      token_max_table.modify( token_max_itr, same_payer, [&]( auto& tk ) {
+      user_tokens_max.modify( token_max_itr, same_payer, [&]( auto& tk ) {
          tk.max_transfer      = quantity;
         });
    }
@@ -95,13 +96,13 @@ void chestnutacnt::rmtokenmax( name user, symbol sym ) {
    require_auth( user );
    eosio_assert( sym.is_valid(), "invalid symbol name" );
 
-   tokens_max token_max_table( _self, user.value );
-   auto token_max_to_delete = token_max_table.find( sym.code().raw() );
+   tokens_max_table user_tokens_max( _self, user.value );
+   auto token_max_to_delete = user_tokens_max.find( sym.code().raw() );
 
-   eosio_assert( token_max_to_delete != token_max_table.end(),
+   eosio_assert( token_max_to_delete != user_tokens_max.end(),
                  "can not find token max to delete" );
 
-   token_max_table.erase( token_max_to_delete );
+   user_tokens_max.erase( token_max_to_delete );
 }
 
 
@@ -149,10 +150,10 @@ void chestnutacnt::transfer( name      from,
    auto sym = quantity.symbol;
    eosio_assert( sym.is_valid(), "invalid symbol name" );
 
-   tokens_max token_max_table( _self, from.value );
-   auto token_max_itr = token_max_table.find( sym.code().raw() );
+   tokens_max_table user_tokens_max( _self, from.value );
+   auto token_max_itr = user_tokens_max.find( sym.code().raw() );
 
-   eosio_assert( token_max_itr != token_max_table.end(),
+   eosio_assert( token_max_itr != user_tokens_max.end(),
                  "token not protected. please addtokenmax" );
    /****/
 
