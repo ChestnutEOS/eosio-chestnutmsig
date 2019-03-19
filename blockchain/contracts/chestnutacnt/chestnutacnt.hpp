@@ -65,6 +65,15 @@ private:
 
    typedef eosio::multi_index< name("xfrmax"), xfr_max > xfr_max_table;
 
+
+   struct [[eosio::table]] whitelist {
+      name        whitelisted_account;
+
+      auto primary_key() const { return whitelisted_account.value; }
+   };
+
+   typedef eosio::multi_index< name("whitelist"), whitelist > whitelist_table;
+
     /****************************************************************************
      *                            F U N C T I O N S
      ***************************************************************************/
@@ -81,6 +90,8 @@ private:
                             const name   permission_parent_name,
                             const name   code_account,
                             const name   code_auth );
+
+   void validate_whitelist( const name from, const name to );
 
    void validate_total_transfer_limit( const name from, const asset quantity );
 
@@ -111,5 +122,9 @@ public:
    ACTION rmtokenmax( name user, symbol sym );
 
    ACTION addxfrmax( name user, asset max_tx, uint64_t minutes );
+
+   ACTION addwhitelist( name user, name account_to_add );
+
+   ACTION rmwhitelist( name user, name account_to_remove );
 
 };

@@ -45,6 +45,19 @@ echo 'cleos push action chestnutacnt hello'
 cleos push action chestnutacnt hello '[""]' -p daniel@chestnut
 
 echo '========================================================'
+echo '===              ADD `sally` TO WHITELIST            ==='
+echo '========================================================'
+echo 'cleos push action chestnutacnt addwhitelist ["daniel","sally"] -p daniel@chestnut'
+cleos push action chestnutacnt addwhitelist '["daniel","sally"]' -p daniel@chestnut
+echo 'cleos push action chestnutacnt addwhitelist ["daniel","george"] -p daniel@chestnut'
+cleos push action chestnutacnt addwhitelist '["daniel","george"]' -p daniel@chestnut
+echo 'cleos push action chestnutacnt addwhitelist ["daniel","kristina"] -p daniel@chestnut'
+cleos push action chestnutacnt addwhitelist '["daniel","kristina"]' -p daniel@chestnut
+sleep 1
+echo 'cleos get table chestnutacnt daniel whitelist'
+cleos get table chestnutacnt daniel whitelist
+
+echo '========================================================'
 echo '===             ADD NEW EOS TRANSFER LIMIT           ==='
 echo '========================================================'
 echo 'daniel adds a new EOS token spending limit'
@@ -68,7 +81,7 @@ sleep 1
 echo '========================================================'
 echo '===                 SEND EOS TRANSFER                ==='
 echo '========================================================'
-echo '`daniel` transfers 99 EOS through chestnutacnt to sally'
+echo '`daniel` transfers EOS tokens through chestnutacnt to sally'
 # echo 'this should fail'
 # echo 'cleos push action chestnutacnt transfer ["daniel","sally","100.0001 EOS","finding memo"] -p daniel@chestnut'
 # cleos push action chestnutacnt transfer '["daniel","sally","100.0001 EOS","finding memo"]' -p daniel@chestnut
@@ -113,11 +126,19 @@ sleep 1
 echo '============================================='
 echo '===               CLEAN UP                ==='
 echo '============================================='
-echo 'cleos get table chestnutacnt daniel xfrmax'
-cleos get table chestnutacnt daniel xfrmax
+echo 'cleos push action chestnutacnt rmwhitelist'
+cleos push action chestnutacnt rmwhitelist '["daniel","kristina"]' -p daniel@chestnut
+cleos push action chestnutacnt rmwhitelist '["daniel","george"]' -p daniel@chestnut
+cleos push action chestnutacnt rmwhitelist '["daniel","sally"]' -p daniel@chestnut
 sleep 1
 echo 'cleos push action chestnutacnt rmtokenmax ["daniel","4,EOS"] -p daniel@chestnut'
 cleos push action chestnutacnt rmtokenmax '["daniel","4,EOS"]' -p daniel@chestnut
+sleep 1
+echo 'cleos get table chestnutacnt daniel whitelist'
+cleos get table chestnutacnt daniel whitelist
+sleep 1
+echo 'cleos get table chestnutacnt daniel xfrmax'
+cleos get table chestnutacnt daniel xfrmax
 sleep 1
 echo 'cleos get table chestnutacnt daniel tokensmax'
 cleos get table chestnutacnt daniel tokensmax

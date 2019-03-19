@@ -19,9 +19,11 @@ void chestnutacnt::create( name user,
    // link auth of user@chestnut to
    //   config::addtokenmax
    //   config::rmtokenmax
-   name action_names[4] = { "addtokenmax"_n,
+   name action_names[6] = { "addtokenmax"_n,
                             "rmtokenmax"_n,
                             "addxfrmax"_n,
+                            "addwhitelist"_n,
+                            "rmwhitelist"_n,
                             "transfer"_n };
 
    for ( int i = 0; i < sizeof(action_names)/sizeof(name); i++ ) {
@@ -36,6 +38,31 @@ void chestnutacnt::create( name user,
       ).send();
    }
 
+}
+
+
+void chestnutacnt::addwhitelist( name user, name account_to_add ) {
+   require_auth( user );
+   eosio::check( is_account( account_to_add ), "account does not exist");
+
+   whitelist_table user_whitelist( _self, user.value );
+
+   user_whitelist.emplace( user, [&]( auto& w ) {
+      w.whitelisted_account = account_to_add;
+   });
+}
+
+
+void chestnutacnt::rmwhitelist( name user, name account_to_remove ) {
+   require_auth( user );
+   eosio::check( is_account( account_to_remove ), "account does not exist");
+
+   whitelist_table user_whitelist( _self, user.value );
+   auto whitelisted = user_whitelist.find( account_to_remove.value );
+
+   eosio_assert( whitelisted->whitelisted_account == account_to_remove , "cannot find account");
+
+   user_whitelist.erase( whitelisted );
 }
 
 
@@ -114,6 +141,7 @@ void chestnutacnt::transfer( name      from,
                              string    memo ) {
    require_auth( from );
 
+   validate_whitelist( from, to );
    validate_total_transfer_limit( from, quantity );
    validate_single_transfer( from, quantity);
 
@@ -137,4 +165,4 @@ void chestnutacnt::transfer( name      from,
 }
 
 
-EOSIO_DISPATCH( chestnutacnt, (hello)(transfer)(create)(addtokenmax)(rmtokenmax)(addxfrmax) )
+EOSIO_DISPATCH( chestnutacnt, (hello)(transfer)(create)(addtokenmax)(rmtokenmax)(addxfrmax)(addwhitelist)(rmwhitelist) )

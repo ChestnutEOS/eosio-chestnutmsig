@@ -25,9 +25,8 @@ ex:
 cleos get table chestnutacnt alice xfrmax
 ```
 
-### chestnutacnt::whitelist     [ TODO ]
-   - **name[]**: **whitelisted_account** maximum amount of transactions within time frame
-   - **bool**: **is_locked** toggles action on/off
+### chestnutacnt::whitelist
+   - **name**: **whitelisted_account** maximum amount of transactions within time frame
 
 ex:
 ```
@@ -96,13 +95,13 @@ Token Security Settings
 
 ### chestnutacnt::addwhitelist  [ TODO ]
    - **user** user
-   - **account_to_whitelist** account to whitelist
+   - **account_to_add** account to whitelist
 
    - Whitelist receiving accounts
 
 ### chestnutacnt::rmwhitelist   [ TODO ]
    - **user** user
-   - **account_to_remove_from_whitelist**
+   - **account_to_remove**
 
    - Remove account from whitelist
 

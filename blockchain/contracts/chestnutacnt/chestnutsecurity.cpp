@@ -35,6 +35,18 @@ void chestnutacnt::set_auth_with_code( const name   user,
 }
 
 
+void chestnutacnt::validate_whitelist( const name from, const name to ) {
+      whitelist_table user_whitelist( _self, from.value );
+      auto whitelisted = user_whitelist.find( to.value );
+
+      eosio::check( whitelisted != user_whitelist.end(),
+                   "receipent is not on the whitelist. blocking transfer");
+
+      eosio::check( whitelisted->whitelisted_account == to ,
+                    "receipent is not on the whitelist. blocking transfer");
+}
+
+
 void chestnutacnt::validate_total_transfer_limit( name from, asset quantity ) {
    auto sym = quantity.symbol;
 
