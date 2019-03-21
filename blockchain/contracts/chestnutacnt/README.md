@@ -1,5 +1,62 @@
 # chestnutacnt
 
+```bash
+cleos get account chestnutacnt
+created: 2019-03-21T00:52:28.500
+permissions: 
+     owner     1:    1 EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B
+        active     1:    1 EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9, 1 chestnutacnt@eosio.code
+memory: 
+     quota:     19.42 MiB    used:     402.9 KiB  
+
+net bandwidth: 
+     staked:          1.0000 EOS           (total stake delegated from account to self)
+     delegated:       0.0000 EOS           (total staked delegated to account from others)
+     used:             14.95 KiB  
+     available:        18.26 GiB  
+     limit:            18.26 GiB  
+
+cpu bandwidth:
+     staked:         10.0000 EOS           (total stake delegated from account to self)
+     delegated:       0.0000 EOS           (total staked delegated to account from others)
+     used:             1.773 ms   
+     available:        5.467 hr   
+     limit:            5.467 hr   
+
+producers:     <not voted>
+```
+```bash
+cleos get account daniel
+created: 2019-03-21T00:52:35.500
+permissions: 
+     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+        active     2:    1 chestnutacnt@active, 1 daniel@chestnut
+        chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+memory: 
+     quota:     9.321 KiB    used:     4.975 KiB  
+
+net bandwidth: 
+     staked:          1.0000 EOS           (total stake delegated from account to self)
+     delegated:       0.0000 EOS           (total staked delegated to account from others)
+     used:             1.438 KiB  
+     available:        18.26 GiB  
+     limit:            18.26 GiB  
+
+cpu bandwidth:
+     staked:          1.0000 EOS           (total stake delegated from account to self)
+     delegated:       0.0000 EOS           (total staked delegated to account from others)
+     used:             1.916 ms   
+     available:         32.8 min  
+     limit:             32.8 min  
+
+EOS balances: 
+     liquid:         1000.0000 EOS
+     staked:            2.0000 EOS
+     unstaking:         0.0000 EOS
+     total:          1002.0000 EOS
+
+producers:     <not voted>
+```
 
 ## Tables
 
