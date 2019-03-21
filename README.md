@@ -15,50 +15,25 @@ Chestnut provides the peace of mind that so many blockchain curious members of t
 
 ### How It Works
 
+Welcome to Chestnut Smart Accounts on EOS!
+Chestnut allows you to convert a normal eosio accounts' active permission into a multi-signature permission requiring signatures from both your private key and our smart contract.
 
-Full Smart Account
+
 ```bash
-cleos get account daniel
-
+cleos get account smartaccount
+created: 2019-03-21T00:52:35.500
 permissions: 
      owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
-        active     1:    1 chestnutacnt@eosio.code
-           chestnut     1:    1 EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
+        active     2:    1 chestnutacnt@active, 1 daniel@chestnut
+        chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
+
 Features:
 * account is fully secured and protected by chestnut smart contact
-    * all interaction with blockchain must go through the chestnut smart contract
+    * all interaction with blockchain be approved by the user and our smart contract
 * you as a user cannot interact with other dApps or smart contracts that chestnut has yet to integrate with
-
-
-Full Smart Account + Chestnut Support
-```bash
-cleos get account daniel
-
-permissions:
-     owner     1:    1 chestnutacnt@support
-        active     1:    1 chestnutacnt@eosio.code
-           chestnut     1:    1 EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
-```
-Enables the following additional features:
-* freeze account
-* account recovery
-
-
-Partial Smart Account
-```bash
-cleos get account daniel
-
-permissions: 
-     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
-        active     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b, 1 chestnutacnt@eosio.code
-           chestnut     1:    1 EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
-```
-Features:
-* user can switch between two account permissions
-    * active: using their active key users can interact with any dApp or smart contract
-        **NOTE: when using this permission, tokens can be transferred without the security of the chestnut smart contract**
-    * chestnut: using their chestnut key users can only use send secure transactions through the chestnut smart contract
+* if the user keeps their owner key then they can recover their own account.  If they wanted to trust us to 
+  recover as well then add `1 chestnutacnt@active` to the owner permission
 
 
 ### To run
