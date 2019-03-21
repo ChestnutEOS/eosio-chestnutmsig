@@ -1,4 +1,5 @@
-#include <eosio.msig/eosio.msig.hpp>
+// #include <eosio.msig/eosio.msig.hpp>
+#include "../include/eosio.msig/eosio.msig.hpp"
 #include <eosiolib/action.hpp>
 #include <eosiolib/permission.hpp>
 #include <eosiolib/crypto.hpp>

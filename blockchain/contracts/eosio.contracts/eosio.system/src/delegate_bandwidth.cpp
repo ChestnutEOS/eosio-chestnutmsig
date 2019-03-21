@@ -2,7 +2,8 @@
  *  @file
  *  @copyright defined in eos/LICENSE.txt
  */
-#include <eosio.system/eosio.system.hpp>
+// #include <eosio.system/eosio.system.hpp>
+#include "../include/eosio.system/eosio.system.hpp"
 
 #include <eosiolib/eosio.hpp>
 #include <eosiolib/print.hpp>
@@ -12,7 +13,8 @@
 #include <eosiolib/privileged.h>
 #include <eosiolib/transaction.hpp>
 
-#include <eosio.token/eosio.token.hpp>
+// #include <eosio.token/eosio.token.hpp>
+#include "../../eosio.token/include/eosio.token/eosio.token.hpp"
 
 
 #include <cmath>

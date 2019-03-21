@@ -1,4 +1,5 @@
-#include <eosio.system/eosio.system.hpp>
+// #include <eosio.system/eosio.system.hpp>
+#include "../include/eosio.system/eosio.system.hpp"
 #include <eosiolib/dispatcher.hpp>
 #include <eosiolib/crypto.h>
 

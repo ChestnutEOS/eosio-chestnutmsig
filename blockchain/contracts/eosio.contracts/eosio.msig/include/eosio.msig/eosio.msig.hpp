@@ -24,7 +24,7 @@ namespace eosio {
          [[eosio::action]]
          void invalidate( name account );
 
-      private:
+      public:
          struct [[eosio::table]] proposal {
             name                            proposal_name;
             std::vector<char>               packed_transaction;

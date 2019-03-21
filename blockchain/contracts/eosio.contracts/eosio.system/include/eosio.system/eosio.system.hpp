@@ -4,12 +4,14 @@
  */
 #pragma once
 
-#include <eosio.system/native.hpp>
+// #include <eosio.system/native.hpp>
+#include "native.hpp"
 #include <eosiolib/asset.hpp>
 #include <eosiolib/time.hpp>
 #include <eosiolib/privileged.hpp>
 #include <eosiolib/singleton.hpp>
-#include <eosio.system/exchange_state.hpp>
+// #include <eosio.system/exchange_state.hpp>
+#include "exchange_state.hpp"
 
 #include <string>
 

@@ -1,6 +1,8 @@
-#include <eosio.system/eosio.system.hpp>
+// #include <eosio.system/eosio.system.hpp>
+#include "../include/eosio.system/eosio.system.hpp"
 
-#include <eosio.token/eosio.token.hpp>
+// #include <eosio.token/eosio.token.hpp>
+#include "../../eosio.token/include/eosio.token/eosio.token.hpp"
 
 namespace eosiosystem {
 

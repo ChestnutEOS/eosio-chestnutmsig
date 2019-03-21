@@ -1,3 +1,4 @@
-#include <eosio.bios/eosio.bios.hpp>
+// #include <eosio.bios/eosio.bios.hpp>
+#include "../include/eosio.bios/eosio.bios.hpp"
 
 EOSIO_DISPATCH( eosio::bios, (setpriv)(setalimits)(setglimits)(setprods)(setparams)(reqauth)(setabi) )
