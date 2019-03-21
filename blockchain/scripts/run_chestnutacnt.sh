@@ -4,29 +4,29 @@ echo '===         C H E S T N U T  S M A R T  A C C O U N T S         ==='
 echo '===                                                             ==='
 echo '==================================================================='
 
+echo 'User `daniel` will turn his eos account into a smart account'
 echo 'Give daniel an initial EOS balance of 1000.0000 EOS'
 cleos push action eosio.token transfer '[ "eosio","daniel","1000.0000 EOS", "starting balance" ]' -p eosio eosio.token; sleep 1
 
 echo '============================================================'
 echo '=== New User daniel turns eos account into smart account ==='
-## This needs to all be done external to the smart contract
 echo '===                    MODIFY  PERMISSIONS               ==='
 echo '============================================================'
 
 echo 'Add @eosio.code permission to chestnutacnt@active'
 cleos push action eosio updateauth '{"account":"chestnutacnt","permission":"active","parent":"owner","auth":{"keys":[{"key":"EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9", "weight":1}],"threshold":1,"accounts":[{"permission":{"actor":"chestnutacnt","permission":"eosio.code"},"weight":1}],"waits":[]}}' -p chestnutacnt@active
 
-echo 'Create @chestnut first'
+echo 'Create @chestnut permission for `daniel` first'
 echo '======================================================'
 cleos push action eosio updateauth '{"account":"daniel","permission":"chestnut","parent":"owner","auth":{"keys":[{"key":"EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b", "weight":1}],"threshold":1,"accounts":[],"waits":[]}}' -p daniel@owner
 echo '======================================================'
 
-echo 'Give chestnutacnt@eosio.code access to daniel@active'
+echo 'Create the multisig active permission with `chestnutacnt@active` and `daniel@chestnut`'
 cleos push action eosio updateauth '{"account":"daniel","permission":"active","parent":"owner","auth":{"keys":[], "threshold":2
 ,"accounts":[{"permission":{"actor":"chestnutacnt","permission":"active"},"weight":1},{"permission":{"actor":"daniel","permission":"chestnut"},"weight":1}],"waits":[]}}' -p daniel
 
 sleep 1
-echo 'Create the smart account with @owner permission'
+echo 'linkauth of the @chestnut permission to the actions on our smart contract'
 cleos push action eosio linkauth '["daniel","chestnutacnt","addtokenmax","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","chestnutacnt","rmtokenmax","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","chestnutacnt","addxfrmax","chestnut"]' -p daniel@owner
@@ -37,9 +37,6 @@ cleos push action eosio linkauth '["daniel","eosio.msig","propose","chestnut"]' 
 cleos push action eosio linkauth '["daniel","eosio.msig","approve","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","exec","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","cancel","chestnut"]' -p daniel@owner
-# echo 'cleos push action chestnutacnt create ["daniel","EOS8GKM..."] -p daniel@active'
-# cleos push action chestnutacnt create '["daniel","EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39"]' -p daniel@active
-# cleos push action chestnutacnt create '["daniel","EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39"]' -p daniel@active
 sleep 1
 
 echo 'Make sure normal transfers fail with the @chestnut permission'
@@ -54,26 +51,18 @@ echo 'cleos get account chestnutacnt'
 cleos get account chestnutacnt
 echo 'cleos get account daniel'
 cleos get account daniel
-
-sleep 1
-echo 'Make sure normal transfers still work with the @active permission'
-echo 'cleos push action eosio.token transfer ["daniel","chestnutacnt","10.0000 EOS","memo"] -p daniel@active'
-cleos push action eosio.token transfer '["daniel","chestnutacnt","10.0000 EOS","memo"]' -p daniel@active
-cleos push action eosio.token transfer '["chestnutacnt","daniel","10.0000 EOS","memo"]' -p chestnutacnt
-sleep 1
-echo 'Make sure smart transfers do NOT work with the @active permission or @chestnut permission'
-# This should not be possible
-# echo 'cleos push action eosio.token transfer ["daniel","chestnutacnt","10.0000 EOS","memo"] -p daniel@active'
-# cleos push action eosio.token transfer '["daniel","chestnutacnt","10.0000 EOS","memo"]' -p daniel@active
-echo 'cleos push action eosio.token transfer ["daniel","chestnutacnt","10.0000 EOS","memo"] -p daniel@chestnut'
-cleos push action eosio.token transfer '["daniel","chestnutacnt","10.0000 EOS","memo"]' -p daniel@chestnut
+echo '======================================================'
+echo 'Make sure eosio.token transfers do NOT work with the @chestnut permission'
+echo 'cleos push action eosio.token transfer ["daniel","sally","10.0000 EOS","memo"] -p daniel@chestnut'
+cleos push action eosio.token transfer '["daniel","sally","10.0000 EOS","memo"]' -p daniel@chestnut
 sleep 1
 echo 'Make sure other actions can not be called with the @chestnut permission'
 echo 'cleos push action chestnutacnt hello'
 cleos push action chestnutacnt hello '[""]' -p daniel@chestnut
+sleep 1
 
 echo '========================================================'
-echo '===              ADD `sally` TO WHITELIST            ==='
+echo '===                  ADD TO WHITELIST                ==='
 echo '========================================================'
 echo 'cleos push action chestnutacnt addwhitelist ["daniel","sally"] -p daniel@chestnut'
 cleos push action chestnutacnt addwhitelist '["daniel","sally"]' -p daniel@chestnut
@@ -88,7 +77,7 @@ cleos get table chestnutacnt daniel whitelist
 echo '========================================================'
 echo '===             ADD NEW EOS TRANSFER LIMIT           ==='
 echo '========================================================'
-echo 'daniel adds a new EOS token spending limit'
+echo '`daniel` adds a new EOS token spending limit'
 echo 'he does not wish to send more than 50 EOS per transfer'
 echo 'cleos push action chestnutacnt addtokenmax ["daniel","50.0000 EOS","eosio.token"] -p daniel@chestnut'
 cleos push action chestnutacnt addtokenmax '["daniel","50.0000 EOS","eosio.token"]' -p daniel@chestnut
@@ -99,6 +88,7 @@ cleos get table chestnutacnt daniel tokensmax
 echo '========================================================'
 echo '===              ADD XFR (TRANSFER) MAX              ==='
 echo '========================================================'
+echo '`daniel` does not want to send more than 100 EOS in one minute'
 echo 'cleos push action chestnutacnt addxfrmax ["daniel","100.0000 EOS","1"] -p daniel@chestnut'
 cleos push action chestnutacnt addxfrmax '["daniel","100.0000 EOS","1"]' -p daniel@chestnut
 sleep 1
@@ -109,19 +99,14 @@ sleep 1
 echo '========================================================'
 echo '===                 SEND EOS TRANSFER                ==='
 echo '========================================================'
-echo '`daniel` transfers EOS tokens through chestnutacnt to sally'
-# echo 'this should fail'
-# echo 'cleos push action chestnutacnt transfer ["daniel","sally","100.0001 EOS","finding memo"] -p daniel@chestnut'
-# cleos push action chestnutacnt transfer '["daniel","sally","100.0001 EOS","finding memo"]' -p daniel@chestnut
-# sleep 1
-echo 'this should pass'
-echo 'before: '
+echo '`daniel` transfers EOS tokens to `sally`'
+echo 'BEFORE: '
 echo 'cleos get table eosio.token daniel accounts'
 cleos get table eosio.token daniel accounts
 echo 'cleos get table eosio.token sally accounts'
 cleos get table eosio.token sally accounts
 sleep 1
-
+echo '========================================================'
 
 echo 'cleos multisig propse `daniel` sends `50.0000 EOS` to `sally`'
 # cleos multisig propose [OPTIONS] proposal_name requested_permissions trx_permissions contract action data [proposer] [proposal_expiration]
@@ -139,8 +124,8 @@ sleep 1
 cleos multisig exec daniel test1 -p daniel@chestnut
 sleep 1
 
-
-echo 'after: '
+echo '========================================================'
+echo 'AFTER: '
 echo 'cleos get table eosio.token daniel accounts'
 cleos get table eosio.token daniel accounts
 echo 'cleos get table eosio.token sally accounts'
@@ -161,7 +146,6 @@ sleep 1
 cleos multisig exec daniel test2 -p daniel@chestnut
 
 echo 'Block the third - attempt to transfer 30 EOS'
-
 cleos multisig propose test3 '[{"actor": "chestnutacnt", "permission": "active"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio.token transfer '{"from":"daniel","to":"sally","quantity":"30.0000 EOS","memo":"test multisig"}' -p daniel@chestnut
 sleep 1
 cleos multisig approve daniel test3 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
@@ -189,20 +173,21 @@ sleep 1
 echo '============================================='
 echo '===               CLEAN UP                ==='
 echo '============================================='
-
-echo 'cleos get table eosio.msig daniel approvals2'
-cleos get table eosio.msig daniel approvals2
+echo 'cleos push action chestnutacnt rmwhitelist'
+cleos push action chestnutacnt rmwhitelist '["daniel","kristina"]' -p daniel@chestnut
+cleos push action chestnutacnt rmwhitelist '["daniel","george"]' -p daniel@chestnut
+cleos push action chestnutacnt rmwhitelist '["daniel","sally"]' -p daniel@chestnut
+sleep 1
+echo ''
 
 echo 'cleos get table eosio.token daniel accounts'
 cleos get table eosio.token daniel accounts
 echo 'cleos get table eosio.token sally accounts'
 cleos get table eosio.token sally accounts
 
-echo 'cleos push action chestnutacnt rmwhitelist'
-cleos push action chestnutacnt rmwhitelist '["daniel","kristina"]' -p daniel@chestnut
-cleos push action chestnutacnt rmwhitelist '["daniel","george"]' -p daniel@chestnut
-cleos push action chestnutacnt rmwhitelist '["daniel","sally"]' -p daniel@chestnut
-sleep 1
+echo 'cleos get table eosio.msig daniel approvals2'
+cleos get table eosio.msig daniel approvals2
+
 echo 'cleos push action chestnutacnt rmtokenmax ["daniel","4,EOS"] -p daniel@chestnut'
 cleos push action chestnutacnt rmtokenmax '["daniel","4,EOS"]' -p daniel@chestnut
 sleep 1
