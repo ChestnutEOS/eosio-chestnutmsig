@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Wed Mar 20 19:45:47 2019",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Thu Mar 21 07:28:02 2019",
     "version": "eosio::abi/1.1",
     "structs": [
         {
@@ -49,20 +49,6 @@
                 {
                     "name": "minutes",
                     "type": "uint64"
-                }
-            ]
-        },
-        {
-            "name": "create",
-            "base": "",
-            "fields": [
-                {
-                    "name": "user",
-                    "type": "name"
-                },
-                {
-                    "name": "chestnut_public_key",
-                    "type": "string"
                 }
             ]
         },
@@ -183,11 +169,6 @@
         {
             "name": "addxfrmax",
             "type": "addxfrmax",
-            "ricardian_contract": ""
-        },
-        {
-            "name": "create",
-            "type": "create",
             "ricardian_contract": ""
         },
         {

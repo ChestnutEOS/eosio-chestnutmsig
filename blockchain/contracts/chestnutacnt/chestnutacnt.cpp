@@ -11,46 +11,6 @@ void chestnutacnt::hello( void ) {
 }
 
 
-void chestnutacnt::create( name user,
-                           const string& chestnut_public_key ) {
-   require_auth( user );
-
-   //set_auth_with_key( user, "chestnut"_n, "active"_n, chestnut_public_key );
-
-   // link auth of user@chestnut to
-   //   config::addtokenmax
-   //   config::rmtokenmax
-   name action_names[6] = { "addtokenmax"_n,
-                            "rmtokenmax"_n,
-                            "addxfrmax"_n,
-                            "addwhitelist"_n,
-                            "rmwhitelist"_n,
-                            "transfer"_n };
-
-   for ( int i = 0; i < sizeof(action_names)/sizeof(name); i++ ) {
-      action(
-         permission_level{ user, "active"_n },
-         "eosio"_n,
-         "linkauth"_n,
-         std::make_tuple( user,
-                          CONTRACT_ACCOUNT,
-                          action_names[i],
-                          "chestnut"_n )
-      ).send();
-   }
-
-   action(
-      permission_level{ user, "active"_n },
-      "eosio"_n,
-      "linkauth"_n,
-      std::make_tuple( user,
-                       "eosio.msig"_n,
-                       "propose"_n,
-                       "chestnut"_n )
-   ).send();
-}
-
-
 void chestnutacnt::addwhitelist( name user, name account_to_add ) {
    require_auth( user );
    eosio::check( is_account( account_to_add ), "account does not exist");
@@ -202,4 +162,4 @@ void chestnutacnt::transfer( name proposer, name proposal_name) {
 }
 
 
-EOSIO_DISPATCH( chestnutacnt, (hello)(transfer)(create)(addtokenmax)(rmtokenmax)(addxfrmax)(addwhitelist)(rmwhitelist) )
+EOSIO_DISPATCH( chestnutacnt, (hello)(transfer)(addtokenmax)(rmtokenmax)(addxfrmax)(addwhitelist)(rmwhitelist) )

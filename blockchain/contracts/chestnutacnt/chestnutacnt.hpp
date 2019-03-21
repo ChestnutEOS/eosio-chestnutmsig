@@ -109,9 +109,6 @@ public:
 
    ACTION hello( void );
 
-   ACTION create( name user,
-                  const string& chestnut_public_key );
-
    ACTION transfer( name proposer, name proposal_name );
 
    ACTION addtokenmax( name  user,
