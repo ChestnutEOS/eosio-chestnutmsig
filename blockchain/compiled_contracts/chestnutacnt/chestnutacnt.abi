@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Tue Mar 19 08:21:36 2019",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Wed Mar 20 19:45:47 2019",
     "version": "eosio::abi/1.1",
     "structs": [
         {
@@ -122,20 +122,12 @@
             "base": "",
             "fields": [
                 {
-                    "name": "from",
+                    "name": "proposer",
                     "type": "name"
                 },
                 {
-                    "name": "to",
+                    "name": "proposal_name",
                     "type": "name"
-                },
-                {
-                    "name": "quantity",
-                    "type": "asset"
-                },
-                {
-                    "name": "memo",
-                    "type": "string"
                 }
             ]
         },
