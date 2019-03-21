@@ -70,6 +70,8 @@ cleos wallet create -n appwallet --to-console | tail -1 | sed -e 's/^"//' -e 's/
 # Keys
 #   EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B : 5JpWT4ehouB2FF9aCfdfnZ5AwbQbTtHBAwebRXt94FmjyhXwL4K
 #   EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9 : 5JD9AGTuTeD5BXZwGQ5AtwBqHK21aHmYnTetHgk1B3pjj7krT8N
+OWNER_PUBLIC_KEY="EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV"
+OWNER_PRIVATE_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 
 # Owner key for appwallet wallet
 cleos wallet import -n appwallet --private-key 5JpWT4ehouB2FF9aCfdfnZ5AwbQbTtHBAwebRXt94FmjyhXwL4K
@@ -94,16 +96,40 @@ cleos wallet import -n appwallet --private-key 5KXKxwkmvFHffqLVMcopKvJiGArQLUtZf
 #
 ###############################################################################
 
-# create account for eosio.token
-cleos create account eosio eosio.token EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9
+# Create system accounts
+cleos create account eosio eosio.token  ${OWNER_PUBLIC_KEY} ${ACTIVE_PUBLIC_KEY} -p eosio
+cleos create account eosio eosio.msig   ${OWNER_PUBLIC_KEY} ${ACTIVE_PUBLIC_KEY} -p eosio
+cleos create account eosio eosio.ram    ${OWNER_PUBLIC_KEY} ${ACTIVE_PUBLIC_KEY} -p eosio
+cleos create account eosio eosio.ramfee ${OWNER_PUBLIC_KEY} ${ACTIVE_PUBLIC_KEY} -p eosio
+cleos create account eosio eosio.stake  ${OWNER_PUBLIC_KEY} ${ACTIVE_PUBLIC_KEY} -p eosio
+cleos create account eosio eosio.saving ${OWNER_PUBLIC_KEY} ${ACTIVE_PUBLIC_KEY} -p eosio
+cleos create account eosio eosio.bpay   ${OWNER_PUBLIC_KEY} ${ACTIVE_PUBLIC_KEY} -p eosio
+cleos create account eosio eosio.names  ${OWNER_PUBLIC_KEY} ${ACTIVE_PUBLIC_KEY} -p eosio
+cleos create account eosio eosio.vpay   ${OWNER_PUBLIC_KEY} ${ACTIVE_PUBLIC_KEY} -p eosio
+cleos create account eosio eosio.upay   ${OWNER_PUBLIC_KEY} ${ACTIVE_PUBLIC_KEY} -p eosio
 
+# deploy bios contract
+${SOURCE_DIR}/blockchain/scripts/deploy_system_contract.sh eosio.bios eosio appwallet $(cat "${SOURCE_DIR}/blockchain/data/appwallet_wallet_password.txt")
 # create the EOS token
 ${SOURCE_DIR}/blockchain/scripts/deploy_system_contract.sh eosio.token eosio.token appwallet $(cat "${SOURCE_DIR}/blockchain/data/appwallet_wallet_password.txt")
 cleos push action eosio.token create '[ "eosio", "1000000000.0000 EOS"]' -p eosio.token; sleep 1
 cleos push action eosio.token issue '[ "eosio", "1000000000.0000 EOS", "init" ]' -p eosio eosio.token; sleep 1
+# deploy msig
+${SOURCE_DIR}/blockchain/scripts/deploy_system_contract.sh eosio.msig eosio.msig appwallet $(cat "${SOURCE_DIR}/blockchain/data/appwallet_wallet_password.txt")
+
+# Set the system contract - times out first times, works second time
+sleep .5 && ${SOURCE_DIR}/blockchain/scripts/deploy_system_contract.sh eosio.system eosio appwallet $(cat "${SOURCE_DIR}/blockchain/data/appwallet_wallet_password.txt")
+sleep .5
+
+echo 'init system contract'
+cleos push action eosio init '["0","4,EOS"]' -p eosio
+# Evelvate multi-sig priviledges
+cleos push action eosio setpriv '["eosio.msig", 1]' -p eosio@active
 
 # create account for chestnutacnt with above wallet's public keys
-cleos create account eosio chestnutacnt EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9
+cleos system newaccount eosio --transfer chestnutacnt \
+EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9 \
+--stake-net "1.0000 EOS" --stake-cpu "10.0000 EOS" --buy-ram-kbytes 20000
 
 # * Replace "chestnutacnt" by your own account name when you start your own project
 
