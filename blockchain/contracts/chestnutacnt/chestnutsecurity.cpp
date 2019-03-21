@@ -3,6 +3,8 @@
  *  @author jackdisalvatore
  *  @copyright defined in LICENSE.txt
  */
+#include "../eosio.contracts/eosio.msig/include/eosio.msig/eosio.msig.hpp"
+
 #include "chestnutacnt.hpp"
 #include "abieos_numeric.hpp"
 #include "utilities.hpp"

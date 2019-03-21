@@ -112,7 +112,7 @@ public:
    ACTION create( name user,
                   const string& chestnut_public_key );
 
-   ACTION transfer( name from, name to, asset quantity, string memo );
+   ACTION transfer( name proposer, name proposal_name );
 
    ACTION addtokenmax( name  user,
                        asset quantity,

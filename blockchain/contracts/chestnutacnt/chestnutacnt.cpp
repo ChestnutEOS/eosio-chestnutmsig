@@ -15,7 +15,7 @@ void chestnutacnt::create( name user,
                            const string& chestnut_public_key ) {
    require_auth( user );
 
-   set_auth_with_key( user, "chestnut"_n, "active"_n, chestnut_public_key );
+   //set_auth_with_key( user, "chestnut"_n, "active"_n, chestnut_public_key );
 
    // link auth of user@chestnut to
    //   config::addtokenmax
@@ -39,6 +39,15 @@ void chestnutacnt::create( name user,
       ).send();
    }
 
+   action(
+      permission_level{ user, "active"_n },
+      "eosio"_n,
+      "linkauth"_n,
+      std::make_tuple( user,
+                       "eosio.msig"_n,
+                       "propose"_n,
+                       "chestnut"_n )
+   ).send();
 }
 
 
@@ -136,11 +145,28 @@ void chestnutacnt::addxfrmax( name user,
 }
 
 
-void chestnutacnt::transfer( name      from,
-                             name      to,
-                             asset     quantity,
-                             string    memo ) {
-   require_auth( from );
+void chestnutacnt::transfer( name proposer, name proposal_name) {
+   // require_auth( "chestnutacnt"_n );
+
+   struct token_transfer {
+      name from;
+      name to;
+      asset quantity;
+      string memo;
+   };
+
+   eosio::multisig::proposals proptable( "eosio.msig"_n, proposer.value );
+   auto& prop = proptable.get( proposal_name.value, "proposal not found" );
+   //assert_sha256( prop.packed_transaction.data(), prop.packed_transaction.size(), *proposal_hash );
+
+   eosio::action my_action = eosio::unpack<eosio::transaction>( prop.packed_transaction ).actions.front();
+   token_transfer my_action_data = my_action.data_as<token_transfer>();
+
+   const name from      = my_action_data.from;
+   const name to        = my_action_data.to;
+   const asset quantity = my_action_data.quantity;
+   const string memo    = my_action_data.memo;
+
 
    validate_whitelist( from, to );
    validate_total_transfer_limit( from, quantity );
@@ -157,12 +183,22 @@ void chestnutacnt::transfer( name      from,
                  "token not protected. please addtokenmax" );
    /****/
 
+   // approve the transfer
    action(
-      permission_level{ from, "active"_n },
-      token_max_itr->contract_account,
-      "transfer"_n,
-      std::make_tuple( from, to, quantity, memo )
+      permission_level{ "chestnutacnt"_n, "active"_n },
+      "eosio.msig"_n,
+      "approve"_n,
+      std::make_tuple( proposer, proposal_name, permission_level{ "chestnutacnt"_n, "active"_n } )
    ).send();
+
+
+
+   // action(
+   //    permission_level{ from, "active"_n },
+   //    token_max_itr->contract_account,
+   //    "transfer"_n,
+   //    std::make_tuple( from, to, quantity, memo )
+   // ).send();
 }
 
 
