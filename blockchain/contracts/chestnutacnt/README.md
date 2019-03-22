@@ -65,9 +65,21 @@ producers:     <not voted>
    - **name**: **contract_account** amount of tokens deposited in account
    - **bool**: **is_locked** toggles action on/off
 
+   - maximum account of tokens that can be transfered at once
+
 ex:
 ```
 cleos get table chestnutacnt alice tokensmax
+```
+
+### chestnutacnt::whitelist
+   - **name**: **whitelisted_account** maximum amount of transactions within time frame
+
+   - whitelist of accounts that are allow to receive token transfers
+
+ex:
+```
+cleos get table chestnutacnt alice whitelist
 ```
 
 ### chestnutacnt::xfrmax **[!!REMOVED!!]**
@@ -82,14 +94,6 @@ ex:
 cleos get table chestnutacnt alice xfrmax
 ```
 
-### chestnutacnt::whitelist
-   - **name**: **whitelisted_account** maximum amount of transactions within time frame
-
-ex:
-```
-cleos get table chestnutacnt alice whitelist
-```
-
 ### chestnutacnt::unstaketime   [ TODO ]
     - **uint32_t**: **days** 0, 1, 3, 7, or 30 days
    - **bool**: **is_locked** toggles action on/off
@@ -101,12 +105,9 @@ cleos get table chestnutacnt alice unstaketime
 
 ## Actions
 
-
-### chestnutacnt::transfer    from to quantity memo
-   - **from** sender
-   - **to** receiver
-   - **quantity** amount and symbol
-   - **memo** optional memo
+### chestnutacnt::transfer    proposer proposal_name
+   - **proposer** user who proposed the token transfer
+   - **proposal_name** proposal name of mult-sig transaction
 
    - transfer tokens (smart contract will send if security check passes)
 
@@ -138,13 +139,13 @@ Token Security Settings
 
    - Set a maxium amount of transfers that can take place within a give time frame
 
-### chestnutacnt::addwhitelist  [ TODO ]
+### chestnutacnt::addwhitelist
    - **user** user
    - **account_to_add** account to whitelist
 
    - Whitelist receiving accounts
 
-### chestnutacnt::rmwhitelist   [ TODO ]
+### chestnutacnt::rmwhitelist
    - **user** user
    - **account_to_remove**
 
@@ -157,69 +158,120 @@ Token Security Settings
    - Set unstaking time
 
 
-### User Story
+## How To Run
 
+User Story:
 A new user `daniel` creates a transfer limit of 100.0000 EOS
 to pervent him from ever spending more than 100.0000 EOS
 
 1. `daniel` turns his normal eos account into a smart account by
-adding the `chestnutacnt@eosio.code` (chestnut smart contract) to
- the acitve permission and calling the `create` action.
+creating a `@chestnut` permission.  Then `daniel` uses his `@chestnut`
+permission to turn his `@active` permission into a multi-sig with his
+new `@chestnut` permission and our `chestnutacnt@active` permission.
 
-`daniel` first adds `chestnutact@eosio.code` to his active permission
+*`daniel` creates `daniel@chestnut`*
 ```bash
-cleos set account permission daniel active \
-'{"threshold": 1,"keys": [{"key": "EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b","weight": 1}],"accounts": [{"permission":{"actor":"chestnutacnt","permission":"eosio.code"},"weight":1}], "waits":[]}' \
-owner -p daniel
-
+cleos push action eosio updateauth '{"account":"daniel","permission":"chestnut","parent":"owner","auth":{"keys":[{"key":"EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b", "weight":1}],"threshold":1,"accounts":[],"waits":[]}}' -p daniel@owner
 ```
 
-`daniel` can either use his active key or create a new key to use with his smart account
+*`daniel` turns his active permission into a multi-sig between `chestnutacnt@active` and `daniel@chestnut`*
 ```bash
-# for 'chestnut' permission
-cleos create key --to-console
-Private key: 5KXKxwkmvFHffqLVMcopKvJiGArQLUtZfZj5LV43Un3yX2t5kMQ
-Public key: EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
+cleos push action eosio updateauth '{"account":"daniel","permission":"active","parent":"owner","auth":{"keys":[], "threshold":2
+,"accounts":[{"permission":{"actor":"chestnutacnt","permission":"active"},"weight":1},{"permission":{"actor":"daniel","permission":"chestnut"},"weight":1}],"waits":[]}}' -p daniel
 ```
 
-Finally `daniel` creates the smart account.
-
+If `daniel` wishes to remove admin privileges for higher security, now is the time to do so.
+*OPTIONAL*
 ```bash
-cleos push action chestnutacnt create '["daniel","EOS8GK..."]' -p daniel@active
+cleos push action eosio updateauth '{"account":"daniel","permission":"owner","parent":"","auth":{"keys":[],"threshold":1,"accounts":[{"permission":{"actor":"eosio.null","permission":"active"},"weight":1}],"waits":[]}}' -p daniel@owner
 ```
 
-Now `daniel`'s smart account should look like
+2. `daniel` links the @chestnut permission with all the smart acontract actions he wishes to have access too
+```bash
+cleos push action eosio linkauth '["daniel","chestnutacnt","addtokenmax","chestnut"]' -p daniel@owner
+cleos push action eosio linkauth '["daniel","chestnutacnt","rmtokenmax","chestnut"]' -p daniel@owner
+cleos push action eosio linkauth '["daniel","chestnutacnt","addxfrmax","chestnut"]' -p daniel@owner
+cleos push action eosio linkauth '["daniel","chestnutacnt","addwhitelist","chestnut"]' -p daniel@owner
+cleos push action eosio linkauth '["daniel","chestnutacnt","rmwhitelist","chestnut"]' -p daniel@owner
 
+cleos push action eosio linkauth '["daniel","eosio.msig","propose","chestnut"]' -p daniel@owner
+cleos push action eosio linkauth '["daniel","eosio.msig","approve","chestnut"]' -p daniel@owner
+cleos push action eosio linkauth '["daniel","eosio.msig","exec","chestnut"]' -p daniel@owner
+cleos push action eosio linkauth '["daniel","eosio.msig","cancel","chestnut"]' -p daniel@owner
+```
+
+**Note:** if `daniel` has opted out of keeping admin previllages to his account (i.e. nulls out his @owner permission)
+then the above must be done via multi-sig like so:
+```bash
+cleos multisig propose givemeauth '[{"actor": "chestnutacnt", "permission": "active"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio linkauth '{"account": "daniel", "code": "chestnutacnt", "type": "addtokenmax", "requirement": "chestnut"}' -p daniel@chestnut
+
+cleos multisig approve daniel givemeauth '{"actor":"daniel", "permission":"chestnut"}' -p daniel@chestnut
+
+cleos multisig approve daniel givemeauth '{"actor":"chestnutacnt", "permission":"active"}' -p chestnutacnt@active
+
+cleos multisig exec daniel givemeauth -p daniel@chestnut
+```
+
+`daniel`'s smart account should look like
 ```bash
 cleos get account daniel
 
+created: 2019-03-21T00:52:35.500
 permissions: 
-     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
-        active     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b, 1 chestnutacnt@eosio.code
-           chestnut     1:    1 EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
+     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b # NULL'ed out if no admin privileges
+        active     2:    1 chestnutacnt@active, 1 daniel@chestnut
+        chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+```
+or if its nulled out
+```bash
+cleos get account daniel
+
+created: 2019-03-21T00:52:35.500
+permissions: 
+     owner     1:    1 eosio.null@active
+        active     2:    1 chestnutacnt@active, 1 daniel@chestnut
+        chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 
-`chestnutacnt@eosio.code` was added to the active permission of the account, meaning
-the smart contract can sign transactions for `daniel`s account.
+3. `daniel` now imports the `@chestnut` key into his wallet
 
-A new permission called `chestnut` has been created that can only be accessed by the
- new private key `daniel` created.  This permission also gets linked to all the
- actions on the chestnut smart contracts.
+4. `daniel` sets up his whitelist
+```bash
+cleos push action chestnutacnt addwhitelist '["daniel","sally"]' -p daniel@chestnut
+cleos push action chestnutacnt addwhitelist '["daniel","george"]' -p daniel@chestnut
+```
 
-2. `daniel` now sets up a spending limit of 100.0000 EOS with his `chestnut` key
-
+5. `daniel` sets up a spending limit of 100.0000 EOS
 ```bash
 cleos push action chestnutacnt addtokenmax '["daniel","100.0000 EOS","eosio.token"]' -p daniel@chestnut
 ```
 
-3. `daniel` can now send transfers from the chestnutsmart contract using the `chestnut` key
-
+6. `daniel` can now propose a multi-sig token transfer
 ```bash
-cleos push action chestnutacnt transfer '["daniel","sally","49.0000 EOS","finding memo"]' -p daniel@chestnut
+cleos multisig propose test1 '[{"actor": "chestnutacnt", "permission": "active"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio.token transfer '{"from":"daniel","to":"sally","quantity":"99.0000 EOS","memo":"test multisig"}' -p daniel@chestnut
+
 ```
+
+7. `daniel` signs his half of the transaction
+```bash
+cleos multisig approve daniel test1 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
+```
+
+8. Our account `chestnutacnt` calls its smart contract to validate `daniel` token transfer proposal
+If the transfer passes the security checks then our `chestnutacnt@active` account will sign the second half of the transaction
+```bash
+cleos push action chestnutacnt transfer '["daniel","test1"]' -p chestnutacnt@active
+```
+
+9. Finally `daniel` can execute the multi-sig transaction
+```bash
+cleos multisig exec daniel test1 -p daniel@chestnut
+```
+
+
 
 the chestnutacnt contract will check the transfer quantity against the spending limit of 100.0000 EOS
 that `daniel` previously setup.  If the quantity is over the limit, the contract will fail the transfer.
-If it is successfull the smart contract will the sign the eosio.token::transfer action with
-chestnutacnt@eosio.code and the transfer will succeed.
+If it is successfull the smart contract will the sign the multi-sig transaction with
+chestnutacnt@active and daniel can execute the transfer.
 
