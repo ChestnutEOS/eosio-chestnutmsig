@@ -26,7 +26,7 @@ Features:
   recover as well then add `chestnutacnt@active` to the owner permission and maintain joint custody.
 
 
-Retain admin / recovery privileges yourself by keeping your owner key
+##### Retain admin / recovery privileges yourself by keeping your owner key
 ```bash
 cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
@@ -36,7 +36,7 @@ permissions:
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 
-Multi-sig admin priviledges with the `chestnutacnt`
+##### Multi-sig admin priviledges with the `chestnutacnt`
 ```bash
 cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
@@ -46,7 +46,7 @@ permissions:
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 
-Completely prevent admin privileges by nulling out the owner permission (**CANNOT BE UNDONE**)
+##### Completely prevent admin privileges by nulling out the owner permission (**CANNOT BE UNDONE**)
 ```bash
 cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
