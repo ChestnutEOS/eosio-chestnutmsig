@@ -106,10 +106,9 @@ void chestnutacnt::validate_single_transfer( const name from, const asset quanti
          //               error );
          if ( quantity > token_max_itr->max_transfer ) {
             const char *error = ( "exceeded maxmimum transfer limit of "
-                                  + std::to_string(
-                                    token_max_itr->max_transfer.amount )
+                                  + token_max_itr->max_transfer.to_string()
                                   + " : attempting to send "
-                                  + std::to_string( quantity.amount )
+                                  + quantity.to_string()
                                   ).c_str();
             eosio_assert( false, error );
          }
