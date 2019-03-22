@@ -162,7 +162,7 @@ Token Security Settings
 
 User Story:
 A new user `daniel` creates a transfer limit of 100.0000 EOS
-to pervent him from ever spending more than 100.0000 EOS
+to pervent him from ever spending more than 100.0000 EOS at once
 
 1. `daniel` turns his normal eos account into a smart account by
 creating a `@chestnut` permission.  Then `daniel` uses his `@chestnut`
