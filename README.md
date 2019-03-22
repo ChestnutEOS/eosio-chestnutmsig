@@ -29,11 +29,10 @@ permissions:
 ```
 
 Features:
-* account is fully secured and protected by chestnut smart contact
-    * all interaction with blockchain be approved by the user and our smart contract
-* you as a user cannot interact with other dApps or smart contracts that chestnut has yet to integrate with
+* account is fully secured and protected with the `chestnutacnt` Smart Contact
+* you can link the `@chestnut` permission auth with other dApps after completing a multisig request with the `chestnutacnt@active` account
 * if the user keeps their owner key then they can recover their own account.  If they wanted to trust us to 
-  recover as well then add `1 chestnutacnt@active` to the owner permission
+  recover as well then add `chestnutacnt@active` to the owner permission and maintain joint custody.
 
 
 ### To run
