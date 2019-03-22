@@ -39,6 +39,9 @@ cleos push action eosio linkauth '["daniel","eosio.msig","exec","chestnut"]' -p 
 cleos push action eosio linkauth '["daniel","eosio.msig","cancel","chestnut"]' -p daniel@owner
 sleep 1
 
+echo 'OPTIONAL - NULL out @owner permission with `eosio.null@active`'
+cleos push action eosio updateauth '{"account":"daniel","permission":"owner","parent":"","auth":{"keys":[],"threshold":1,"accounts":[{"permission":{"actor":"eosio.null","permission":"active"},"weight":1}],"waits":[]}}' -p daniel@owner
+
 echo 'Make sure normal transfers fail with the @chestnut permission'
 echo 'cleos push action eosio.token transfer ["daniel","chestnutacnt","10.0000 EOS","memo"] -p daniel@chestnut'
 cleos push action eosio.token transfer '["daniel","chestnutacnt","10.0000 EOS","memo"]' -p daniel@chestnut
