@@ -180,6 +180,20 @@ cleos get table eosio.token daniel accounts
 echo 'cleos get table eosio.token sally accounts'
 cleos get table eosio.token sally accounts
 
+echo '===================================================='
+echo '===  `linkauth` @chestnut with another contract  ==='
+echo '===================================================='
+cleos multisig propose givemeauth '[{"actor": "chestnutacnt", "permission": "active"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio linkauth '{"account": "daniel", "code": "eosio", "type": "buyram", "requirement": "chestnut"}' -p daniel@chestnut
+sleep 1
+cleos multisig approve daniel givemeauth '{"actor":"daniel", "permission":"chestnut"}' -p daniel@chestnut
+sleep 1
+cleos multisig approve daniel givemeauth '{"actor":"chestnutacnt", "permission":"active"}' -p chestnutacnt@active
+sleep 1
+cleos multisig exec daniel givemeauth -p daniel@chestnut
+sleep 1
+
+echo ' It works!'
+cleos push action eosio buyram '["daniel","daniel","1.0000 EOS"]' -p daniel@chestnut
 
 echo '============================================='
 echo '===               CLEAN UP                ==='
