@@ -166,7 +166,7 @@ to pervent him from ever spending more than 100.0000 EOS
 
 1. `daniel` turns his normal eos account into a smart account by
 creating a `@chestnut` permission.  Then `daniel` uses his `@chestnut`
-permission to turn his `@active` permission into a multi-sig with his
+permission to turn his `@active` permission into a multi-sig with the
 new `@chestnut` permission and our `chestnutacnt@active` permission.
 
 *`daniel` creates `daniel@chestnut`*
