@@ -180,7 +180,8 @@ cleos push action eosio updateauth '{"account":"daniel","permission":"active","p
 ,"accounts":[{"permission":{"actor":"chestnutacnt","permission":"active"},"weight":1},{"permission":{"actor":"daniel","permission":"chestnut"},"weight":1}],"waits":[]}}' -p daniel
 ```
 
-If `daniel` wishes to remove admin privileges for higher security, now is the time to do so.\s\s
+If `daniel` wishes to remove admin privileges for higher security, now is the time to do so.
+
 *OPTIONAL*
 ```bash
 cleos push action eosio updateauth '{"account":"daniel","permission":"owner","parent":"","auth":{"keys":[],"threshold":1,"accounts":[{"permission":{"actor":"eosio.null","permission":"active"},"weight":1}],"waits":[]}}' -p daniel@owner
