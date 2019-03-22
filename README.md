@@ -18,16 +18,6 @@ Chestnut provides the peace of mind that so many blockchain curious members of t
 Welcome to Chestnut Smart Accounts on EOS!
 Chestnut allows you to convert a normal eosio accounts' active permission into a multi-signature permission requiring signatures from both your private key and our smart contract.
 
-
-```bash
-cleos get account smartaccount
-created: 2019-03-21T00:52:35.500
-permissions: 
-     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b # NULL this out to remove admin privileges (eosio.null@active)
-        active     2:    1 chestnutacnt@active, 1 daniel@chestnut
-        chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
-```
-
 Features:
 * accounts' `@active` permission cannot be changed by malicious dApps
 * token transfers are protected by the `chestnutacnt` Smart Contact
@@ -36,7 +26,38 @@ Features:
   recover as well then add `chestnutacnt@active` to the owner permission and maintain joint custody.
 
 
-### To run
+Retain admin / recovery privileges yourself by keeping your owner key
+```bash
+cleos get account smartaccount
+created: 2019-03-21T00:52:35.500
+permissions: 
+     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+        active     2:    1 chestnutacnt@active, 1 smartaccount@chestnut
+        chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+```
+
+Multi-sig admin priviledges with the `chestnutacnt`
+```bash
+cleos get account smartaccount
+created: 2019-03-21T00:52:35.500
+permissions: 
+     owner     2:    1 chestnutacnt@active, 1 smartaccount@chestnut
+        active     2:    1 chestnutacnt@active, 1 smartaccount@chestnut
+        chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+```
+
+Completely prevent admin privileges by nulling out the owner permission (**CANNOT BE UNDONE**)
+```bash
+cleos get account smartaccount
+created: 2019-03-21T00:52:35.500
+permissions: 
+     owner     1:    1 eosio.null@active
+        active     2:    1 chestnutacnt@active, 1 smartaccount@chestnut
+        chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+```
+
+
+### To Run
 ```bash
 ./start_blockchain.sh
 ```
