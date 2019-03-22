@@ -75,34 +75,34 @@ void chestnutacnt::rmtokenmax( name user, symbol sym ) {
 }
 
 
-void chestnutacnt::addxfrmax( name user,
-                              asset max_tx,
-                              uint64_t minutes ) {
-   require_auth( user );
-   eosio::check( max_tx.symbol.is_valid(), "invalid symbol name" );
+// void chestnutacnt::addxfrmax( name user,
+//                               asset max_tx,
+//                               uint64_t minutes ) {
+//    require_auth( user );
+//    eosio::check( max_tx.symbol.is_valid(), "invalid symbol name" );
 
-   time_point ct{ microseconds{ static_cast<int64_t>( current_time() ) } };
-   time_point duration{ microseconds{ static_cast<int64_t>( minutes * useconds_per_minute ) } };
+//    time_point ct{ microseconds{ static_cast<int64_t>( current_time() ) } };
+//    time_point duration{ microseconds{ static_cast<int64_t>( minutes * useconds_per_minute ) } };
 
-   xfr_max_table xfr_table( _self, user.value );
-   auto xfr = xfr_table.find( max_tx.symbol.code().raw() );
+//    xfr_max_table xfr_table( _self, user.value );
+//    auto xfr = xfr_table.find( max_tx.symbol.code().raw() );
 
-   if ( xfr == xfr_table.end() ) {
-      xfr = xfr_table.emplace( user/* RAM payer */, [&]( auto& x ) {
-         x.total_tokens_allowed_to_spend  = max_tx;
-         x.current_tokens_spent           = asset(0, max_tx.symbol);
-         x.minutes                        = minutes;
-         x.end_time                       = ct + duration;
-      });
-   } else {
-      xfr_table.modify( xfr, same_payer, [&]( auto& x ) {
-         x.total_tokens_allowed_to_spend  = max_tx;
-         x.current_tokens_spent           = asset(0, max_tx.symbol);
-         x.minutes                        = minutes;
-         x.end_time                       = ct + duration;
-      });
-   }
-}
+//    if ( xfr == xfr_table.end() ) {
+//       xfr = xfr_table.emplace( user RAM payer , [&]( auto& x ) {
+//          x.total_tokens_allowed_to_spend  = max_tx;
+//          x.current_tokens_spent           = asset(0, max_tx.symbol);
+//          x.minutes                        = minutes;
+//          x.end_time                       = ct + duration;
+//       });
+//    } else {
+//       xfr_table.modify( xfr, same_payer, [&]( auto& x ) {
+//          x.total_tokens_allowed_to_spend  = max_tx;
+//          x.current_tokens_spent           = asset(0, max_tx.symbol);
+//          x.minutes                        = minutes;
+//          x.end_time                       = ct + duration;
+//       });
+//    }
+// }
 
 
 void chestnutacnt::transfer( name proposer, name proposal_name) {
@@ -129,7 +129,7 @@ void chestnutacnt::transfer( name proposer, name proposal_name) {
 
 
    validate_whitelist( from, to );
-   validate_total_transfer_limit( from, quantity );
+   // validate_total_transfer_limit( from, quantity );
    validate_single_transfer( from, quantity);
 
    /****/
@@ -162,4 +162,4 @@ void chestnutacnt::transfer( name proposer, name proposal_name) {
 }
 
 
-EOSIO_DISPATCH( chestnutacnt, (hello)(transfer)(addtokenmax)(rmtokenmax)(addxfrmax)(addwhitelist)(rmwhitelist) )
+EOSIO_DISPATCH( chestnutacnt, (hello)(transfer)(addtokenmax)(rmtokenmax)/*(addxfrmax)*/(addwhitelist)(rmwhitelist) )

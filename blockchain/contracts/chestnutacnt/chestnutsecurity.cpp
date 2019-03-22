@@ -49,47 +49,47 @@ void chestnutacnt::validate_whitelist( const name from, const name to ) {
 }
 
 
-void chestnutacnt::validate_total_transfer_limit( const name from, const asset quantity ) {
-   auto sym = quantity.symbol;
+// void chestnutacnt::validate_total_transfer_limit( const name from, const asset quantity ) {
+//    auto sym = quantity.symbol;
 
-   xfr_max_table xfr_table( _self, from.value );
-   auto xfr = xfr_table.find( sym.code().raw() );
+//    xfr_max_table xfr_table( _self, from.value );
+//    auto xfr = xfr_table.find( sym.code().raw() );
 
-   if ( xfr == xfr_table.end() ) {
-      const char *error = ( "no transfer limit set for "
-                            + symbol_to_string( quantity.symbol )
-                            + " token" ).c_str();
-      eosio::check( false, error );
-   } else {
-      // check to see if transfer is within current time frame
-      if ( current_time_point() <= xfr->end_time ) {
+//    if ( xfr == xfr_table.end() ) {
+//       const char *error = ( "no transfer limit set for "
+//                             + symbol_to_string( quantity.symbol )
+//                             + " token" ).c_str();
+//       eosio::check( false, error );
+//    } else {
+//       // check to see if transfer is within current time frame
+//       if ( current_time_point() <= xfr->end_time ) {
 
-         const char *error = ( "exceeded maxmimun spending limit of "
-                              + xfr->total_tokens_allowed_to_spend.to_string()
-                              + " over " + std::to_string(xfr->minutes)
-                              + " minute(s), attempted to send "
-                              + quantity.to_string() ).c_str();
+//          const char *error = ( "exceeded maxmimun spending limit of "
+//                               + xfr->total_tokens_allowed_to_spend.to_string()
+//                               + " over " + std::to_string(xfr->minutes)
+//                               + " minute(s), attempted to send "
+//                               + quantity.to_string() ).c_str();
 
-         eosio::check( quantity + xfr->current_tokens_spent <= xfr->total_tokens_allowed_to_spend, error );
+//          eosio::check( quantity + xfr->current_tokens_spent <= xfr->total_tokens_allowed_to_spend, error );
 
-         // increase spent tokens
-         xfr_table.modify( xfr, same_payer, [&]( auto& x ) { 
-            x.current_tokens_spent = x.current_tokens_spent + quantity;
-         });
+//          // increase spent tokens
+//          xfr_table.modify( xfr, same_payer, [&]( auto& x ) { 
+//             x.current_tokens_spent = x.current_tokens_spent + quantity;
+//          });
 
-      } else {
-         // current time frame has ended
-         time_point ct{ microseconds{ static_cast<int64_t>( current_time() ) } };
-         time_point duration{ microseconds{ static_cast<int64_t>( xfr->minutes * useconds_per_minute ) } };
+//       } else {
+//          // current time frame has ended
+//          time_point ct{ microseconds{ static_cast<int64_t>( current_time() ) } };
+//          time_point duration{ microseconds{ static_cast<int64_t>( xfr->minutes * useconds_per_minute ) } };
 
-         // reset spent tokens
-         xfr_table.modify( xfr, same_payer, [&]( auto& x ) {
-            x.current_tokens_spent           = quantity;
-            x.end_time                       = ct + duration;
-         });
-      }
-   }
-}
+//          // reset spent tokens
+//          xfr_table.modify( xfr, same_payer, [&]( auto& x ) {
+//             x.current_tokens_spent           = quantity;
+//             x.end_time                       = ct + duration;
+//          });
+//       }
+//    }
+// }
 
 
 void chestnutacnt::validate_single_transfer( const name from, const asset quantity ) {
