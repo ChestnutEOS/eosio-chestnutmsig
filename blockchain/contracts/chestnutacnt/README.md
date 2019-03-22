@@ -70,7 +70,7 @@ ex:
 cleos get table chestnutacnt alice tokensmax
 ```
 
-### chestnutacnt::xfrmax
+### chestnutacnt::xfrmax **[!!REMOVED!!]**
    - **asset**: **total_tokens_allowed_to_spend** maximum amount of tokens that can be spent within the time frame
    - **asset**: **current_EOS_spent** current amount of tokens spent
    - **uint64_t**: **minutes**
@@ -101,16 +101,6 @@ cleos get table chestnutacnt alice unstaketime
 
 ## Actions
 
-### chestnutacnt::create    user chestnut_public_key
-   - **user** the smart account user
-   - **chestnut_public_key** smart account `chestnut` public key
-
-   - creates new smart account
-
-ex:
-```
-cleos push action chestnutacnt create '["alice","EOS_ACTIVE_PUBILC_KEY"]' -p alice@chestnut
-```
 
 ### chestnutacnt::transfer    from to quantity memo
    - **from** sender
@@ -125,7 +115,7 @@ ex:
 cleos push action chestnutacnt transfer '["alice","bob","100.0000 EOS","memo"]' -p alice@chestnut
 ```
 
-### chestnutacnt::unstake    todo
+### chestnutacnt::unstake    [TODO]
    - **from** sender
 
 ex:
@@ -141,14 +131,12 @@ Token Security Settings
 
    - Set maximum single token transfer
 
-### chestnutacnt::addxfrmax     [ TODO ]
+### chestnutacnt::addxfrmax     **[!!REMOVED!!]**
    - **user** user
    - **max_tx** total tokens allowed to spend in given time frame
    - **minutes** time in minutes
 
    - Set a maxium amount of transfers that can take place within a give time frame
-
-### chestnutacnt::rmxfrmax      [ TODO ]
 
 ### chestnutacnt::addwhitelist  [ TODO ]
    - **user** user
