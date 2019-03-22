@@ -23,7 +23,7 @@ Chestnut allows you to convert a normal eosio accounts' active permission into a
 cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
 permissions: 
-     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b # NULL this out to remove admin privileges
+     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b # NULL this out to remove admin privileges (eosio.null@active)
         active     2:    1 chestnutacnt@active, 1 daniel@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
