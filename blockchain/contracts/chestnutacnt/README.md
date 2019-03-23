@@ -5,21 +5,22 @@ cleos get account chestnutacnt
 created: 2019-03-21T00:52:28.500
 permissions: 
      owner     1:    1 EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B
-        active     1:    1 EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9, 1 chestnutacnt@eosio.code
+        active     1:    1 EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9
+           security     1:    1 EOS5s5QRNMeWu4eL5Jdg4PfDHXYxoy1GbMj1C4txc34veeioiL3Zw, 1 chestnutacnt@eosio.code
 memory: 
-     quota:     19.42 MiB    used:     402.9 KiB  
+     quota:     19.42 MiB    used:       302 KiB  
 
 net bandwidth: 
      staked:          1.0000 EOS           (total stake delegated from account to self)
      delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:             14.95 KiB  
+     used:             12.45 KiB  
      available:        18.26 GiB  
      limit:            18.26 GiB  
 
 cpu bandwidth:
      staked:         10.0000 EOS           (total stake delegated from account to self)
      delegated:       0.0000 EOS           (total staked delegated to account from others)
-     used:             1.773 ms   
+     used:             2.166 ms   
      available:        5.467 hr   
      limit:            5.467 hr   
 
@@ -30,7 +31,7 @@ cleos get account daniel
 created: 2019-03-21T00:52:35.500
 permissions: 
      owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
-        active     2:    1 chestnutacnt@active, 1 daniel@chestnut
+        active     2:    1 chestnutacnt@security, 1 daniel@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 memory: 
      quota:     9.321 KiB    used:     4.975 KiB  
@@ -167,17 +168,17 @@ to pervent him from ever spending more than 100.0000 EOS at once
 1. `daniel` turns his normal eos account into a smart account by
 creating a `@chestnut` permission.  Then `daniel` uses his `@chestnut`
 permission to turn his `@active` permission into a multi-sig with the
-new `@chestnut` permission and our `chestnutacnt@active` permission.
+new `@chestnut` permission and our `chestnutacnt@security` permission.
 
 *`daniel` creates `daniel@chestnut`*
 ```bash
 cleos push action eosio updateauth '{"account":"daniel","permission":"chestnut","parent":"owner","auth":{"keys":[{"key":"EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b", "weight":1}],"threshold":1,"accounts":[],"waits":[]}}' -p daniel@owner
 ```
 
-*`daniel` turns his active permission into a multi-sig between `chestnutacnt@active` and `daniel@chestnut`*
+*`daniel` turns his active permission into a multi-sig between `chestnutacnt@security` and `daniel@chestnut`*
 ```bash
 cleos push action eosio updateauth '{"account":"daniel","permission":"active","parent":"owner","auth":{"keys":[], "threshold":2
-,"accounts":[{"permission":{"actor":"chestnutacnt","permission":"active"},"weight":1},{"permission":{"actor":"daniel","permission":"chestnut"},"weight":1}],"waits":[]}}' -p daniel
+,"accounts":[{"permission":{"actor":"chestnutacnt","permission":"security"},"weight":1},{"permission":{"actor":"daniel","permission":"chestnut"},"weight":1}],"waits":[]}}' -p daniel
 ```
 
 If `daniel` wishes to remove admin privileges for higher security, now is the time to do so.
@@ -204,11 +205,11 @@ cleos push action eosio linkauth '["daniel","eosio.msig","cancel","chestnut"]' -
 **Note:** if `daniel` has opted out of keeping admin previllages to his account (i.e. nulls out his @owner permission)
 then the above must be done via multi-sig like so:
 ```bash
-cleos multisig propose givemeauth '[{"actor": "chestnutacnt", "permission": "active"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio linkauth '{"account": "daniel", "code": "chestnutacnt", "type": "addtokenmax", "requirement": "chestnut"}' -p daniel@chestnut
+cleos multisig propose givemeauth '[{"actor": "chestnutacnt", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio linkauth '{"account": "daniel", "code": "chestnutacnt", "type": "addtokenmax", "requirement": "chestnut"}' -p daniel@chestnut
 
 cleos multisig approve daniel givemeauth '{"actor":"daniel", "permission":"chestnut"}' -p daniel@chestnut
 
-cleos multisig approve daniel givemeauth '{"actor":"chestnutacnt", "permission":"active"}' -p chestnutacnt@active
+cleos multisig approve daniel givemeauth '{"actor":"chestnutacnt", "permission":"security"}' -p chestnutacnt@security
 
 cleos multisig exec daniel givemeauth -p daniel@chestnut
 ```
@@ -220,7 +221,7 @@ cleos get account daniel
 created: 2019-03-21T00:52:35.500
 permissions: 
      owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b # NULL'ed out if no admin privileges
-        active     2:    1 chestnutacnt@active, 1 daniel@chestnut
+        active     2:    1 chestnutacnt@security, 1 daniel@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 or if its nulled out
@@ -230,7 +231,7 @@ cleos get account daniel
 created: 2019-03-21T00:52:35.500
 permissions: 
      owner     1:    1 eosio.null@active
-        active     2:    1 chestnutacnt@active, 1 daniel@chestnut
+        active     2:    1 chestnutacnt@security, 1 daniel@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 
@@ -249,7 +250,7 @@ cleos push action chestnutacnt addtokenmax '["daniel","100.0000 EOS","eosio.toke
 
 6. `daniel` can now propose a multi-sig token transfer
 ```bash
-cleos multisig propose test1 '[{"actor": "chestnutacnt", "permission": "active"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio.token transfer '{"from":"daniel","to":"sally","quantity":"99.0000 EOS","memo":"test multisig"}' -p daniel@chestnut
+cleos multisig propose test1 '[{"actor": "chestnutacnt", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio.token transfer '{"from":"daniel","to":"sally","quantity":"99.0000 EOS","memo":"test multisig"}' -p daniel@chestnut
 
 ```
 
@@ -259,9 +260,9 @@ cleos multisig approve daniel test1 '{"actor":"daniel","permission":"chestnut"}'
 ```
 
 8. Our account `chestnutacnt` calls its smart contract to validate `daniel` token transfer proposal
-If the transfer passes the security checks then our `chestnutacnt@active` account will sign the second half of the transaction
+If the transfer passes the security checks then our `chestnutacnt@security` account will sign the second half of the transaction
 ```bash
-cleos push action chestnutacnt transfer '["daniel","test1"]' -p chestnutacnt@active
+cleos push action chestnutacnt transfer '["daniel","test1"]' -p chestnutacnt@security
 ```
 
 9. Finally `daniel` can execute the multi-sig transaction

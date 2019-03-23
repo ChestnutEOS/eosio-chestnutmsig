@@ -145,10 +145,10 @@ void chestnutacnt::transfer( name proposer, name proposal_name) {
 
    // approve the transfer
    action(
-      permission_level{ "chestnutacnt"_n, "active"_n },
+      permission_level{ "chestnutacnt"_n, "security"_n },
       "eosio.msig"_n,
       "approve"_n,
-      std::make_tuple( proposer, proposal_name, permission_level{ "chestnutacnt"_n, "active"_n } )
+      std::make_tuple( proposer, proposal_name, permission_level{ "chestnutacnt"_n, "security"_n } )
    ).send();
 
 

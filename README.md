@@ -21,7 +21,7 @@ Chestnut allows you to convert a normal eosio accounts' active permission into a
 Features:
 * accounts' `@active` permission cannot be changed by malicious dApps
 * token transfers are protected by the `chestnutacnt` Smart Contact
-* you can use any other Chestnut approved dApp by linking the `@chestnut` permission with other dApps after completing a multisig request with our `chestnutacnt@active` account
+* you can use any other Chestnut approved dApp by linking the `@chestnut` permission with other dApps after completing a multisig request with our `chestnutacnt@security` account
 * if the user decideds to keeps their owner key then they can recover their own account.  If they wanted to trust us to 
   recover as well then add `chestnutacnt@active` to the owner permission and maintain joint custody.
 
@@ -32,7 +32,7 @@ cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
 permissions: 
      owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
-        active     2:    1 chestnutacnt@active, 1 smartaccount@chestnut
+        active     2:    1 chestnutacnt@security, 1 smartaccount@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 
@@ -42,7 +42,7 @@ cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
 permissions: 
      owner     2:    1 chestnutacnt@active, 1 smartaccount@chestnut
-        active     2:    1 chestnutacnt@active, 1 smartaccount@chestnut
+        active     2:    1 chestnutacnt@security, 1 smartaccount@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 
@@ -52,7 +52,7 @@ cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
 permissions: 
      owner     1:    1 eosio.null@active
-        active     2:    1 chestnutacnt@active, 1 smartaccount@chestnut
+        active     2:    1 chestnutacnt@security, 1 smartaccount@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 

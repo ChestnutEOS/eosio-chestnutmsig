@@ -86,6 +86,11 @@ cleos wallet import -n appwallet --private-key 5K7mtrinTFrVTduSxizUc5hjXJEtTjVTs
 # Public key: EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
 cleos wallet import -n appwallet --private-key 5KXKxwkmvFHffqLVMcopKvJiGArQLUtZfZj5LV43Un3yX2t5kMQ
 
+# keys for `chestnutacnt@security`
+# EOS5s5QRNMeWu4eL5Jdg4PfDHXYxoy1GbMj1C4txc34veeioiL3Zw
+# 5Key1RhpSyJyPkxCwjf8bTQrcNSGqYtQ37yEEkHzDnozMnXtooW
+cleos wallet import -n appwallet --private-key 5Key1RhpSyJyPkxCwjf8bTQrcNSGqYtQ37yEEkHzDnozMnXtooW
+
 # * Replace "appwallet" by your own wallet name when you start your own project
 
 ###############################################################################
