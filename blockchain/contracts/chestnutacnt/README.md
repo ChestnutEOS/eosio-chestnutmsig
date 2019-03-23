@@ -275,5 +275,5 @@ cleos multisig exec daniel test1 -p daniel@chestnut
 the chestnutacnt contract will check the transfer quantity against the spending limit of 100.0000 EOS
 that `daniel` previously setup.  If the quantity is over the limit, the contract will fail the transfer.
 If it is successfull the smart contract will the sign the multi-sig transaction with
-chestnutacnt@active and daniel can execute the transfer.
+chestnutacnt@security and daniel can execute the transfer.
 
