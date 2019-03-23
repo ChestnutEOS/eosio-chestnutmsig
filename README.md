@@ -58,6 +58,14 @@ permissions:
 
 
 ### To Run
+
+To run for the first time
+```bash
+./first_time_setup.sh
+```
+
+after just run
+
 ```bash
 ./start_blockchain.sh
 ```
