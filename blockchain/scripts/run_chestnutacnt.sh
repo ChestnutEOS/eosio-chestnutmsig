@@ -127,7 +127,40 @@ echo '========================================================'
 echo 'cleos multisig propse `daniel` sends `50.0000 EOS` to `sally`'
 # cleos multisig propose [OPTIONS] proposal_name requested_permissions trx_permissions contract action data [proposer] [proposal_expiration]
 cleos multisig propose test1 '[{"actor": "chestnutacnt", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio.token transfer '{"from":"daniel","to":"sally","quantity":"50.0000 EOS","memo":"test multisig"}' -p daniel@chestnut
+
+# HERE IS HOW TO SEND THE TRANSACTION WITHOUT CLEOS
+# cleos --print-request --print-response push action eosio.msig propose '{"proposer": "daniel", "proposal_name": "test1","requested": [{"actor": "chestnutacnt", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}], "trx": { "expiration": "2020-04-22T16:39:15", "ref_block_num": 0, "ref_block_prefix": 0, "max_net_usage_words": 0, "max_cpu_usage_ms": 0, "delay_sec": 0, "context_free_actions":[], "actions": [{ "account": "eosio.token", "name": "transfer", "authorization": [{ "actor": "daniel", "permission": "active" }], "data": "0000000044e5a64900000000001fa3c120a107000000000004454f53000000000d74657374206d756c7469736967" }], "transaction_extensions": []    } }' -p daniel@chestnut
+
+# "transaction": {
+#    "expiration": "2019-03-22T16:39:15",
+#    "ref_block_num": 0,
+#    "ref_block_prefix": 0,
+#    "max_net_usage_words": 0,
+#    "max_cpu_usage_ms": 0,
+#    "delay_sec": 0,
+#    "context_free_actions": [],
+#    "actions": [{
+#        "account": "eosio.token",
+#        "name": "transfer",
+#        "authorization": [{
+#            "actor": "daniel",
+#            "permission": "active"
+#          }
+#        ],
+#        "data": {
+#          "from": "daniel",
+#          "to": "sally",
+#          "quantity": "50.0000 EOS",
+#          "memo": "test multisig"
+#        },
+#        "hex_data": "0000000044e5a64900000000001fa3c120a107000000000004454f53000000000d74657374206d756c7469736967"
+#      }
+#    ],
+#    "transaction_extensions": []
+#  }
+
 sleep 1
+
 cleos multisig approve daniel test1 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
 sleep 1
 cleos push action chestnutacnt transfer '["daniel","test1"]' -p chestnutacnt@security
