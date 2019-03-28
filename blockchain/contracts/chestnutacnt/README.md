@@ -259,10 +259,35 @@ cleos multisig propose test1 '[{"actor": "chestnutacnt", "permission": "security
 cleos multisig approve daniel test1 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
 ```
 
-8. Our account `chestnutacnt` calls its smart contract to validate `daniel` token transfer proposal
-If the transfer passes the security checks then our `chestnutacnt@security` account will sign the second half of the transaction
+8. `daniel`  calls our smart contract to validate the token transfer proposal
+If the transfer passes the security checks then `chestnutacnt@eosio.code` will sign for `chestnutacnt@security` completing the required permission for the mutlti-sig
 ```bash
 cleos push action chestnutacnt transfer '["daniel","test1"]' -p chestnutacnt@security
+
+cleos get table eosio.msig daniel approvals2
+{
+  "rows": [{
+      "version": 1,
+      "proposal_name": "test1",
+      "requested_approvals": [],
+      "provided_approvals": [{
+          "level": {
+            "actor": "daniel",
+            "permission": "chestnut"
+          },
+          "time": "2019-03-28T23:07:38.000"
+        },{
+          "level": {
+            "actor": "chestnutacnt",
+            "permission": "security"
+          },
+          "time": "2019-03-28T23:07:39.000"
+        }
+      ]
+    }
+  ],
+  "more": false
+}
 ```
 
 9. Finally `daniel` can execute the multi-sig transaction
