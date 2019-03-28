@@ -42,7 +42,7 @@ cleos push action eosio linkauth '["daniel","chestnutacnt","rmtokenmax","chestnu
 cleos push action eosio linkauth '["daniel","chestnutacnt","addxfrmax","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","chestnutacnt","addwhitelist","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","chestnutacnt","rmwhitelist","chestnut"]' -p daniel@owner
-# cleos push action eosio linkauth '["daniel","chestnutacnt","transfer","chestnut"]' -p daniel@owner
+cleos push action eosio linkauth '["daniel","chestnutacnt","transfer","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","propose","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","approve","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","exec","chestnut"]' -p daniel@owner
@@ -163,7 +163,7 @@ sleep 1
 
 cleos multisig approve daniel test1 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
 sleep 1
-cleos push action chestnutacnt transfer '["daniel","test1"]' -p chestnutacnt@security
+cleos push action chestnutacnt transfer '["daniel","test1"]' -p daniel@chestnut
 sleep 1
 # cleos multisig review daniel test1
 # sleep 1
@@ -190,7 +190,7 @@ cleos multisig propose test2 '[{"actor": "chestnutacnt", "permission": "security
 sleep 1
 cleos multisig approve daniel test2 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
 sleep 1
-cleos push action chestnutacnt transfer '["daniel","test2"]' -p chestnutacnt@security
+cleos push action chestnutacnt transfer '["daniel","test2"]' -p daniel@chestnut
 sleep 1
 cleos multisig exec daniel test2 -p daniel@chestnut
 sleep 1
@@ -205,7 +205,7 @@ cleos multisig propose test3 '[{"actor": "chestnutacnt", "permission": "security
 sleep 1
 cleos multisig approve daniel test3 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
 sleep 1
-cleos push action chestnutacnt transfer '["daniel","test3"]' -p chestnutacnt@security
+cleos push action chestnutacnt transfer '["daniel","test3"]' -p daniel@chestnut
 sleep 1
 #cleos multisig exec daniel test3 -p daniel@chestnut
 cleos multisig cancel daniel test3 daniel -p daniel@chestnut
@@ -220,8 +220,8 @@ cleos multisig propose test4 '[{"actor": "chestnutacnt", "permission": "security
 sleep 1
 cleos multisig approve daniel test4 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
 sleep 1
-'cleos push action chestnutacnt transfer ["daniel","test4"] -p chestnutacnt@security'
-cleos push action chestnutacnt transfer '["daniel","test4"]' -p chestnutacnt@security
+'cleos push action chestnutacnt transfer ["daniel","test4"] -p daniel@chestnut'
+cleos push action chestnutacnt transfer '["daniel","test4"]' -p daniel@chestnut
 sleep 1
 cleos multisig exec daniel test4 -p daniel@chestnut
 sleep 1
