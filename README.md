@@ -41,7 +41,7 @@ permissions:
 cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
 permissions: 
-     owner     2:    1 beneficiary@owner, 1 chestnutacnt@active, 1 smartaccount@chestnut
+     owner     2:    1 beneficiary@owner, 1 chestnutacnt@active, 1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
         active     2:    1 chestnutacnt@security, 1 smartaccount@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
