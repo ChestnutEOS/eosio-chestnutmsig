@@ -117,14 +117,6 @@ ex:
 cleos push action chestnutacnt transfer '["alice","bob","100.0000 EOS","memo"]' -p alice@chestnut
 ```
 
-### chestnutacnt::unstake    [TODO]
-   - **from** sender
-
-ex:
-```
-cleos push action chestnutacnt unstake '["",""]' -p alice@chestnut
-```
-
 Token Security Settings
 ### chestnutacnt::addtokenmax
    - **user** user
@@ -151,12 +143,6 @@ Token Security Settings
    - **account_to_remove**
 
    - Remove account from whitelist
-
-### chestnutacnt::setunstake    [ TODO ]
-   - **user** user
-   - **days** 0, 1, 3, 7, or 30 days
-
-   - Set unstaking time
 
 ---
 ## How To Run
@@ -262,7 +248,7 @@ cleos multisig approve daniel test1 '{"actor":"daniel","permission":"chestnut"}'
 8. `daniel`  calls our smart contract to validate the token transfer proposal
 If the transfer passes the security checks then `chestnutacnt@eosio.code` will sign for `chestnutacnt@security` completing the required permission for the mutlti-sig
 ```bash
-cleos push action chestnutacnt transfer '["daniel","test1"]' -p chestnutacnt@security
+cleos push action chestnutacnt transfer '["daniel","test1"]' -p daniel@chestnut
 
 cleos get table eosio.msig daniel approvals2
 {
