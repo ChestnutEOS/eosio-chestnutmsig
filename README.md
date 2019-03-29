@@ -36,25 +36,16 @@ permissions:
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 
-#### Multi-sig admin priviledges with the `chestnutacnt`
+#### Multi-sig admin priviledges with the `chestnutacnt` and beneficiary
 ```bash
 cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
 permissions: 
-     owner     2:    1 chestnutacnt@active, 1 smartaccount@chestnut
+     owner     2:    1 beneficiary@owner, 1 chestnutacnt@active, 1 smartaccount@chestnut
         active     2:    1 chestnutacnt@security, 1 smartaccount@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 
-#### Completely prevent admin privileges by nulling out the owner permission (**CANNOT BE UNDONE**)
-```bash
-cleos get account smartaccount
-created: 2019-03-21T00:52:35.500
-permissions: 
-     owner     1:    1 eosio.null@active
-        active     2:    1 chestnutacnt@security, 1 smartaccount@chestnut
-        chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
-```
 
 
 ### To Run
