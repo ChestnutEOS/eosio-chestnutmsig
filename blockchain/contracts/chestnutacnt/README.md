@@ -167,13 +167,6 @@ cleos push action eosio updateauth '{"account":"daniel","permission":"active","p
 ,"accounts":[{"permission":{"actor":"chestnutacnt","permission":"security"},"weight":1},{"permission":{"actor":"daniel","permission":"chestnut"},"weight":1}],"waits":[]}}' -p daniel
 ```
 
-If `daniel` wishes to remove admin privileges for higher security, now is the time to do so.
-
-*OPTIONAL*
-```bash
-cleos push action eosio updateauth '{"account":"daniel","permission":"owner","parent":"","auth":{"keys":[],"threshold":1,"accounts":[{"permission":{"actor":"eosio.null","permission":"active"},"weight":1}],"waits":[]}}' -p daniel@owner
-```
-
 2. `daniel` links the @chestnut permission with all the smart acontract actions he wishes to have access too
 ```bash
 cleos push action eosio linkauth '["daniel","chestnutacnt","addtokenmax","chestnut"]' -p daniel@owner
@@ -206,17 +199,7 @@ cleos get account daniel
 
 created: 2019-03-21T00:52:35.500
 permissions: 
-     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b # NULL'ed out if no admin privileges
-        active     2:    1 chestnutacnt@security, 1 daniel@chestnut
-        chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
-```
-or if its nulled out
-```bash
-cleos get account daniel
-
-created: 2019-03-21T00:52:35.500
-permissions: 
-     owner     1:    1 eosio.null@active
+     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b # NULL'ed out if no admin privileges (eosio.null@active)
         active     2:    1 chestnutacnt@security, 1 daniel@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
