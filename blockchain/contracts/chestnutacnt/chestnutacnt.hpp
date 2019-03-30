@@ -52,17 +52,17 @@ private:
    typedef eosio::multi_index< name("tokensmax"), token_max > tokens_max_table;
 
 
-   // struct [[eosio::table]] xfr_max {
-   //    asset       total_tokens_allowed_to_spend;
-   //    asset       current_tokens_spent;
-   //    uint64_t    minutes;
-   //    time_point  end_time;
-   //    bool        is_locked{false};
+   struct [[eosio::table]] xfr_max {
+      asset       total_tokens_allowed_to_spend;
+      asset       current_tokens_spent;
+      uint64_t    minutes;
+      time_point  end_time;
+      bool        is_locked{false};
 
-   //    auto primary_key() const { return total_tokens_allowed_to_spend.symbol.code().raw(); }
-   // };
+      auto primary_key() const { return total_tokens_allowed_to_spend.symbol.code().raw(); }
+   };
 
-   // typedef eosio::multi_index< name("xfrmax"), xfr_max > xfr_max_table;
+   typedef eosio::multi_index< name("xfrmax"), xfr_max > xfr_max_table;
 
 
    struct [[eosio::table]] whitelist {
@@ -92,7 +92,7 @@ private:
 
    void validate_whitelist( const name from, const name to );
 
-   // void validate_total_transfer_limit( const name from, const asset quantity );
+   void validate_total_transfer_limit( const name from, const asset quantity );
 
    void validate_single_transfer( const name from, const asset quantity );
 
@@ -117,7 +117,7 @@ public:
 
    ACTION rmtokenmax( name user, symbol sym );
 
-   // ACTION addxfrmax( name user, asset max_tx, uint64_t minutes );
+   ACTION addxfrmax( name user, asset max_tx, uint64_t minutes );
 
    ACTION addwhitelist( name user, name account_to_add );
 

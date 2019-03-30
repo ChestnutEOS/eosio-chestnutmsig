@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Thu Mar 21 20:32:06 2019",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sat Mar 30 19:19:23 2019",
     "version": "eosio::abi/1.1",
     "structs": [
         {
@@ -31,6 +31,24 @@
                 {
                     "name": "account_to_add",
                     "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "addxfrmax",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "max_tx",
+                    "type": "asset"
+                },
+                {
+                    "name": "minutes",
+                    "type": "uint64"
                 }
             ]
         },
@@ -108,6 +126,32 @@
                     "type": "name"
                 }
             ]
+        },
+        {
+            "name": "xfr_max",
+            "base": "",
+            "fields": [
+                {
+                    "name": "total_tokens_allowed_to_spend",
+                    "type": "asset"
+                },
+                {
+                    "name": "current_tokens_spent",
+                    "type": "asset"
+                },
+                {
+                    "name": "minutes",
+                    "type": "uint64"
+                },
+                {
+                    "name": "end_time",
+                    "type": "time_point"
+                },
+                {
+                    "name": "is_locked",
+                    "type": "bool"
+                }
+            ]
         }
     ],
     "types": [],
@@ -120,6 +164,11 @@
         {
             "name": "addwhitelist",
             "type": "addwhitelist",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "addxfrmax",
+            "type": "addxfrmax",
             "ricardian_contract": ""
         },
         {
@@ -154,6 +203,13 @@
         {
             "name": "whitelist",
             "type": "whitelist",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "xfrmax",
+            "type": "xfr_max",
             "index_type": "i64",
             "key_names": [],
             "key_types": []

@@ -101,16 +101,16 @@ sleep 1
 echo 'cleos get table chestnutacnt daniel tokensmax'
 cleos get table chestnutacnt daniel tokensmax
 
-# echo '========================================================'
-# echo '===              ADD XFR (TRANSFER) MAX              ==='
-# echo '========================================================'
-# echo '`daniel` does not want to send more than 100 EOS in one minute'
-# echo 'cleos push action chestnutacnt addxfrmax ["daniel","100.0000 EOS","1"] -p daniel@chestnut'
-# cleos push action chestnutacnt addxfrmax '["daniel","100.0000 EOS","1"]' -p daniel@chestnut
-# sleep 1
-# echo 'cleos get table chestnutacnt daniel xfrmax'
-# cleos get table chestnutacnt daniel xfrmax
-# sleep 1
+echo '========================================================'
+echo '===              ADD XFR (TRANSFER) MAX              ==='
+echo '========================================================'
+echo '`daniel` does not want to send more than 100 EOS in one minute'
+echo 'cleos push action chestnutacnt addxfrmax ["daniel","100.0000 EOS","1"] -p daniel@chestnut'
+cleos push action chestnutacnt addxfrmax '["daniel","100.0000 EOS","1"]' -p daniel@chestnut
+sleep 1
+echo 'cleos get table chestnutacnt daniel xfrmax'
+cleos get table chestnutacnt daniel xfrmax
+sleep 1
 
 echo '========================================================'
 echo '===                 SEND EOS TRANSFER                ==='
@@ -174,8 +174,9 @@ sleep 1
 cleos push action chestnutacnt transfer '["daniel","test1"]' -p daniel@chestnut
 sleep 1
 
-echo '========================================================'
 echo 'AFTER: '
+echo 'cleos get table chestnutacnt daniel xfrmax'
+cleos get table chestnutacnt daniel xfrmax
 echo 'cleos get table eosio.token daniel accounts'
 cleos get table eosio.token daniel accounts
 echo 'cleos get table eosio.token sally accounts'
@@ -194,6 +195,8 @@ sleep 1
 cleos push action chestnutacnt transfer '["daniel","test2"]' -p daniel@chestnut
 sleep 1
 
+echo 'cleos get table chestnutacnt daniel xfrmax'
+cleos get table chestnutacnt daniel xfrmax
 echo 'cleos get table eosio.token daniel accounts'
 cleos get table eosio.token daniel accounts
 echo 'cleos get table eosio.token sally accounts'
@@ -209,20 +212,36 @@ sleep 1
 
 cleos multisig cancel daniel test3 daniel -p daniel@chestnut
 
-# echo 'cleos get table chestnutacnt daniel xfrmax'
-# cleos get table chestnutacnt daniel xfrmax
+echo 'cleos get table chestnutacnt daniel xfrmax'
+cleos get table chestnutacnt daniel xfrmax
 
-sleep 1
-echo '4. transfer 30 more'
-# echo 'transfer time reset by now'
+
+echo '4. Exceed the 100.00 EOS per minute transfer limit'
+echo '   attempt to send 30 EOS (75+30 = 105) !< 100'
 cleos multisig propose test4 '[{"actor": "chestnutacnt", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio.token transfer '{"from":"daniel","to":"sally","quantity":"30.0000 EOS","memo":"test multisig"}' -p daniel@chestnut
 sleep 1
 cleos multisig approve daniel test4 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
 sleep 1
-'cleos push action chestnutacnt transfer ["daniel","test4"] -p daniel@chestnut'
 cleos push action chestnutacnt transfer '["daniel","test4"]' -p daniel@chestnut
 sleep 1
 
+cleos multisig cancel daniel test4 daniel -p daniel@chestnut
+
+
+echo 'sleep 60'
+sleep 60
+echo '5. transfer 30 more'
+echo 'transfer time reset by now'
+cleos multisig propose test5 '[{"actor": "chestnutacnt", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio.token transfer '{"from":"daniel","to":"sally","quantity":"30.0000 EOS","memo":"test multisig"}' -p daniel@chestnut
+sleep 1
+cleos multisig approve daniel test5 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
+sleep 1
+echo 'cleos push action chestnutacnt transfer ["daniel","test5"] -p daniel@chestnut'
+cleos push action chestnutacnt transfer '["daniel","test5"]' -p daniel@chestnut
+sleep 1
+
+echo 'cleos get table chestnutacnt daniel xfrmax'
+cleos get table chestnutacnt daniel xfrmax
 echo 'cleos get table eosio.token daniel accounts'
 cleos get table eosio.token daniel accounts
 echo 'cleos get table eosio.token sally accounts'
