@@ -129,8 +129,8 @@ void chestnutacnt::transfer( name proposer, name proposal_name) {
 
 
    validate_whitelist( from, to );
-   // validate_total_transfer_limit( from, quantity );
    validate_single_transfer( from, quantity);
+   //validate_total_transfer_limit( from, quantity );
 
    /****/
    auto sym = quantity.symbol;
@@ -151,14 +151,13 @@ void chestnutacnt::transfer( name proposer, name proposal_name) {
       std::make_tuple( proposer, proposal_name, permission_level{ "chestnutacnt"_n, "security"_n } )
    ).send();
 
+   action(
+      permission_level{ "chestnutacnt"_n, "security"_n },
+      "eosio.msig"_n,
+      "exec"_n,
+      std::make_tuple( proposer, proposal_name, "chestnutacnt"_n )
+   ).send();
 
-
-   // action(
-   //    permission_level{ from, "active"_n },
-   //    token_max_itr->contract_account,
-   //    "transfer"_n,
-   //    std::make_tuple( from, to, quantity, memo )
-   // ).send();
 }
 
 

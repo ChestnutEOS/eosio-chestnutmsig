@@ -20,8 +20,9 @@ cleos push action eosio updateauth '{"account":"chestnutacnt","permission":"secu
 
 echo 'linkauth of the @security permission to the `transfer` action on the `chestnutacnt` smart contract'
 cleos push action eosio linkauth '["chestnutacnt","chestnutacnt","transfer","security"]' -p chestnutacnt@active
-echo 'linkauth of the @security permission to the `eosio.msig::approve`'
+echo 'linkauth of the @security permission to the `eosio.msig::approve` and `eosio.msig::exec'
 cleos push action eosio linkauth '["chestnutacnt","eosio.msig","approve","security"]' -p chestnutacnt@active
+cleos push action eosio linkauth '["chestnutacnt","eosio.msig","exec","security"]' -p chestnutacnt@active
 
 # echo 'Add @eosio.code permission to chestnutacnt@active'
 # cleos push action eosio updateauth '{"account":"chestnutacnt","permission":"active","parent":"owner","auth":{"keys":[{"key":"EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9", "weight":1}],"threshold":1,"accounts":[{"permission":{"actor":"chestnutacnt","permission":"eosio.code"},"weight":1}],"waits":[]}}' -p chestnutacnt@active
@@ -45,7 +46,6 @@ cleos push action eosio linkauth '["daniel","chestnutacnt","rmwhitelist","chestn
 cleos push action eosio linkauth '["daniel","chestnutacnt","transfer","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","propose","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","approve","chestnut"]' -p daniel@owner
-cleos push action eosio linkauth '["daniel","eosio.msig","exec","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","cancel","chestnut"]' -p daniel@owner
 sleep 1
 
@@ -163,14 +163,15 @@ sleep 1
 
 cleos multisig approve daniel test1 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
 sleep 1
-cleos push action chestnutacnt transfer '["daniel","test1"]' -p daniel@chestnut
-sleep 1
+# echo 'cleos get table eosio.msig daniel proposal'
+# cleos get table eosio.msig daniel proposal
+# sleep 1
+# echo 'cleos get table eosio.msig daniel approvals2'
+# cleos get table eosio.msig daniel approvals2
+# sleep 1
 # cleos multisig review daniel test1
 # sleep 1
-echo 'cleos get table eosio.msig daniel approvals2'
-cleos get table eosio.msig daniel approvals2
-sleep 1
-cleos multisig exec daniel test1 -p daniel@chestnut
+cleos push action chestnutacnt transfer '["daniel","test1"]' -p daniel@chestnut
 sleep 1
 
 echo '========================================================'
@@ -192,8 +193,6 @@ cleos multisig approve daniel test2 '{"actor":"daniel","permission":"chestnut"}'
 sleep 1
 cleos push action chestnutacnt transfer '["daniel","test2"]' -p daniel@chestnut
 sleep 1
-cleos multisig exec daniel test2 -p daniel@chestnut
-sleep 1
 
 echo 'cleos get table eosio.token daniel accounts'
 cleos get table eosio.token daniel accounts
@@ -207,7 +206,7 @@ cleos multisig approve daniel test3 '{"actor":"daniel","permission":"chestnut"}'
 sleep 1
 cleos push action chestnutacnt transfer '["daniel","test3"]' -p daniel@chestnut
 sleep 1
-#cleos multisig exec daniel test3 -p daniel@chestnut
+
 cleos multisig cancel daniel test3 daniel -p daniel@chestnut
 
 # echo 'cleos get table chestnutacnt daniel xfrmax'
@@ -223,27 +222,26 @@ sleep 1
 'cleos push action chestnutacnt transfer ["daniel","test4"] -p daniel@chestnut'
 cleos push action chestnutacnt transfer '["daniel","test4"]' -p daniel@chestnut
 sleep 1
-cleos multisig exec daniel test4 -p daniel@chestnut
-sleep 1
+
 echo 'cleos get table eosio.token daniel accounts'
 cleos get table eosio.token daniel accounts
 echo 'cleos get table eosio.token sally accounts'
 cleos get table eosio.token sally accounts
 
-echo '===================================================='
-echo '===  `linkauth` @chestnut with another contract  ==='
-echo '===================================================='
-cleos multisig propose givemeauth '[{"actor": "chestnutacnt", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio linkauth '{"account": "daniel", "code": "eosio", "type": "buyram", "requirement": "chestnut"}' -p daniel@chestnut
-sleep 1
-cleos multisig approve daniel givemeauth '{"actor":"daniel", "permission":"chestnut"}' -p daniel@chestnut
-sleep 1
-cleos multisig approve daniel givemeauth '{"actor":"chestnutacnt", "permission":"security"}' -p chestnutacnt@security
-sleep 1
-cleos multisig exec daniel givemeauth -p daniel@chestnut
-sleep 1
+# echo '===================================================='
+# echo '===  `linkauth` @chestnut with another contract  ==='
+# echo '===================================================='
+# cleos multisig propose givemeauth '[{"actor": "chestnutacnt", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio linkauth '{"account": "daniel", "code": "eosio", "type": "buyram", "requirement": "chestnut"}' -p daniel@chestnut
+# sleep 1
+# cleos multisig approve daniel givemeauth '{"actor":"daniel", "permission":"chestnut"}' -p daniel@chestnut
+# sleep 1
+# cleos multisig approve daniel givemeauth '{"actor":"chestnutacnt", "permission":"security"}' -p chestnutacnt@security
+# sleep 1
+# cleos multisig exec daniel givemeauth -p daniel@chestnut
+# sleep 1
 
-echo ' It works!'
-cleos push action eosio buyram '["daniel","daniel","1.0000 EOS"]' -p daniel@chestnut
+# echo ' It works!'
+# cleos push action eosio buyram '["daniel","daniel","1.0000 EOS"]' -p daniel@chestnut
 
 echo '============================================='
 echo '===               CLEAN UP                ==='
