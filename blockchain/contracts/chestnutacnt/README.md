@@ -83,7 +83,7 @@ ex:
 cleos get table chestnutacnt alice whitelist
 ```
 
-### chestnutacnt::xfrmax **[!!REMOVED!!]**
+### chestnutacnt::xfrmax
    - **asset**: **total_tokens_allowed_to_spend** maximum amount of tokens that can be spent within the time frame
    - **asset**: **current_EOS_spent** current amount of tokens spent
    - **uint64_t**: **minutes**
@@ -125,7 +125,7 @@ Token Security Settings
 
    - Set maximum single token transfer
 
-### chestnutacnt::addxfrmax     **[!!REMOVED!!]**
+### chestnutacnt::addxfrmax
    - **user** user
    - **max_tx** total tokens allowed to spend in given time frame
    - **minutes** time in minutes
@@ -147,7 +147,7 @@ Token Security Settings
 ---
 ## How To Run
 
-User Story:
+Setup:
 A new user `daniel` creates a transfer limit of 100.0000 EOS
 to pervent him from ever spending more than 100.0000 EOS at once
 
@@ -174,23 +174,11 @@ cleos push action eosio linkauth '["daniel","chestnutacnt","rmtokenmax","chestnu
 cleos push action eosio linkauth '["daniel","chestnutacnt","addxfrmax","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","chestnutacnt","addwhitelist","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","chestnutacnt","rmwhitelist","chestnut"]' -p daniel@owner
+cleos push action eosio linkauth '["daniel","chestnutacnt","transfer","chestnut"]' -p daniel@owner
 
 cleos push action eosio linkauth '["daniel","eosio.msig","propose","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","approve","chestnut"]' -p daniel@owner
-cleos push action eosio linkauth '["daniel","eosio.msig","exec","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","cancel","chestnut"]' -p daniel@owner
-```
-
-**Note:** if `daniel` has opted out of keeping admin previllages to his account (i.e. nulls out his @owner permission)
-then the above must be done via multi-sig like so:
-```bash
-cleos multisig propose givemeauth '[{"actor": "chestnutacnt", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio linkauth '{"account": "daniel", "code": "chestnutacnt", "type": "addtokenmax", "requirement": "chestnut"}' -p daniel@chestnut
-
-cleos multisig approve daniel givemeauth '{"actor":"daniel", "permission":"chestnut"}' -p daniel@chestnut
-
-cleos multisig approve daniel givemeauth '{"actor":"chestnutacnt", "permission":"security"}' -p chestnutacnt@security
-
-cleos multisig exec daniel givemeauth -p daniel@chestnut
 ```
 
 `daniel`'s smart account should look like
@@ -212,59 +200,35 @@ cleos push action chestnutacnt addwhitelist '["daniel","sally"]' -p daniel@chest
 cleos push action chestnutacnt addwhitelist '["daniel","george"]' -p daniel@chestnut
 ```
 
-5. `daniel` sets up a spending limit of 100.0000 EOS
+5. `daniel` sets up a transfer limit of 100.0000 EOS
 ```bash
 cleos push action chestnutacnt addtokenmax '["daniel","100.0000 EOS","eosio.token"]' -p daniel@chestnut
 ```
 
-6. `daniel` can now propose a multi-sig token transfer
+6. `daniel` sets up a spending limit of 1000.0000 EOS over 1 day (1440 minutes)
+```bash
+cleos push action chestnutacnt addxfrmax '["daniel","1000.0000 EOS","1440"]' -p daniel@chestnut
+```
+
+Token Transfers:
+
+1. `daniel` can now propose a multi-sig token transfer
 ```bash
 cleos multisig propose test1 '[{"actor": "chestnutacnt", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio.token transfer '{"from":"daniel","to":"sally","quantity":"99.0000 EOS","memo":"test multisig"}' -p daniel@chestnut
 
 ```
 
-7. `daniel` signs his half of the transaction
+2. `daniel` signs his half of the transaction
 ```bash
 cleos multisig approve daniel test1 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
 ```
 
-8. `daniel`  calls our smart contract to validate the token transfer proposal
-If the transfer passes the security checks then `chestnutacnt@eosio.code` will sign for `chestnutacnt@security` completing the required permission for the mutlti-sig
+3. `daniel`  calls our smart contract to validate the token transfer proposal
+If the transfer passes the security checks then `chestnutacnt@eosio.code` will sign for `chestnutacnt@security` completing the required permission for the mutlti-sig.
+Then it will automatically execute the transfer
 ```bash
 cleos push action chestnutacnt transfer '["daniel","test1"]' -p daniel@chestnut
-
-cleos get table eosio.msig daniel approvals2
-{
-  "rows": [{
-      "version": 1,
-      "proposal_name": "test1",
-      "requested_approvals": [],
-      "provided_approvals": [{
-          "level": {
-            "actor": "daniel",
-            "permission": "chestnut"
-          },
-          "time": "2019-03-28T23:07:38.000"
-        },{
-          "level": {
-            "actor": "chestnutacnt",
-            "permission": "security"
-          },
-          "time": "2019-03-28T23:07:39.000"
-        }
-      ]
-    }
-  ],
-  "more": false
-}
 ```
-
-9. Finally `daniel` can execute the multi-sig transaction
-```bash
-cleos multisig exec daniel test1 -p daniel@chestnut
-```
-
-
 
 the chestnutacnt contract will check the transfer quantity against the spending limit of 100.0000 EOS
 that `daniel` previously setup.  If the quantity is over the limit, the contract will fail the transfer.
