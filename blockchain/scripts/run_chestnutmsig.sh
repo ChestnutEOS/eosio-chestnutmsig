@@ -24,9 +24,6 @@ echo 'linkauth of the @security permission to the `eosio.msig::approve` and `eos
 cleos push action eosio linkauth '["chestnutmsig","eosio.msig","approve","security"]' -p chestnutmsig@active
 cleos push action eosio linkauth '["chestnutmsig","eosio.msig","exec","security"]' -p chestnutmsig@active
 
-# echo 'Add @eosio.code permission to chestnutmsig@active'
-# cleos push action eosio updateauth '{"account":"chestnutmsig","permission":"active","parent":"owner","auth":{"keys":[{"key":"EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9", "weight":1}],"threshold":1,"accounts":[{"permission":{"actor":"chestnutmsig","permission":"eosio.code"},"weight":1}],"waits":[]}}' -p chestnutmsig@active
-
 echo 'Create @chestnut permission for `daniel` first'
 echo '======================================================'
 cleos push action eosio updateauth '{"account":"daniel","permission":"chestnut","parent":"owner","auth":{"keys":[{"key":"EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b", "weight":1}],"threshold":1,"accounts":[],"waits":[]}}' -p daniel@owner
