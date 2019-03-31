@@ -20,10 +20,10 @@ Chestnut allows you to convert a normal eosio accounts' active permission into a
 
 Features:
 * accounts' `@active` permission cannot be changed by malicious dApps
-* token transfers are protected by the `chestnutacnt` Smart Contact
-* you can use any other Chestnut approved dApp by linking the `@chestnut` permission with other dApps after completing a multisig request with our `chestnutacnt@security` account
+* token transfers are protected by the `chestnutmsig` Smart Contact
+* you can use any other Chestnut approved dApp by linking the `@chestnut` permission with other dApps after completing a multisig request with our `chestnutmsig@security` account
 * if the user decideds to keeps their owner key then they can recover their own account.  If they wanted to trust us to 
-  recover as well then add `chestnutacnt@active` to the owner permission and maintain joint custody.
+  recover as well then add `chestnutmsig@active` to the owner permission and maintain joint custody.
 
 
 #### Retain admin / recovery privileges yourself by keeping your owner key
@@ -32,17 +32,17 @@ cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
 permissions: 
      owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
-        active     2:    1 chestnutacnt@security, 1 smartaccount@chestnut
+        active     2:    1 chestnutmsig@security, 1 smartaccount@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 
-#### Multi-sig admin priviledges with the `chestnutacnt` and beneficiary
+#### Multi-sig admin priviledges with the `chestnutmsig` and beneficiary
 ```bash
 cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
 permissions: 
-     owner     2:    1 beneficiary@owner, 1 chestnutacnt@active, 1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
-        active     2:    1 chestnutacnt@security, 1 smartaccount@chestnut
+     owner     2:    1 beneficiary@owner, 1 chestnutmsig@active, 1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+        active     2:    1 chestnutmsig@security, 1 smartaccount@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 
@@ -68,4 +68,4 @@ To shut down press Ctrl+C and run
 ```
 
 
-See `blockchain/contracts/chestnutacnt/README.md` for contract details.
+See `blockchain/contracts/chestnutmsig/README.md` for contract details.
