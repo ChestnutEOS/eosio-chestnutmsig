@@ -42,6 +42,7 @@ cleos push action eosio linkauth '["daniel","chestnutmsig","addwhitelist","chest
 cleos push action eosio linkauth '["daniel","chestnutmsig","rmwhitelist","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","chestnutmsig","transfer","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","chestnutmsig","giveauth","chestnut"]' -p daniel@owner
+
 cleos push action eosio linkauth '["daniel","eosio.msig","propose","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","approve","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","cancel","chestnut"]' -p daniel@owner
