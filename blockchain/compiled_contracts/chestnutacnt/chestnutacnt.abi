@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sat Mar 30 19:19:23 2019",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sun Mar 31 11:56:23 2019",
     "version": "eosio::abi/1.1",
     "structs": [
         {
@@ -49,6 +49,20 @@
                 {
                     "name": "minutes",
                     "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "giveauth",
+            "base": "",
+            "fields": [
+                {
+                    "name": "proposer",
+                    "type": "name"
+                },
+                {
+                    "name": "proposal_name",
+                    "type": "name"
                 }
             ]
         },
@@ -169,6 +183,11 @@
         {
             "name": "addxfrmax",
             "type": "addxfrmax",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "giveauth",
+            "type": "giveauth",
             "ricardian_contract": ""
         },
         {
