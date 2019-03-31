@@ -6,7 +6,7 @@ created: 2019-03-21T00:52:28.500
 permissions: 
      owner     1:    1 EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B
         active     1:    1 EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9
-           security     1:    1 EOS5s5QRNMeWu4eL5Jdg4PfDHXYxoy1GbMj1C4txc34veeioiL3Zw, 1 chestnutacnt@eosio.code
+           security     1:    1 chestnutacnt@eosio.code
 memory: 
      quota:     19.42 MiB    used:       302 KiB  
 
