@@ -86,7 +86,7 @@ cleos wallet import -n appwallet --private-key 5K7mtrinTFrVTduSxizUc5hjXJEtTjVTs
 # Public key: EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
 cleos wallet import -n appwallet --private-key 5KXKxwkmvFHffqLVMcopKvJiGArQLUtZfZj5LV43Un3yX2t5kMQ
 
-# keys for `chestnutacnt@security`
+# keys for `chestnutmsig@security`
 # EOS5s5QRNMeWu4eL5Jdg4PfDHXYxoy1GbMj1C4txc34veeioiL3Zw
 # 5Key1RhpSyJyPkxCwjf8bTQrcNSGqYtQ37yEEkHzDnozMnXtooW
 cleos wallet import -n appwallet --private-key 5Key1RhpSyJyPkxCwjf8bTQrcNSGqYtQ37yEEkHzDnozMnXtooW
@@ -96,8 +96,8 @@ cleos wallet import -n appwallet --private-key 5Key1RhpSyJyPkxCwjf8bTQrcNSGqYtQ3
 ###############################################################################
 #
 #   Replace the following: 
-#       account name "chestnutacnt" with the account name for your contract
-#       contract name "chestnutacnt" with the smart contract name
+#       account name "chestnutmsig" with the account name for your contract
+#       contract name "chestnutmsig" with the smart contract name
 #
 ###############################################################################
 
@@ -131,26 +131,26 @@ cleos push action eosio init '["0","4,EOS"]' -p eosio
 # Evelvate multi-sig priviledges
 cleos push action eosio setpriv '["eosio.msig", 1]' -p eosio@active
 
-# create account for chestnutacnt with above wallet's public keys
-cleos system newaccount eosio --transfer chestnutacnt \
+# create account for chestnutmsig with above wallet's public keys
+cleos system newaccount eosio --transfer chestnutmsig \
 EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9 \
 --stake-net "1.0000 EOS" --stake-cpu "10.0000 EOS" --buy-ram-kbytes 20000
 
-# * Replace "chestnutacnt" by your own account name when you start your own project
+# * Replace "chestnutmsig" by your own account name when you start your own project
 
 echo "=== deploy smart contract ==="
 # $1 smart contract name
 # $2 account holder name of the smart contract
 # $3 wallet for unlock the account
 # $4 password for unlocking the wallet
-${SOURCE_DIR}/blockchain/scripts/deploy_contract.sh chestnutacnt chestnutacnt appwallet $(cat "${SOURCE_DIR}/blockchain/data/appwallet_wallet_password.txt")
+${SOURCE_DIR}/blockchain/scripts/deploy_contract.sh chestnutmsig chestnutmsig appwallet $(cat "${SOURCE_DIR}/blockchain/data/appwallet_wallet_password.txt")
 
 echo "=== create user accounts ==="
 # script for create data into blockchain
 ${SOURCE_DIR}/blockchain/scripts/create_accounts.sh
 
 # * Replace the script with different form of data that you would pushed into the blockchain when you start your own project
-${SOURCE_DIR}/blockchain/scripts/run_chestnutacnt.sh
+${SOURCE_DIR}/blockchain/scripts/run_chestnutmsig.sh
 
 echo "=== end of setup blockchain accounts and smart contract ==="
 # create a file to indicate the blockchain has been initialized

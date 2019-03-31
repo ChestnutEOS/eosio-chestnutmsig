@@ -5,7 +5,7 @@
  */
 // #include "../eosio.contracts/eosio.msig/include/eosio.msig/eosio.msig.hpp"
 
-#include "chestnutacnt.hpp"
+#include "chestnutmsig.hpp"
 #include "utilities.hpp"
 
 
@@ -13,13 +13,13 @@ const int64_t  useconds_per_day      = 24 * 3600 * int64_t(1000000);
 const int64_t  useconds_per_minute   = 60 * int64_t(1000000);
 
 
-time_point chestnutacnt::current_time_point() {
+time_point chestnutmsig::current_time_point() {
    const static time_point ct{ microseconds{ static_cast<int64_t>( current_time() ) } };
    return ct;
 }
 
 
-void chestnutacnt::validate_whitelist( const name from, const name to ) {
+void chestnutmsig::validate_whitelist( const name from, const name to ) {
       whitelist_table user_whitelist( _self, from.value );
       auto whitelisted = user_whitelist.find( to.value );
 
@@ -29,7 +29,7 @@ void chestnutacnt::validate_whitelist( const name from, const name to ) {
 }
 
 
-void chestnutacnt::validate_total_transfer_limit( const name from, const asset quantity ) {
+void chestnutmsig::validate_total_transfer_limit( const name from, const asset quantity ) {
    auto sym = quantity.symbol;
 
    xfr_max_table xfr_table( _self, from.value );
@@ -72,7 +72,7 @@ void chestnutacnt::validate_total_transfer_limit( const name from, const asset q
 }
 
 
-void chestnutacnt::validate_single_transfer( const name from, const asset quantity ) {
+void chestnutmsig::validate_single_transfer( const name from, const asset quantity ) {
    auto sym = quantity.symbol;
    eosio::check( sym.is_valid(), "invalid symbol name" );
 

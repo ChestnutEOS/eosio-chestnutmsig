@@ -1,17 +1,17 @@
 /**
- *  @file chestnutacnt.cpp
+ *  @file chestnutmsig.cpp
  *  @author jackdisalvatore
  *  @copyright defined in LICENSE.txt
  */
 #include "chestnutsecurity.cpp"
 
 
-void chestnutacnt::hello( void ) {
+void chestnutmsig::hello( void ) {
    print("hello world\n");
 }
 
 
-void chestnutacnt::addwhitelist( name user, name account_to_add ) {
+void chestnutmsig::addwhitelist( name user, name account_to_add ) {
    require_auth( user );
    eosio::check( is_account( account_to_add ), "account does not exist");
 
@@ -23,7 +23,7 @@ void chestnutacnt::addwhitelist( name user, name account_to_add ) {
 }
 
 
-void chestnutacnt::rmwhitelist( name user, name account_to_remove ) {
+void chestnutmsig::rmwhitelist( name user, name account_to_remove ) {
    require_auth( user );
    eosio::check( is_account( account_to_remove ), "account does not exist");
 
@@ -36,7 +36,7 @@ void chestnutacnt::rmwhitelist( name user, name account_to_remove ) {
 }
 
 
-void chestnutacnt::addtokenmax( name  user,
+void chestnutmsig::addtokenmax( name  user,
                                 asset quantity,
                                 name  contract_account ) {
    require_auth( user );
@@ -61,7 +61,7 @@ void chestnutacnt::addtokenmax( name  user,
 }
 
 
-void chestnutacnt::rmtokenmax( name user, symbol sym ) {
+void chestnutmsig::rmtokenmax( name user, symbol sym ) {
    require_auth( user );
    eosio::check( sym.is_valid(), "invalid symbol name" );
 
@@ -75,7 +75,7 @@ void chestnutacnt::rmtokenmax( name user, symbol sym ) {
 }
 
 
-void chestnutacnt::addxfrmax( name user,
+void chestnutmsig::addxfrmax( name user,
                               asset max_tx,
                               uint64_t minutes ) {
    require_auth( user );
@@ -105,7 +105,7 @@ void chestnutacnt::addxfrmax( name user,
 }
 
 
-void chestnutacnt::transfer( name proposer, name proposal_name) {
+void chestnutmsig::transfer( name proposer, name proposal_name) {
    require_auth( proposer );
 
    // eosio::multisig::proposals proptable( "eosio.msig"_n, proposer.value );
@@ -122,24 +122,24 @@ void chestnutacnt::transfer( name proposer, name proposal_name) {
 
    // approve
    action(
-      permission_level{ "chestnutacnt"_n, "security"_n },
+      permission_level{ "chestnutmsig"_n, "security"_n },
       "eosio.msig"_n,
       "approve"_n,
-      std::make_tuple( proposer, proposal_name, permission_level{ "chestnutacnt"_n, "security"_n } )
+      std::make_tuple( proposer, proposal_name, permission_level{ "chestnutmsig"_n, "security"_n } )
    ).send();
 
    // execute
    action(
-      permission_level{ "chestnutacnt"_n, "security"_n },
+      permission_level{ "chestnutmsig"_n, "security"_n },
       "eosio.msig"_n,
       "exec"_n,
-      std::make_tuple( proposer, proposal_name, "chestnutacnt"_n )
+      std::make_tuple( proposer, proposal_name, "chestnutmsig"_n )
    ).send();
 
 }
 
 
-void chestnutacnt::giveauth( name proposer, name proposal_name ) {
+void chestnutmsig::giveauth( name proposer, name proposal_name ) {
    require_auth( proposer );
 
    // get proposal
@@ -160,21 +160,21 @@ void chestnutacnt::giveauth( name proposer, name proposal_name ) {
 
    // approve
    action(
-      permission_level{ "chestnutacnt"_n, "security"_n },
+      permission_level{ "chestnutmsig"_n, "security"_n },
       "eosio.msig"_n,
       "approve"_n,
-      std::make_tuple( proposer, proposal_name, permission_level{ "chestnutacnt"_n, "security"_n } )
+      std::make_tuple( proposer, proposal_name, permission_level{ "chestnutmsig"_n, "security"_n } )
    ).send();
 
    // execute
    action(
-      permission_level{ "chestnutacnt"_n, "security"_n },
+      permission_level{ "chestnutmsig"_n, "security"_n },
       "eosio.msig"_n,
       "exec"_n,
-      std::make_tuple( proposer, proposal_name, "chestnutacnt"_n )
+      std::make_tuple( proposer, proposal_name, "chestnutmsig"_n )
    ).send();
 
 }
 
 
-EOSIO_DISPATCH( chestnutacnt, (hello)(giveauth)(transfer)(addtokenmax)(rmtokenmax)(addxfrmax)(addwhitelist)(rmwhitelist) )
+EOSIO_DISPATCH( chestnutmsig, (hello)(giveauth)(transfer)(addtokenmax)(rmtokenmax)(addxfrmax)(addwhitelist)(rmwhitelist) )

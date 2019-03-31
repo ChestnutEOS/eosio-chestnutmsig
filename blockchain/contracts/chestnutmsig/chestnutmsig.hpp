@@ -1,5 +1,5 @@
 /**
- *  @file chestnutacnt.hpp
+ *  @file chestnutmsig.hpp
  *  @author jackdisalvatore
  *  @copyright defined in LICENSE.txt
  */
@@ -28,10 +28,10 @@ using eosio::microseconds;
 using eosio::same_payer;
 
 
-#define CONTRACT_ACCOUNT "chestnutacnt"_n
+#define CONTRACT_ACCOUNT "chestnutmsig"_n
 
 
-class [[eosio::contract("chestnutacnt")]] chestnutacnt : public eosio::contract {
+class [[eosio::contract("chestnutmsig")]] chestnutmsig : public eosio::contract {
 private:
 
    /****************************************************************************
@@ -118,7 +118,7 @@ public:
    using contract::contract;
 
    // constructor
-   chestnutacnt( name receiver, name code, datastream<const char*> ds ):
+   chestnutmsig( name receiver, name code, datastream<const char*> ds ):
                  contract( receiver, code, ds ) {}
 
    /****************************************************************************

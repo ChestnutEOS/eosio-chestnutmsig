@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sun Mar 31 11:56:23 2019",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sun Mar 31 15:37:46 2019",
     "version": "eosio::abi/1.1",
     "structs": [
         {
@@ -138,6 +138,10 @@
                 {
                     "name": "whitelisted_account",
                     "type": "name"
+                },
+                {
+                    "name": "is_locked",
+                    "type": "bool"
                 }
             ]
         },
