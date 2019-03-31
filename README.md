@@ -21,9 +21,8 @@ Chestnut allows you to convert a normal eosio accounts' active permission into a
 Features:
 * accounts' `@active` permission cannot be changed by malicious dApps
 * token transfers are protected by the `chestnutmsig` Smart Contact
-* you can use any other Chestnut approved dApp by linking the `@chestnut` permission with other dApps after completing a multisig request with our `chestnutmsig@security` account
-* if the user decideds to keeps their owner key then they can recover their own account.  If they wanted to trust us to 
-  recover as well then add `chestnutmsig@active` to the owner permission and maintain joint custody.
+* you can use any other Chestnut approved dApp by linking your `@chestnut` permission with other dApps
+* account recovery available with trusted beneficiaries
 
 
 #### Retain admin / recovery privileges yourself by keeping your owner key
