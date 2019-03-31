@@ -1,3 +1,3 @@
 #!/bin/bash
-eosio-cpp --abigen chestnutacnt.cpp -o chestnutacnt.wasm
+eosio-cpp --abigen chestnutmsig.cpp -o chestnutmsig.wasm
 
