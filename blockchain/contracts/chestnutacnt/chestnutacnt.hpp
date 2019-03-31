@@ -37,6 +37,14 @@ private:
     *                            D A T A  T Y P E S
     ***************************************************************************/
 
+   // eosio::linkauth
+   struct link_auth {
+      name account;
+      name code;
+      name type;
+      name requirement;
+   };
+
    /****************************************************************************
     *                                T A B L E S
     ***************************************************************************/
@@ -108,6 +116,8 @@ public:
     ***************************************************************************/
 
    ACTION hello( void );
+
+   ACTION giveauth( name proposer, name proposal_name );
 
    ACTION transfer( name proposer, name proposal_name );
 

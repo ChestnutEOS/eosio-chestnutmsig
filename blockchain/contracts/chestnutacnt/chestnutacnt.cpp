@@ -161,4 +161,41 @@ void chestnutacnt::transfer( name proposer, name proposal_name) {
 }
 
 
-EOSIO_DISPATCH( chestnutacnt, (hello)(transfer)(addtokenmax)(rmtokenmax)(addxfrmax)(addwhitelist)(rmwhitelist) )
+// name account, name code, name type, name requirement
+void chestnutacnt::giveauth( name proposer, name proposal_name ) {
+   require_auth( proposer );
+
+   // get proposal
+   eosio::multisig::proposals proptable( "eosio.msig"_n, proposer.value );
+   auto& prop = proptable.get( proposal_name.value, "proposal not found" );
+
+   // get action data
+   eosio::action my_action = eosio::unpack<eosio::transaction>( prop.packed_transaction ).actions.front();
+   eosio::check( "linkauth"_n == my_action.name, "only accepts linkauth proposal" );
+   link_auth my_action_data = my_action.data_as<link_auth>();
+
+   // account = proposer
+   eosio::check( proposer     == my_action_data.account, "cannot propose for other accounts" );
+   /*eosio::check( CONTRACT_BLACKLIST_GOES_HERE != my_action_data.code         );*/
+   /*eosio::check( ACTION_BLACKLIST_GOES_HERE   != my_action_data.type         );*/
+   eosio::check( "chestnut"_n  == my_action_data.requirement, "can only linkauth with @chestnut permission" );
+
+   // approve the transfer
+   action(
+      permission_level{ "chestnutacnt"_n, "security"_n },
+      "eosio.msig"_n,
+      "approve"_n,
+      std::make_tuple( proposer, proposal_name, permission_level{ "chestnutacnt"_n, "security"_n } )
+   ).send();
+
+   action(
+      permission_level{ "chestnutacnt"_n, "security"_n },
+      "eosio.msig"_n,
+      "exec"_n,
+      std::make_tuple( proposer, proposal_name, "chestnutacnt"_n )
+   ).send();
+
+}
+
+
+EOSIO_DISPATCH( chestnutacnt, (hello)(giveauth)(transfer)(addtokenmax)(rmtokenmax)(addxfrmax)(addwhitelist)(rmwhitelist) )

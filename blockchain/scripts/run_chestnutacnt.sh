@@ -44,6 +44,7 @@ cleos push action eosio linkauth '["daniel","chestnutacnt","addxfrmax","chestnut
 cleos push action eosio linkauth '["daniel","chestnutacnt","addwhitelist","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","chestnutacnt","rmwhitelist","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","chestnutacnt","transfer","chestnut"]' -p daniel@owner
+cleos push action eosio linkauth '["daniel","chestnutacnt","giveauth","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","propose","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","approve","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","cancel","chestnut"]' -p daniel@owner
@@ -247,20 +248,20 @@ cleos get table eosio.token daniel accounts
 echo 'cleos get table eosio.token sally accounts'
 cleos get table eosio.token sally accounts
 
-# echo '===================================================='
-# echo '===  `linkauth` @chestnut with another contract  ==='
-# echo '===================================================='
-# cleos multisig propose givemeauth '[{"actor": "chestnutacnt", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio linkauth '{"account": "daniel", "code": "eosio", "type": "buyram", "requirement": "chestnut"}' -p daniel@chestnut
-# sleep 1
-# cleos multisig approve daniel givemeauth '{"actor":"daniel", "permission":"chestnut"}' -p daniel@chestnut
-# sleep 1
-# cleos multisig approve daniel givemeauth '{"actor":"chestnutacnt", "permission":"security"}' -p chestnutacnt@security
-# sleep 1
+echo '===================================================='
+echo '===  `linkauth` @chestnut with another contract  ==='
+echo '===================================================='
+cleos multisig propose givemeauth '[{"actor": "chestnutacnt", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio linkauth '{"account": "daniel", "code": "eosio", "type": "buyram", "requirement": "chestnut"}' -p daniel@chestnut
+sleep 1
+cleos multisig approve daniel givemeauth '{"actor":"daniel", "permission":"chestnut"}' -p daniel@chestnut
+sleep 1
+cleos push action chestnutacnt giveauth '["daniel","givemeauth"]' -p daniel@chestnut
+sleep 1
 # cleos multisig exec daniel givemeauth -p daniel@chestnut
 # sleep 1
 
-# echo ' It works!'
-# cleos push action eosio buyram '["daniel","daniel","1.0000 EOS"]' -p daniel@chestnut
+echo ' It works!'
+cleos push action eosio buyram '["daniel","daniel","1.0000 EOS"]' -p daniel@chestnut
 
 echo '============================================='
 echo '===               CLEAN UP                ==='
