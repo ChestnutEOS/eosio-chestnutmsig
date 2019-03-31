@@ -16,7 +16,7 @@ echo '===                    MODIFY  PERMISSIONS               ==='
 echo '============================================================'
 
 echo 'Create @security permission for `chestnutacnt`'
-cleos push action eosio updateauth '{"account":"chestnutacnt","permission":"security","parent":"active","auth":{"keys":[{"key":"EOS5s5QRNMeWu4eL5Jdg4PfDHXYxoy1GbMj1C4txc34veeioiL3Zw", "weight":1}],"threshold":1,"accounts":[{"permission":{"actor":"chestnutacnt","permission":"eosio.code"},"weight":1}],"waits":[]}}' -p chestnutacnt@active
+cleos push action eosio updateauth '{"account":"chestnutacnt","permission":"security","parent":"active","auth":{"keys":[],"threshold":1,"accounts":[{"permission":{"actor":"chestnutacnt","permission":"eosio.code"},"weight":1}],"waits":[]}}' -p chestnutacnt@active
 
 echo 'linkauth of the @security permission to the `transfer` action on the `chestnutacnt` smart contract'
 cleos push action eosio linkauth '["chestnutacnt","chestnutacnt","transfer","security"]' -p chestnutacnt@active
@@ -257,8 +257,6 @@ cleos multisig approve daniel givemeauth '{"actor":"daniel", "permission":"chest
 sleep 1
 cleos push action chestnutacnt giveauth '["daniel","givemeauth"]' -p daniel@chestnut
 sleep 1
-# cleos multisig exec daniel givemeauth -p daniel@chestnut
-# sleep 1
 
 echo ' It works!'
 cleos push action eosio buyram '["daniel","daniel","1.0000 EOS"]' -p daniel@chestnut
@@ -287,9 +285,9 @@ sleep 1
 echo 'cleos get table chestnutacnt daniel whitelist'
 cleos get table chestnutacnt daniel whitelist
 sleep 1
-# echo 'cleos get table chestnutacnt daniel xfrmax'
-# cleos get table chestnutacnt daniel xfrmax
-# sleep 1
+echo 'cleos get table chestnutacnt daniel xfrmax'
+cleos get table chestnutacnt daniel xfrmax
+sleep 1
 echo 'cleos get table chestnutacnt daniel tokensmax'
 cleos get table chestnutacnt daniel tokensmax
 

@@ -48,7 +48,7 @@ permissions:
 
 
 
-### To Run
+### To Run Demo
 
 To run for the first time
 ```bash

@@ -30,7 +30,7 @@ void chestnutacnt::rmwhitelist( name user, name account_to_remove ) {
    whitelist_table user_whitelist( _self, user.value );
    auto whitelisted = user_whitelist.find( account_to_remove.value );
 
-   eosio_assert( whitelisted->whitelisted_account == account_to_remove , "cannot find account");
+   eosio::check( whitelisted->whitelisted_account == account_to_remove , "cannot find account");
 
    user_whitelist.erase( whitelisted );
 }
@@ -42,7 +42,7 @@ void chestnutacnt::addtokenmax( name  user,
    require_auth( user );
 
    auto sym = quantity.symbol;
-   eosio_assert( sym.is_valid(), "invalid symbol name" );
+   eosio::check( sym.is_valid(), "invalid symbol name" );
 
    tokens_max_table user_tokens_max( _self, user.value );
    auto token_max_itr = user_tokens_max.find( sym.code().raw() );
@@ -63,12 +63,12 @@ void chestnutacnt::addtokenmax( name  user,
 
 void chestnutacnt::rmtokenmax( name user, symbol sym ) {
    require_auth( user );
-   eosio_assert( sym.is_valid(), "invalid symbol name" );
+   eosio::check( sym.is_valid(), "invalid symbol name" );
 
    tokens_max_table user_tokens_max( _self, user.value );
    auto token_max_to_delete = user_tokens_max.find( sym.code().raw() );
 
-   eosio_assert( token_max_to_delete != user_tokens_max.end(),
+   eosio::check( token_max_to_delete != user_tokens_max.end(),
                  "can not find token max to delete" );
 
    user_tokens_max.erase( token_max_to_delete );
@@ -106,44 +106,21 @@ void chestnutacnt::addxfrmax( name user,
 
 
 void chestnutacnt::transfer( name proposer, name proposal_name) {
-   // require_auth( "chestnutacnt"_n );
+   require_auth( proposer );
 
-   struct token_transfer {
-      name from;
-      name to;
-      asset quantity;
-      string memo;
-   };
-
-   eosio::multisig::proposals proptable( "eosio.msig"_n, proposer.value );
+   // eosio::multisig::proposals proptable( "eosio.msig"_n, proposer.value );
+   proposals proptable( "eosio.msig"_n, proposer.value );
    auto& prop = proptable.get( proposal_name.value, "proposal not found" );
    //assert_sha256( prop.packed_transaction.data(), prop.packed_transaction.size(), *proposal_hash );
 
-   eosio::action my_action = eosio::unpack<eosio::transaction>( prop.packed_transaction ).actions.front();
-   token_transfer my_action_data = my_action.data_as<token_transfer>();
+   eosio::action proposed_action = eosio::unpack<transaction>( prop.packed_transaction ).actions.front();
+   token_transfer action_data = proposed_action.data_as<token_transfer>();
 
-   const name from      = my_action_data.from;
-   const name to        = my_action_data.to;
-   const asset quantity = my_action_data.quantity;
-   const string memo    = my_action_data.memo;
+   validate_whitelist( action_data.from, action_data.to );
+   validate_single_transfer( action_data.from, action_data.quantity);
+   validate_total_transfer_limit( action_data.from, action_data.quantity );
 
-
-   validate_whitelist( from, to );
-   validate_single_transfer( from, quantity);
-   validate_total_transfer_limit( from, quantity );
-
-   /****/
-   auto sym = quantity.symbol;
-   eosio_assert( sym.is_valid(), "invalid symbol name" );
-
-   tokens_max_table user_tokens_max( _self, from.value );
-   auto token_max_itr = user_tokens_max.find( sym.code().raw() );
-
-   eosio_assert( token_max_itr != user_tokens_max.end(),
-                 "token not protected. please addtokenmax" );
-   /****/
-
-   // approve the transfer
+   // approve
    action(
       permission_level{ "chestnutacnt"_n, "security"_n },
       "eosio.msig"_n,
@@ -151,6 +128,7 @@ void chestnutacnt::transfer( name proposer, name proposal_name) {
       std::make_tuple( proposer, proposal_name, permission_level{ "chestnutacnt"_n, "security"_n } )
    ).send();
 
+   // execute
    action(
       permission_level{ "chestnutacnt"_n, "security"_n },
       "eosio.msig"_n,
@@ -161,16 +139,16 @@ void chestnutacnt::transfer( name proposer, name proposal_name) {
 }
 
 
-// name account, name code, name type, name requirement
 void chestnutacnt::giveauth( name proposer, name proposal_name ) {
    require_auth( proposer );
 
    // get proposal
-   eosio::multisig::proposals proptable( "eosio.msig"_n, proposer.value );
+   // eosio::multisig::proposals proptable( "eosio.msig"_n, proposer.value );
+   proposals proptable( "eosio.msig"_n, proposer.value );
    auto& prop = proptable.get( proposal_name.value, "proposal not found" );
 
    // get action data
-   eosio::action proposed_action = eosio::unpack<eosio::transaction>( prop.packed_transaction ).actions.front();
+   eosio::action proposed_action = eosio::unpack<transaction>( prop.packed_transaction ).actions.front();
    eosio::check( "linkauth"_n == proposed_action.name, "only accepts linkauth proposal" );
    link_auth action_data = proposed_action.data_as<link_auth>();
 

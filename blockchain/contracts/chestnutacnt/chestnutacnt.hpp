@@ -8,12 +8,13 @@
 #include <eosiolib/eosio.hpp>
 #include <eosiolib/asset.hpp>
 #include <eosiolib/time.hpp>
-#include <eosiolib/public_key.hpp>
+#include <eosiolib/transaction.hpp>
 
 #include <string>
 
 using std::string;
 
+using eosio::transaction;
 using eosio::action;
 using eosio::datastream;
 using eosio::permission_level;
@@ -37,6 +38,14 @@ private:
     *                            D A T A  T Y P E S
     ***************************************************************************/
 
+   // eosio.token::transfer
+   struct token_transfer {
+      name from;
+      name to;
+      asset quantity;
+      string memo;
+   };
+
    // eosio::linkauth
    struct link_auth {
       name account;
@@ -44,6 +53,17 @@ private:
       name type;
       name requirement;
    };
+
+   // eosio.msig [[eosio::table]] proposal
+   // #include "../eosio.contracts/eosio.msig/include/eosio.msig/eosio.msig.hpp"
+   struct proposal {
+      name                            proposal_name;
+      std::vector<char>               packed_transaction;
+
+      uint64_t primary_key()const { return proposal_name.value; }
+   };
+
+   typedef eosio::multi_index< "proposal"_n, proposal > proposals;
 
    /****************************************************************************
     *                                T A B L E S
@@ -75,6 +95,7 @@ private:
 
    struct [[eosio::table]] whitelist {
       name        whitelisted_account;
+      bool        is_locked{false};
 
       auto primary_key() const { return whitelisted_account.value; }
    };
@@ -86,17 +107,6 @@ private:
     ***************************************************************************/
 
    time_point current_time_point();
-
-   void set_auth_with_key( const name   user,
-                           const name   permission_name,
-                           const name   permission_parent_name,
-                           const string new_owner_pubkey );
-
-   void set_auth_with_code( const name   user,
-                            const name   permission_name,
-                            const name   permission_parent_name,
-                            const name   code_account,
-                            const name   code_auth );
 
    void validate_whitelist( const name from, const name to );
 

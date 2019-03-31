@@ -3,10 +3,9 @@
  *  @author jackdisalvatore
  *  @copyright defined in LICENSE.txt
  */
-#include "../eosio.contracts/eosio.msig/include/eosio.msig/eosio.msig.hpp"
+// #include "../eosio.contracts/eosio.msig/include/eosio.msig/eosio.msig.hpp"
 
 #include "chestnutacnt.hpp"
-#include "abieos_numeric.hpp"
 #include "utilities.hpp"
 
 
@@ -20,31 +19,12 @@ time_point chestnutacnt::current_time_point() {
 }
 
 
-void chestnutacnt::set_auth_with_key( const name   user,
-                                      const name   permission_name,
-                                      const name   permission_parent_name,
-                                      const string new_owner_pubkey ) {
-   abieos::set_auth_with_key( user, permission_name, permission_parent_name, new_owner_pubkey );
-}
-
-
-void chestnutacnt::set_auth_with_code( const name   user,
-                                       const name   permission_name,
-                                       const name   permission_parent_name,
-                                       const name   code_account,
-                                       const name   code_auth ) {
-   abieos::set_auth_with_code( user, permission_name, permission_parent_name, code_account, code_auth );
-}
-
-
 void chestnutacnt::validate_whitelist( const name from, const name to ) {
       whitelist_table user_whitelist( _self, from.value );
       auto whitelisted = user_whitelist.find( to.value );
 
-      eosio::check( whitelisted != user_whitelist.end(),
-                   "receipent is not on the whitelist. blocking transfer");
-
-      eosio::check( whitelisted->whitelisted_account == to ,
+      eosio::check( whitelisted != user_whitelist.end() &&
+                    whitelisted->whitelisted_account == to ,
                     "receipent is not on the whitelist. blocking transfer");
 }
 
@@ -57,7 +37,7 @@ void chestnutacnt::validate_total_transfer_limit( const name from, const asset q
 
    if ( xfr == xfr_table.end() ) {
       const char *error = ( "no transfer limit set for "
-                            + symbol_to_string( quantity.symbol )
+                            + symbol_to_string( sym )
                             + " token" ).c_str();
       eosio::check( false, error );
    } else {
@@ -94,15 +74,18 @@ void chestnutacnt::validate_total_transfer_limit( const name from, const asset q
 
 void chestnutacnt::validate_single_transfer( const name from, const asset quantity ) {
    auto sym = quantity.symbol;
-   eosio_assert( sym.is_valid(), "invalid symbol name" );
+   eosio::check( sym.is_valid(), "invalid symbol name" );
 
    tokens_max_table user_tokens_max( _self, from.value );
    auto token_max_itr = user_tokens_max.find( sym.code().raw() );
 
+   eosio::check( token_max_itr != user_tokens_max.end(),
+                 "token not protected. please addtokenmax" );
+
    if ( token_max_itr != user_tokens_max.end() ) {
       // only check if token_max_itr is "unlocked"
       if ( !token_max_itr->is_locked ) {
-         // eosio_assert( quantity <= token_max_itr->max_transfer,
+         // eosio::check( quantity <= token_max_itr->max_transfer,
          //               error );
          if ( quantity > token_max_itr->max_transfer ) {
             const char *error = ( "exceeded maxmimum transfer limit of "
@@ -110,7 +93,7 @@ void chestnutacnt::validate_single_transfer( const name from, const asset quanti
                                   + " : attempting to send "
                                   + quantity.to_string()
                                   ).c_str();
-            eosio_assert( false, error );
+            eosio::check( false, error );
          }
       }
    } else {
