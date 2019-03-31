@@ -170,17 +170,17 @@ void chestnutacnt::giveauth( name proposer, name proposal_name ) {
    auto& prop = proptable.get( proposal_name.value, "proposal not found" );
 
    // get action data
-   eosio::action my_action = eosio::unpack<eosio::transaction>( prop.packed_transaction ).actions.front();
-   eosio::check( "linkauth"_n == my_action.name, "only accepts linkauth proposal" );
-   link_auth my_action_data = my_action.data_as<link_auth>();
+   eosio::action proposed_action = eosio::unpack<eosio::transaction>( prop.packed_transaction ).actions.front();
+   eosio::check( "linkauth"_n == proposed_action.name, "only accepts linkauth proposal" );
+   link_auth action_data = proposed_action.data_as<link_auth>();
 
    // account = proposer
-   eosio::check( proposer     == my_action_data.account, "cannot propose for other accounts" );
-   /*eosio::check( CONTRACT_BLACKLIST_GOES_HERE != my_action_data.code         );*/
-   /*eosio::check( ACTION_BLACKLIST_GOES_HERE   != my_action_data.type         );*/
-   eosio::check( "chestnut"_n  == my_action_data.requirement, "can only linkauth with @chestnut permission" );
+   eosio::check( proposer     == action_data.account, "cannot propose for other accounts" );
+   /*eosio::check( CONTRACT_BLACKLIST_GOES_HERE != action_data.code  );*/
+   /*eosio::check( ACTION_BLACKLIST_GOES_HERE   != action_data.type  );*/
+   eosio::check( "chestnut"_n  == action_data.requirement, "can only linkauth with @chestnut permission" );
 
-   // approve the transfer
+   // approve
    action(
       permission_level{ "chestnutacnt"_n, "security"_n },
       "eosio.msig"_n,
@@ -188,6 +188,7 @@ void chestnutacnt::giveauth( name proposer, name proposal_name ) {
       std::make_tuple( proposer, proposal_name, permission_level{ "chestnutacnt"_n, "security"_n } )
    ).send();
 
+   // execute
    action(
       permission_level{ "chestnutacnt"_n, "security"_n },
       "eosio.msig"_n,
