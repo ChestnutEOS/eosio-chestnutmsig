@@ -64,23 +64,24 @@ producers:     <not voted>
 ### chestnutmsig::tokensmax
    - **asset**: **balance** amount of tokens deposited in account
    - **name**: **contract_account** amount of tokens deposited in account
-   - **bool**: **is_locked** toggles action on/off
+   - **bool**: **is_locked** toggles check on/off
 
    - maximum account of tokens that can be transfered at once
 
 ex:
-```
-cleos get table chestnutmsig alice tokensmax
+```bash
+cleos get table chestnutmsig daniel tokensmax
 ```
 
 ### chestnutmsig::whitelist
    - **name**: **whitelisted_account** maximum amount of transactions within time frame
+   - **bool**: **is_locked** toggles check on/off
 
    - whitelist of accounts that are allow to receive token transfers
 
 ex:
-```
-cleos get table chestnutmsig alice whitelist
+```bash
+cleos get table chestnutmsig daniel whitelist
 ```
 
 ### chestnutmsig::xfrmax
@@ -88,21 +89,13 @@ cleos get table chestnutmsig alice whitelist
    - **asset**: **current_EOS_spent** current amount of tokens spent
    - **uint64_t**: **minutes**
    - **time_point**: **end_time**
-   - **bool**: **is_locked** toggles action on/off
+   - **bool**: **is_locked** toggles check on/off
 
 ex:
-```
-cleos get table chestnutmsig alice xfrmax
+```bash
+cleos get table chestnutmsig daniel xfrmax
 ```
 
-### chestnutmsig::unstaketime   [ TODO ]
-   - **uint32_t**: **days** 0, 1, 3, 7, or 30 days
-   - **bool**: **is_locked** toggles action on/off
-
-ex:
-```
-cleos get table chestnutmsig alice unstaketime
-```
 
 ## Actions
 
@@ -113,8 +106,27 @@ cleos get table chestnutmsig alice unstaketime
    - transfer tokens (smart contract will send if security check passes)
 
 ex:
+```bash
+cleos multisig propose test1 '[{"actor": "chestnutmsig", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio.token transfer '{"from":"daniel","to":"sally","quantity":"50.0000 EOS","memo":"test multisig"}' -p daniel@chestnut
+
+cleos multisig approve daniel test1 '{"actor":"daniel","permission":"chestnut"}' -p daniel@chestnut
+
+cleos push action chestnutmsig '["daniel","test1"]' -p daniel@chestnut
 ```
-cleos push action chestnutmsig transfer '["alice","bob","100.0000 EOS","memo"]' -p alice@chestnut
+
+### chestnutmsig::giveauth    proposer proposal_name
+   - **proposer** user who proposed to linked their auth
+   - **proposal_name** proposal name of mult-sig transaction (containing linkauth action)
+
+   - link @chestnut authority with other contracts (smart contract will send)
+
+ex:
+```bash
+cleos multisig propose authproposal '[{"actor": "chestnutmsig", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "active"}]' eosio linkauth '{"account": "daniel", "code": "eosio", "type": "buyram", "requirement": "chestnut"}' -p daniel@chestnut
+
+cleos multisig approve daniel authproposal '{"actor":"daniel", "permission":"chestnut"}' -p daniel@chestnut
+
+cleos push action chestnutmsig giveauth '["daniel","authproposal"]' -p daniel@chestnut
 ```
 
 Token Security Settings
@@ -125,6 +137,20 @@ Token Security Settings
 
    - Set maximum single token transfer
 
+```bash
+cleos push action chestnutmsig addtokenmax '["daniel","50.0000 EOS","eosio.token"]' -p daniel@chestnut
+```
+
+### chestnutmsig::rmtokenmax
+   - **user** user
+   - **symbol** token symbol to token limit to be removed
+
+   - Remove maximum single token transfer
+
+```bash
+cleos push action chestnutmsig rmtokenmax '["daniel","4,EOS"]' -p daniel@chestnut
+```
+
 ### chestnutmsig::addxfrmax
    - **user** user
    - **max_tx** total tokens allowed to spend in given time frame
@@ -132,17 +158,29 @@ Token Security Settings
 
    - Set a maxium amount of transfers that can take place within a give time frame
 
+```bash
+cleos push action chestnutmsig addxfrmax '["daniel","100.0000 EOS","1"]' -p daniel@chestnut
+```
+
 ### chestnutmsig::addwhitelist
    - **user** user
    - **account_to_add** account to whitelist
 
    - Whitelist receiving accounts
 
+```bash
+cleos push action chestnutmsig addwhitelist '["daniel","kristina"]' -p daniel@chestnut
+```
+
 ### chestnutmsig::rmwhitelist
    - **user** user
    - **account_to_remove**
 
    - Remove account from whitelist
+
+```bash
+cleos push action chestnutmsig rmwhitelist '["daniel","kristina"]' -p daniel@chestnut
+```
 
 ---
 ## How To Run
@@ -175,6 +213,7 @@ cleos push action eosio linkauth '["daniel","chestnutmsig","addxfrmax","chestnut
 cleos push action eosio linkauth '["daniel","chestnutmsig","addwhitelist","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","chestnutmsig","rmwhitelist","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","chestnutmsig","transfer","chestnut"]' -p daniel@owner
+cleos push action eosio linkauth '["daniel","chestnutmsig","giveauth","chestnut"]' -p daniel@owner
 
 cleos push action eosio linkauth '["daniel","eosio.msig","propose","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","approve","chestnut"]' -p daniel@owner
@@ -187,7 +226,7 @@ cleos get account daniel
 
 created: 2019-03-21T00:52:35.500
 permissions: 
-     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b # NULL'ed out if no admin privileges (eosio.null@active)
+     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b  # multi-sig if using beneficiary recovery option
         active     2:    1 chestnutmsig@security, 1 daniel@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
