@@ -57,7 +57,7 @@ namespace eosio {
             return ac.balance;
          }
 
-      protected:
+      private:
          struct [[eosio::table]] account {
             asset    balance;
 
