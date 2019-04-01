@@ -4,60 +4,48 @@ echo '===         C H E S T N U T  S M A R T  A C C O U N T S         ==='
 echo '===                                                             ==='
 echo '==================================================================='
 
-echo 'User `daniel` will turn his eos account into a smart account'
-echo 'Give daniel an initial EOS balance of 1000.0000 EOS'
+echo 'Give `daniel` an initial EOS balance of 1000.0000 EOS'
 cleos push action eosio.token transfer '[ "eosio","daniel","1000.0000 EOS", "starting balance" ]' -p eosio eosio.token; sleep 1
-echo 'Give chestnutmsig an initial EOS balance of 1000.0000 EOS'
+echo 'Give `chestnutmsig` an initial EOS balance of 1000.0000 EOS'
 cleos push action eosio.token transfer '[ "eosio","chestnutmsig","1000.0000 EOS", "starting balance" ]' -p eosio eosio.token; sleep 1
 
-echo '============================================================'
-echo '=== New User daniel turns eos account into smart account ==='
-echo '===                    MODIFY  PERMISSIONS               ==='
-echo '============================================================'
-
+echo '===================================================='
+echo '===        MODIFY SMART CONTRACT ACCOUNT         ==='
+echo '===          `chestnutmsig`                      ==='
+echo '===================================================='
 echo 'Create @security permission for `chestnutmsig`'
 cleos push action eosio updateauth '{"account":"chestnutmsig","permission":"security","parent":"active","auth":{"keys":[],"threshold":1,"accounts":[{"permission":{"actor":"chestnutmsig","permission":"eosio.code"},"weight":1}],"waits":[]}}' -p chestnutmsig@active
 
-echo 'linkauth of the @security permission to the `transfer` action on the `chestnutmsig` smart contract'
-cleos push action eosio linkauth '["chestnutmsig","chestnutmsig","transfer","security"]' -p chestnutmsig@active
-echo 'linkauth of the @security permission to the `eosio.msig::approve` and `eosio.msig::exec'
+echo 'linkauth of the @security permission to the `eosio.msig::approve` and `eosio.msig::exec`'
 cleos push action eosio linkauth '["chestnutmsig","eosio.msig","approve","security"]' -p chestnutmsig@active
 cleos push action eosio linkauth '["chestnutmsig","eosio.msig","exec","security"]' -p chestnutmsig@active
 
+echo '=============================================================='
+echo '=== New User `daniel` turns eos account into smart account ==='
+echo '===                    MODIFY  PERMISSIONS                 ==='
+echo '=============================================================='
+echo 'User `daniel` will turn his eos account into a smart account'
 echo 'Create @chestnut permission for `daniel` first'
-echo '======================================================'
 cleos push action eosio updateauth '{"account":"daniel","permission":"chestnut","parent":"owner","auth":{"keys":[{"key":"EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b", "weight":1}],"threshold":1,"accounts":[],"waits":[]}}' -p daniel@owner
-echo '======================================================'
 
 echo 'Create the multisig active permission with `chestnutmsig@security` and `daniel@chestnut`'
 cleos push action eosio updateauth '{"account":"daniel","permission":"active","parent":"owner","auth":{"keys":[], "threshold":2
 ,"accounts":[{"permission":{"actor":"chestnutmsig","permission":"security"},"weight":1},{"permission":{"actor":"daniel","permission":"chestnut"},"weight":1}],"waits":[]}}' -p daniel
 
-sleep 1
-echo 'linkauth of the @chestnut permission to the actions on our smart contract'
-cleos push action eosio linkauth '["daniel","chestnutmsig","addtokenmax","chestnut"]' -p daniel@owner
-cleos push action eosio linkauth '["daniel","chestnutmsig","rmtokenmax","chestnut"]' -p daniel@owner
-cleos push action eosio linkauth '["daniel","chestnutmsig","addxfrmax","chestnut"]' -p daniel@owner
-cleos push action eosio linkauth '["daniel","chestnutmsig","addwhitelist","chestnut"]' -p daniel@owner
-cleos push action eosio linkauth '["daniel","chestnutmsig","rmwhitelist","chestnut"]' -p daniel@owner
-cleos push action eosio linkauth '["daniel","chestnutmsig","transfer","chestnut"]' -p daniel@owner
-cleos push action eosio linkauth '["daniel","chestnutmsig","giveauth","chestnut"]' -p daniel@owner
-
+echo 'linkauth of the @chestnut permisssion to `eosio.msig`'
 cleos push action eosio linkauth '["daniel","eosio.msig","propose","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","approve","chestnut"]' -p daniel@owner
 cleos push action eosio linkauth '["daniel","eosio.msig","cancel","chestnut"]' -p daniel@owner
-sleep 1
+
+echo 'linkauth of the @chestnut permission to the actions on our smart contract'
+cleos push action eosio linkauth '["daniel","chestnutmsig","","chestnut"]' -p daniel@owner
 
 echo 'OPTIONAL - NULL out @owner permission with `eosio.null@active`'
 cleos push action eosio updateauth '{"account":"daniel","permission":"owner","parent":"","auth":{"keys":[],"threshold":1,"accounts":[{"permission":{"actor":"eosio.null","permission":"active"},"weight":1}],"waits":[]}}' -p daniel@owner
 
 echo 'Make sure normal transfers fail with the @chestnut permission'
-echo 'cleos push action eosio.token transfer ["daniel","chestnutmsig","10.0000 EOS","memo"] -p daniel@chestnut'
-cleos push action eosio.token transfer '["daniel","chestnutmsig","10.0000 EOS","memo"]' -p daniel@chestnut
-
-echo 'Make sure any action that is not `transfer` fails `chestnutmsig@security`'
-echo 'cleos push action eosio buyram ["chestnutmsig","chestnutmsig","10.0000 EOS"] -p chestnutmsig@security'
-cleos push action eosio buyram '["chestnutmsig","chestnutmsig","10.0000 EOS"]' -p chestnutmsig@security
+echo 'cleos push action eosio.token transfer ["daniel","sally","10.0000 EOS","memo"] -p daniel@chestnut'
+cleos push action eosio.token transfer '["daniel","sally","10.0000 EOS","memo"]' -p daniel@chestnut
 
 echo '======================================================'
 echo '===                    ACCOUNTS                    ==='
@@ -66,15 +54,6 @@ echo 'cleos get account chestnutmsig'
 cleos get account chestnutmsig
 echo 'cleos get account daniel'
 cleos get account daniel
-echo '======================================================'
-echo 'Make sure eosio.token transfers do NOT work with the @chestnut permission'
-echo 'cleos push action eosio.token transfer ["daniel","sally","10.0000 EOS","memo"] -p daniel@chestnut'
-cleos push action eosio.token transfer '["daniel","sally","10.0000 EOS","memo"]' -p daniel@chestnut
-sleep 1
-echo 'Make sure other actions can not be called with the @chestnut permission'
-echo 'cleos push action chestnutmsig hello'
-cleos push action chestnutmsig hello '[""]' -p daniel@chestnut
-sleep 1
 
 echo '========================================================'
 echo '===                  ADD TO WHITELIST                ==='
