@@ -19,6 +19,8 @@ Chestnut provides the peace of mind that so many blockchain curious members of t
 Welcome to Chestnut Smart Accounts on EOS!
 Chestnut allows you to convert a normal eosio accounts' active permission into a multi-signature permission requiring signatures from both your private key and our smart contract.
 
+Chestnut creates a new account permission called `chestnut` for your account.  Then this permission is added along with the `chestnutmsig` smart contract to your accounts active permission creating a multi-sig configuration.  Whenever you wish to perform an action with the active permission, i.e. token transfers, the `chestnutmsig` smart contract must allow it.  If you wish to interact with a new dApp, a multi-sig request must first be approved before giving the smart account access to the dApp.
+
 Features:
 * accounts' `@active` permission cannot be changed by malicious dApps
 * token transfers are protected by the `chestnutmsig` Smart Contact
