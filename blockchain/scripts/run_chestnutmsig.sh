@@ -40,8 +40,13 @@ cleos push action eosio linkauth '["daniel","eosio.msig","cancel","chestnut"]' -
 echo 'linkauth of the @chestnut permission to the actions on our smart contract'
 cleos push action eosio linkauth '["daniel","chestnutmsig","","chestnut"]' -p daniel@owner
 
-echo 'OPTIONAL - NULL out @owner permission with `eosio.null@active`'
-cleos push action eosio updateauth '{"account":"daniel","permission":"owner","parent":"","auth":{"keys":[],"threshold":1,"accounts":[{"permission":{"actor":"eosio.null","permission":"active"},"weight":1}],"waits":[]}}' -p daniel@owner
+# echo 'No Trusted Recovery'
+# cleos push action eosio updateauth '{"account":"daniel","permission":"owner","parent":"","auth":{"keys":[],"threshold":2,"accounts":[{"permission":{"actor":"chestnutmsig","permission":"security"},"weight":1},{"permission":{"actor":"daniel","permission":"chestnut"},"weight":1}],"waits":[]}}' -p daniel@owner
+
+echo 'Trusted Recovery - add friends `george` and `kristina`'
+cleos push action eosio updateauth '{"account":"daniel","permission":"owner","parent":"","auth":{"keys":[],"threshold":4,"accounts":[{"permission":{"actor":"chestnutmsig","permission":"security"},"weight":1},{"permission":{"actor":"daniel","permission":"chestnut"},"weight":3},{"permission":{"actor":"george","permission":"active"},"weight":1},{"permission":{"actor":"kristina","permission":"active"},"weight":1}],"waits":[{"wait_sec": 7, "weight": 2}]}}' -p daniel@owner
+
+# {"wait_sec": 5, "weight": 3}, {"wait_sec": 10, "weight": 4}
 
 echo 'Make sure normal transfers fail with the @chestnut permission'
 echo 'cleos push action eosio.token transfer ["daniel","sally","10.0000 EOS","memo"] -p daniel@chestnut'
@@ -237,6 +242,51 @@ sleep 1
 
 echo ' It works!'
 cleos push action eosio buyram '["daniel","daniel","1.0000 EOS"]' -p daniel@chestnut
+
+echo '======================================================'
+echo '===                    RECOVERY                    ==='
+echo '======================================================'
+# `george` active private key
+# Private key: 5KaqYiQzKsXXXxVvrG8Q3ECZdQAj2hNcvCgGEubRvvq7CU3LySK
+cleos wallet import -n appwallet --private-key 5KaqYiQzKsXXXxVvrG8Q3ECZdQAj2hNcvCgGEubRvvq7CU3LySK
+# `kristina` active private key
+# Private key: 5KE2UNPCZX5QepKcLpLXVCLdAw7dBfJFJnuCHhXUf61hPRMtUZg
+cleos wallet import -n appwallet --private-key 5KE2UNPCZX5QepKcLpLXVCLdAw7dBfJFJnuCHhXUf61hPRMtUZg
+sleep 1
+
+echo 'Change @chestnut key with `daniel` and `kristina`'
+cleos multisig propose recoverme '[{"actor": "daniel", "permission": "chestnut"}, {"actor": "kristina", "permission": "active"}]' '[{"actor": "daniel", "permission": "owner"}]' eosio updateauth '{"account": "daniel", "permission": "chestnut", "parent": "owner", "auth": {"keys":[{"key":"EOS5yd9aufDv7MqMquGcQdD6Bfmv6umqSuh9ru3kheDBqbi6vtJ58", "weight":1}],"threshold":1,"accounts":[],"waits":[]}}"}' -p daniel@chestnut
+
+cleos multisig approve daniel recoverme '{"actor": "daniel", "permission": "chestnut"}' -p daniel@chestnut
+cleos multisig approve daniel recoverme '{"actor": "kristina", "permission": "active"}' -p kristina@active
+cleos multisig exec daniel recoverme -p kristina@active
+sleep 1
+
+cleos get account daniel
+
+# Key Pair EOS5yd9aufDv7MqMquGcQdD6Bfmv6umqSuh9ru3kheDBqbi6vtJ58 : 5K2jun7wohStgiCDSDYjk3eteRH1KaxUQsZTEmTGPH4GS9vVFb7
+cleos wallet import -n appwallet --private-key 5K2jun7wohStgiCDSDYjk3eteRH1KaxUQsZTEmTGPH4GS9vVFb7
+
+echo 'Change @chestnut key back with `daniel` and `george`'
+cleos multisig propose goback '[{"actor": "daniel", "permission": "chestnut"}, {"actor": "george", "permission": "active"}]' '[{"actor": "daniel", "permission": "owner"}]' eosio updateauth '{"account": "daniel", "permission": "chestnut", "parent": "owner", "auth": {"keys":[{"key":"EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b", "weight":1}],"threshold":1,"accounts":[],"waits":[]}}"}' -p daniel@chestnut
+
+cleos multisig approve daniel goback '{"actor": "daniel", "permission": "chestnut"}' -p daniel@chestnut
+cleos multisig approve daniel goback '{"actor": "george", "permission": "active"}' -p george@active
+cleos multisig exec daniel goback -p george@active
+sleep 1
+
+cleos get account daniel
+
+# TODO: figure out how "wait" times work
+# echo '`george` and `kristina` try to switch @chestnut key'
+# cleos multisig propose attack '[{"actor": "george", "permission": "active"}, {"actor": "kristina", "permission": "active"}]' '[{"actor": "daniel", "permission": "owner"}]' eosio updateauth '{"account": "daniel", "permission": "chestnut", "parent": "owner", "auth": {"keys":[{"key":"EOS5yd9aufDv7MqMquGcQdD6Bfmv6umqSuh9ru3kheDBqbi6vtJ58", "weight":1}],"threshold":1,"accounts":[],"waits":[]}}"}' -p george@active
+
+# cleos multisig approve george attack '{"actor": "george", "permission": "active"}' -p george@active
+# cleos multisig approve george attack '{"actor": "kristina", "permission": "active"}' -p kristina@active
+# echo 'sleep 10'
+# sleep 10
+# cleos multisig exec george attack -p george@active
+# sleep 1
 
 echo '============================================='
 echo '===               CLEAN UP                ==='

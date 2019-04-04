@@ -30,7 +30,7 @@ producers:     <not voted>
 cleos get account daniel
 created: 2019-03-21T00:52:35.500
 permissions: 
-     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+     owner     4:    1 chestnutmsig@security, 3 daniel@chestnut, 1 george@active, 1 kristina@active #, 2 wait time of 3 days
         active     2:    1 chestnutmsig@security, 1 daniel@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 memory: 

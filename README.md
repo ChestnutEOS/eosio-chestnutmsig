@@ -28,22 +28,22 @@ Features:
 * account recovery available with trusted beneficiaries
 
 
-#### Retain admin / recovery privileges yourself by keeping your owner key
+#### Account with NO trusted friends
 ```bash
 cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
 permissions: 
-     owner     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+     owner     2:    1 chestnutmsig@security, 1 smartaccount@chestnut
         active     2:    1 chestnutmsig@security, 1 smartaccount@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
 
-#### Multi-sig admin priviledges with the `chestnutmsig` and beneficiary
+#### Account with trusted friends recovery
 ```bash
 cleos get account smartaccount
 created: 2019-03-21T00:52:35.500
 permissions: 
-     owner     2:    1 beneficiary@owner, 1 chestnutmsig@active, 1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
+     owner     4:    1 chestnutmsig@security, 1 george@active, 1 kristina@active, 3 smartaccount@chestnut #, 2 wait time three days
         active     2:    1 chestnutmsig@security, 1 smartaccount@chestnut
         chestnut     1:    1 EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b
 ```
