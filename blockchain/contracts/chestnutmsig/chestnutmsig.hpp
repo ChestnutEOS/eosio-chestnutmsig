@@ -83,6 +83,7 @@ private:
    struct [[eosio::table]] xfr_max {
       asset       total_tokens_allowed_to_spend;
       asset       current_tokens_spent;
+      name        contract_account;
       uint64_t    minutes;
       time_point  end_time;
       bool        is_locked{false};
@@ -137,7 +138,7 @@ public:
 
    ACTION rmtokenmax( name user, symbol sym );
 
-   ACTION addxfrmax( name user, asset max_tx, uint64_t minutes );
+   ACTION addxfrmax( name user, asset max_tx, name contract_account, uint64_t minutes );
 
    ACTION addwhitelist( name user, name account_to_add );
 

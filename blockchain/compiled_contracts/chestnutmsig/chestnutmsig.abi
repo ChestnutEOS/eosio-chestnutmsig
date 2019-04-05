@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sun Mar 31 15:37:46 2019",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Fri Apr  5 08:44:40 2019",
     "version": "eosio::abi/1.1",
     "structs": [
         {
@@ -45,6 +45,10 @@
                 {
                     "name": "max_tx",
                     "type": "asset"
+                },
+                {
+                    "name": "contract_account",
+                    "type": "name"
                 },
                 {
                     "name": "minutes",
@@ -156,6 +160,10 @@
                 {
                     "name": "current_tokens_spent",
                     "type": "asset"
+                },
+                {
+                    "name": "contract_account",
+                    "type": "name"
                 },
                 {
                     "name": "minutes",

@@ -88,8 +88,8 @@ echo '========================================================'
 echo '===              ADD XFR (TRANSFER) MAX              ==='
 echo '========================================================'
 echo '`daniel` does not want to send more than 100 EOS in one minute'
-echo 'cleos push action chestnutmsig addxfrmax ["daniel","100.0000 EOS","1"] -p daniel@chestnut'
-cleos push action chestnutmsig addxfrmax '["daniel","100.0000 EOS","1"]' -p daniel@chestnut
+echo 'cleos push action chestnutmsig addxfrmax ["daniel","100.0000 EOS","eosio.token","1"] -p daniel@chestnut'
+cleos push action chestnutmsig addxfrmax '["daniel","100.0000 EOS","eosio.token","1"]' -p daniel@chestnut
 sleep 1
 echo 'cleos get table chestnutmsig daniel xfrmax'
 cleos get table chestnutmsig daniel xfrmax
@@ -306,8 +306,8 @@ cleos get table eosio.token sally accounts
 echo 'cleos get table eosio.msig daniel approvals2'
 cleos get table eosio.msig daniel approvals2
 
-echo 'cleos push action chestnutmsig rmtokenmax ["daniel","4,EOS"] -p daniel@chestnut'
-cleos push action chestnutmsig rmtokenmax '["daniel","4,EOS"]' -p daniel@chestnut
+echo 'cleos push action chestnutmsig rmtokenmax ["daniel","4,EOS","eosio.token"] -p daniel@chestnut'
+cleos push action chestnutmsig rmtokenmax '["daniel","4,EOS","eosio.token"]' -p daniel@chestnut
 sleep 1
 echo 'cleos get table chestnutmsig daniel whitelist'
 cleos get table chestnutmsig daniel whitelist

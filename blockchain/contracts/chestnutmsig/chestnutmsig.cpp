@@ -77,9 +77,11 @@ void chestnutmsig::rmtokenmax( name user, symbol sym ) {
 
 void chestnutmsig::addxfrmax( name user,
                               asset max_tx,
+                              name  contract_account,
                               uint64_t minutes ) {
    require_auth( user );
    eosio::check( max_tx.symbol.is_valid(), "invalid symbol name" );
+   eosio::check( is_account(contract_account), "contract account does not exist" );
 
    time_point ct{ microseconds{ static_cast<int64_t>( current_time() ) } };
    time_point duration{ microseconds{ static_cast<int64_t>( minutes * useconds_per_minute ) } };
@@ -91,6 +93,7 @@ void chestnutmsig::addxfrmax( name user,
       xfr = xfr_table.emplace( user /*RAM payer*/ , [&]( auto& x ) {
          x.total_tokens_allowed_to_spend  = max_tx;
          x.current_tokens_spent           = asset(0, max_tx.symbol);
+         x.contract_account               = contract_account;
          x.minutes                        = minutes;
          x.end_time                       = ct + duration;
       });
@@ -98,6 +101,7 @@ void chestnutmsig::addxfrmax( name user,
       xfr_table.modify( xfr, same_payer, [&]( auto& x ) {
          x.total_tokens_allowed_to_spend  = max_tx;
          x.current_tokens_spent           = asset(0, max_tx.symbol);
+         x.contract_account               = contract_account;
          x.minutes                        = minutes;
          x.end_time                       = ct + duration;
       });
