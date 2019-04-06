@@ -144,6 +144,8 @@ public:
 
    ACTION addxfrmax( name user, asset max_tx, name contract_account, uint64_t minutes );
 
+   ACTION rmxfrmax( name user, symbol sym, name contract_account );
+
    ACTION addwhitelist( name user, name account_to_add );
 
    ACTION rmwhitelist( name user, name account_to_remove );

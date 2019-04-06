@@ -105,6 +105,21 @@ void chestnutmsig::addxfrmax( name user,
 }
 
 
+void chestnutmsig::rmxfrmax( name user, symbol sym, name contract_account ) {
+   require_auth( user );
+
+   xfr_max_table xfr_table( _self, user.value );
+   uint128_t table_key = get_token_key( contract_account, sym );
+
+   const char *error = ( "could not find spending limit for " 
+                         + symbol_to_string(sym) + " with account " 
+                         + contract_account.to_string() ).c_str();
+   auto& xfr = xfr_table.get( table_key , error );
+
+   xfr_table.erase( xfr );
+}
+
+
 void chestnutmsig::transfer( name proposer, name proposal_name) {
    require_auth( proposer );
 
@@ -177,4 +192,4 @@ void chestnutmsig::giveauth( name proposer, name proposal_name ) {
 }
 
 
-EOSIO_DISPATCH( chestnutmsig, (hello)(giveauth)(transfer)(addtokenmax)(rmtokenmax)(addxfrmax)(addwhitelist)(rmwhitelist) )
+EOSIO_DISPATCH( chestnutmsig, (hello)(giveauth)(transfer)(addtokenmax)(rmtokenmax)(addxfrmax)(rmxfrmax)(addwhitelist)(rmwhitelist) )

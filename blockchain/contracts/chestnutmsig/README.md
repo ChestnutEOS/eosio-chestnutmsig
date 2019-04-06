@@ -174,6 +174,17 @@ cleos push action chestnutmsig rmtokenmax '["daniel","4,EOS"]' -p daniel@chestnu
 cleos push action chestnutmsig addxfrmax '["daniel","100.0000 EOS","1"]' -p daniel@chestnut
 ```
 
+### chestnutmsig::rmxfrmax
+   - **user** user
+   - **sym** symbol for total tokens allowed to spend in given time frame
+   - **contract_account** account running the smart contract for symbol
+
+   - Delete maxium amount of transfers that can take place within a give time frame
+
+```bash
+cleos push action chestnutmsig rmxfrmax '["daniel","4,EOS","eosio.token"]' -p daniel@chestnut
+```
+
 ### chestnutmsig::addwhitelist
    - **user** user
    - **account_to_add** account to whitelist

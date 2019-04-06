@@ -318,6 +318,9 @@ cleos push action chestnutmsig rmtokenmax '["daniel","4,ABC","eosio.token"]' -p 
 cleos push action chestnutmsig rmtokenmax '["daniel","4,PEOS","eosio.token"]' -p daniel@chestnut
 sleep 1
 
+cleos push action chestnutmsig rmxfrmax '["daniel","4,EOS","eosio.token"]' -p daniel@chestnut
+cleos push action chestnutmsig rmxfrmax '["daniel","4,ABC","eosio.token"]' -p daniel@chestnut
+
 echo 'cleos get table chestnutmsig daniel whitelist'
 cleos get table chestnutmsig daniel whitelist
 sleep 1
