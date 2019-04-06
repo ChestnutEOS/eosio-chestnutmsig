@@ -313,11 +313,8 @@ cleos get table eosio.token sally accounts
 echo 'cleos get table eosio.msig daniel approvals2'
 cleos get table eosio.msig daniel approvals2
 
-echo 'cleos push action chestnutmsig rmtokenmax ["daniel","4,EOS","eosio.token"] -p daniel@chestnut'
 cleos push action chestnutmsig rmtokenmax '["daniel","4,EOS","eosio.token"]' -p daniel@chestnut
-echo 'cleos push action chestnutmsig rmtokenmax ["daniel","4,ABC","eosio.token"] -p daniel@chestnut'
 cleos push action chestnutmsig rmtokenmax '["daniel","4,ABC","eosio.token"]' -p daniel@chestnut
-echo 'cleos push action chestnutmsig rmtokenmax ["daniel","4,PEOS","eosio.token"] -p daniel@chestnut'
 cleos push action chestnutmsig rmtokenmax '["daniel","4,PEOS","eosio.token"]' -p daniel@chestnut
 sleep 1
 
