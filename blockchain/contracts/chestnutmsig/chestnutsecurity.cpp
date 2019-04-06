@@ -72,31 +72,29 @@ void chestnutmsig::validate_total_transfer_limit( const name from, const asset q
 }
 
 
-void chestnutmsig::validate_single_transfer( const name from, const asset quantity ) {
+void chestnutmsig::validate_single_transfer( const name from, const asset quantity, name contract_account ) {
    auto sym = quantity.symbol;
    eosio::check( sym.is_valid(), "invalid symbol name" );
 
+   // Find "tokenmax" using contract name and symbol to maintain unquiness
    tokens_max_table user_tokens_max( _self, from.value );
-   auto token_max_itr = user_tokens_max.find( sym.code().raw() );
+   uint128_t table_key = get_token_key( contract_account, sym );
+   auto token_max_itr = user_tokens_max.find( table_key );
 
    eosio::check( token_max_itr != user_tokens_max.end(),
                  "token not protected. please addtokenmax" );
 
-   if ( token_max_itr != user_tokens_max.end() ) {
-      // only check if token_max_itr is "unlocked"
-      if ( !token_max_itr->is_locked ) {
-         // eosio::check( quantity <= token_max_itr->max_transfer,
-         //               error );
-         if ( quantity > token_max_itr->max_transfer ) {
-            const char *error = ( "exceeded maxmimum transfer limit of "
-                                  + token_max_itr->max_transfer.to_string()
-                                  + " : attempting to send "
-                                  + quantity.to_string()
-                                  ).c_str();
-            eosio::check( false, error );
-         }
+   // only check if token_max_itr is "unlocked"
+   if ( !token_max_itr->is_locked ) {
+      // eosio::check( quantity <= token_max_itr->max_transfer,
+      //               error );
+      if ( quantity > token_max_itr->max_transfer ) {
+         const char *error = ( "exceeded maxmimum transfer limit of "
+                               + token_max_itr->max_transfer.to_string()
+                               + " : attempting to send "
+                               + quantity.to_string()
+                               ).c_str();
+         eosio::check( false, error );
       }
-   } else {
-      // print("no token limit imposed\n");
    }
 }

@@ -45,28 +45,28 @@ void chestnutmsig::addtokenmax( name  user,
    eosio::check( sym.is_valid(), "invalid symbol name" );
 
    tokens_max_table user_tokens_max( _self, user.value );
-   auto token_max_itr = user_tokens_max.find( sym.code().raw() );
+   uint128_t table_key = get_token_key( contract_account, sym );
+   auto  token_max_itr = user_tokens_max.find( table_key );
 
-   if ( token_max_itr == user_tokens_max.end() ) {
-      token_max_itr = user_tokens_max.emplace( user, [&]( auto& tk ) {
-         tk.max_transfer      = quantity;
-         tk.contract_account  = contract_account;
-      });
-   } else {
-      user_tokens_max.modify( token_max_itr, same_payer, [&]( auto& tk ) {
-         tk.max_transfer      = quantity;
-        });
-   }
+   eosio::check( token_max_itr == user_tokens_max.end(), "limit already added for "
+                 + token_max_itr->contract_account.to_string() + " " 
+                 + token_max_itr->max_transfer.to_string() );
 
+   token_max_itr = user_tokens_max.emplace( user, [&]( auto& tk ) {
+      tk.id                = table_key;
+      tk.max_transfer      = quantity;
+      tk.contract_account  = contract_account;
+   });
 }
 
 
-void chestnutmsig::rmtokenmax( name user, symbol sym ) {
+void chestnutmsig::rmtokenmax( name user, symbol sym, name contract_account ) {
    require_auth( user );
    eosio::check( sym.is_valid(), "invalid symbol name" );
 
    tokens_max_table user_tokens_max( _self, user.value );
-   auto token_max_to_delete = user_tokens_max.find( sym.code().raw() );
+   uint128_t table_key = get_token_key( contract_account, sym );
+   auto token_max_to_delete = user_tokens_max.find( table_key );
 
    eosio::check( token_max_to_delete != user_tokens_max.end(),
                  "can not find token max to delete" );
@@ -121,7 +121,7 @@ void chestnutmsig::transfer( name proposer, name proposal_name) {
    token_transfer action_data = proposed_action.data_as<token_transfer>();
 
    validate_whitelist( action_data.from, action_data.to );
-   validate_single_transfer( action_data.from, action_data.quantity);
+   validate_single_transfer( action_data.from, action_data.quantity, proposed_action.account );
    validate_total_transfer_limit( action_data.from, action_data.quantity );
 
    // approve

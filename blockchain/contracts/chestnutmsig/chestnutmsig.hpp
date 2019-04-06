@@ -70,11 +70,12 @@ private:
     ***************************************************************************/
 
    struct [[eosio::table]] token_max {
+      uint128_t   id;
       asset       max_transfer;
       name        contract_account;
       bool        is_locked{false};
 
-      uint64_t primary_key() const { return max_transfer.symbol.code().raw(); }
+      uint128_t primary_key() const { return id; }
    };
 
    typedef eosio::multi_index< name("tokensmax"), token_max > tokens_max_table;
@@ -107,13 +108,17 @@ private:
     *                            F U N C T I O N S
     ***************************************************************************/
 
+   uint128_t get_token_key( name contract_account, symbol sym ) {
+      return ( (uint128_t(contract_account.value) << 64 ) | sym.code().raw() );
+   }
+
    time_point current_time_point();
 
    void validate_whitelist( const name from, const name to );
 
    void validate_total_transfer_limit( const name from, const asset quantity );
 
-   void validate_single_transfer( const name from, const asset quantity );
+   void validate_single_transfer( const name from, const asset quantity, name contract_account );
 
 public:
    using contract::contract;
@@ -132,11 +137,9 @@ public:
 
    ACTION transfer( name proposer, name proposal_name );
 
-   ACTION addtokenmax( name  user,
-                       asset quantity,
-                       name  contract_account );
+   ACTION addtokenmax( name  user, asset quantity, name  contract_account );
 
-   ACTION rmtokenmax( name user, symbol sym );
+   ACTION rmtokenmax( name user, symbol sym, name contract_account );
 
    ACTION addxfrmax( name user, asset max_tx, name contract_account, uint64_t minutes );
 

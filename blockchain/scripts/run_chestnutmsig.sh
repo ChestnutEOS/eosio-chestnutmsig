@@ -80,6 +80,10 @@ echo '`daniel` adds a new EOS token spending limit'
 echo 'he does not wish to send more than 50 EOS per transfer'
 echo 'cleos push action chestnutmsig addtokenmax ["daniel","50.0000 EOS","eosio.token"] -p daniel@chestnut'
 cleos push action chestnutmsig addtokenmax '["daniel","50.0000 EOS","eosio.token"]' -p daniel@chestnut
+cleos push action chestnutmsig addtokenmax '["daniel","50.0000 PEOS","eosio.token"]' -p daniel@chestnut
+cleos push action chestnutmsig addtokenmax '["daniel","60.0000 ABC","eosio.token"]' -p daniel@chestnut
+echo 'violates uniqueness'
+cleos push action chestnutmsig addtokenmax '["daniel","70.0000 EOS","chestnutmsig"]' -p daniel@chestnut
 sleep 1
 echo 'cleos get table chestnutmsig daniel tokensmax'
 cleos get table chestnutmsig daniel tokensmax
@@ -308,7 +312,12 @@ cleos get table eosio.msig daniel approvals2
 
 echo 'cleos push action chestnutmsig rmtokenmax ["daniel","4,EOS","eosio.token"] -p daniel@chestnut'
 cleos push action chestnutmsig rmtokenmax '["daniel","4,EOS","eosio.token"]' -p daniel@chestnut
+echo 'cleos push action chestnutmsig rmtokenmax ["daniel","4,ABC","eosio.token"] -p daniel@chestnut'
+cleos push action chestnutmsig rmtokenmax '["daniel","4,ABC","eosio.token"]' -p daniel@chestnut
+echo 'cleos push action chestnutmsig rmtokenmax ["daniel","4,PEOS","eosio.token"] -p daniel@chestnut'
+cleos push action chestnutmsig rmtokenmax '["daniel","4,PEOS","eosio.token"]' -p daniel@chestnut
 sleep 1
+
 echo 'cleos get table chestnutmsig daniel whitelist'
 cleos get table chestnutmsig daniel whitelist
 sleep 1

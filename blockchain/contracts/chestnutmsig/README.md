@@ -68,6 +68,18 @@ producers:     <not voted>
 
    - maximum account of tokens that can be transfered at once
 
+   id is unique based on contract_account and asset symbol
+   ex:
+   contract_account.value  =  6138663591592764928 = 0x5530ea033482a600
+   sym.code().raw()        =  5459781 = 0x534f45
+    store two uint64_t together as one uint128_t ( 64 next to 64 )
+      key =  ( uint128_t(contract_account.value) << 64 ) | sym.code().raw()
+      key =  ( 0x5530ea033482a600 << 64 ) | 0x534f45
+      key =  ( 0x5530ea033482a6000000000000000000 ) | 0x534f45
+      key =  0x5530ea033482a6000000000000534f45
+    switch endianess 
+      key = 0x454f53000000000000a6823403ea3055
+
 ex:
 ```bash
 cleos get table chestnutmsig daniel tokensmax
