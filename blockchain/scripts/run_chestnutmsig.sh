@@ -94,6 +94,9 @@ echo '========================================================'
 echo '`daniel` does not want to send more than 100 EOS in one minute'
 echo 'cleos push action chestnutmsig addxfrmax ["daniel","100.0000 EOS","eosio.token","1"] -p daniel@chestnut'
 cleos push action chestnutmsig addxfrmax '["daniel","100.0000 EOS","eosio.token","1"]' -p daniel@chestnut
+cleos push action chestnutmsig addxfrmax '["daniel","2500.0000 ABC","eosio.token","1"]' -p daniel@chestnut
+echo 'violates uniqueness'
+cleos push action chestnutmsig addxfrmax '["daniel","25.0000 ABC","chestnutmsig","1"]' -p daniel@chestnut
 sleep 1
 echo 'cleos get table chestnutmsig daniel xfrmax'
 cleos get table chestnutmsig daniel xfrmax

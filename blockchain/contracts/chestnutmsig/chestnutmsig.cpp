@@ -87,25 +87,21 @@ void chestnutmsig::addxfrmax( name user,
    time_point duration{ microseconds{ static_cast<int64_t>( minutes * useconds_per_minute ) } };
 
    xfr_max_table xfr_table( _self, user.value );
-   auto xfr = xfr_table.find( max_tx.symbol.code().raw() );
+   uint128_t table_key = get_token_key( contract_account, max_tx.symbol );
+   auto xfr = xfr_table.find( table_key );
 
-   if ( xfr == xfr_table.end() ) {
-      xfr = xfr_table.emplace( user /*RAM payer*/ , [&]( auto& x ) {
-         x.total_tokens_allowed_to_spend  = max_tx;
-         x.current_tokens_spent           = asset(0, max_tx.symbol);
-         x.contract_account               = contract_account;
-         x.minutes                        = minutes;
-         x.end_time                       = ct + duration;
-      });
-   } else {
-      xfr_table.modify( xfr, same_payer, [&]( auto& x ) {
-         x.total_tokens_allowed_to_spend  = max_tx;
-         x.current_tokens_spent           = asset(0, max_tx.symbol);
-         x.contract_account               = contract_account;
-         x.minutes                        = minutes;
-         x.end_time                       = ct + duration;
-      });
-   }
+   eosio::check( xfr == xfr_table.end(), "spending limit already added for "
+                 + xfr->contract_account.to_string() + " "
+                 + xfr->total_tokens_allowed_to_spend.to_string() );
+
+   xfr = xfr_table.emplace( user /*RAM payer*/ , [&]( auto& x ) {
+      x.id                             = table_key;
+      x.total_tokens_allowed_to_spend  = max_tx;
+      x.current_tokens_spent           = asset(0, max_tx.symbol);
+      x.contract_account               = contract_account;
+      x.minutes                        = minutes;
+      x.end_time                       = ct + duration;
+   });
 }
 
 
@@ -122,7 +118,7 @@ void chestnutmsig::transfer( name proposer, name proposal_name) {
 
    validate_whitelist( action_data.from, action_data.to );
    validate_single_transfer( action_data.from, action_data.quantity, proposed_action.account );
-   validate_total_transfer_limit( action_data.from, action_data.quantity );
+   validate_total_transfer_limit( action_data.from, action_data.quantity, proposed_action.account );
 
    // approve
    action(

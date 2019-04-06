@@ -29,11 +29,12 @@ void chestnutmsig::validate_whitelist( const name from, const name to ) {
 }
 
 
-void chestnutmsig::validate_total_transfer_limit( const name from, const asset quantity ) {
+void chestnutmsig::validate_total_transfer_limit( const name from, const asset quantity, const name contract_account ) {
    auto sym = quantity.symbol;
 
    xfr_max_table xfr_table( _self, from.value );
-   auto xfr = xfr_table.find( sym.code().raw() );
+   uint128_t table_key = get_token_key( contract_account, sym );
+   auto xfr = xfr_table.find( table_key );
 
    if ( xfr == xfr_table.end() ) {
       const char *error = ( "no transfer limit set for "

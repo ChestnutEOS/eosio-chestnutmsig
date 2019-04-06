@@ -82,6 +82,7 @@ private:
 
 
    struct [[eosio::table]] xfr_max {
+      uint128_t   id;
       asset       total_tokens_allowed_to_spend;
       asset       current_tokens_spent;
       name        contract_account;
@@ -89,7 +90,7 @@ private:
       time_point  end_time;
       bool        is_locked{false};
 
-      auto primary_key() const { return total_tokens_allowed_to_spend.symbol.code().raw(); }
+      uint128_t primary_key() const { return id; }
    };
 
    typedef eosio::multi_index< name("xfrmax"), xfr_max > xfr_max_table;
@@ -116,7 +117,7 @@ private:
 
    void validate_whitelist( const name from, const name to );
 
-   void validate_total_transfer_limit( const name from, const asset quantity );
+   void validate_total_transfer_limit( const name from, const asset quantity, const name contract_account );
 
    void validate_single_transfer( const name from, const asset quantity, name contract_account );
 
