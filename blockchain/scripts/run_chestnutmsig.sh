@@ -341,7 +341,7 @@ cleos multisig approve daniel returntonorm '{"actor":"daniel", "permission":"che
 cleos push action chestnutmsig leave '["daniel", "returntonorm"]' -p daniel@chestnut
 sleep 1
 
-echo 'regain @owner control'
+echo 'regain @active control'
 cleos push action eosio updateauth '{"account": "daniel", "permission": "active", "parent": "owner", "auth": {"keys":[{"key":"EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b", "weight":1}],"threshold":1,"accounts":[],"waits":[]}}"}' -p daniel@owner
 
 echo 'unlinkauth for @chestnut'
