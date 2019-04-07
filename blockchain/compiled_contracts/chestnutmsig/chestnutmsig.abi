@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sat Apr  6 13:20:52 2019",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sun Apr  7 18:07:20 2019",
     "version": "eosio::abi/1.1",
     "structs": [
         {
@@ -76,6 +76,20 @@
             "fields": []
         },
         {
+            "name": "leave",
+            "base": "",
+            "fields": [
+                {
+                    "name": "proposer",
+                    "type": "name"
+                },
+                {
+                    "name": "proposal_name",
+                    "type": "name"
+                }
+            ]
+        },
+        {
             "name": "rmtokenmax",
             "base": "",
             "fields": [
@@ -120,7 +134,7 @@
                     "type": "symbol"
                 },
                 {
-                    "name": "account_account",
+                    "name": "contract_account",
                     "type": "name"
                 }
             ]
@@ -235,6 +249,11 @@
         {
             "name": "hello",
             "type": "hello",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "leave",
+            "type": "leave",
             "ricardian_contract": ""
         },
         {

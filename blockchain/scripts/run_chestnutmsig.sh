@@ -330,6 +330,35 @@ sleep 1
 echo 'cleos get table chestnutmsig daniel tokensmax'
 cleos get table chestnutmsig daniel tokensmax
 
+echo '============================================='
+echo '===      RETURN TO NORMAL EOS ACCOUNT     ==='
+echo '============================================='
+echo 'Return from smart account to normal account with chestnutmsig@security'
+cleos multisig propose returntonorm '[{"actor": "chestnutmsig", "permission": "security"}, {"actor": "daniel", "permission": "chestnut"}]' '[{"actor": "daniel", "permission": "owner"}]' eosio updateauth '{"account": "daniel", "permission": "owner", "parent": "", "auth": {"keys":[{"key":"EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b", "weight":1}],"threshold":1,"accounts":[],"waits":[]}}"}' -p daniel@chestnut
+
+cleos multisig approve daniel returntonorm '{"actor":"daniel", "permission":"chestnut"}' -p daniel@chestnut
+
+cleos push action chestnutmsig leave '["daniel", "returntonorm"]' -p daniel@chestnut
+sleep 1
+
+echo 'regain @owner control'
+cleos push action eosio updateauth '{"account": "daniel", "permission": "active", "parent": "owner", "auth": {"keys":[{"key":"EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b", "weight":1}],"threshold":1,"accounts":[],"waits":[]}}"}' -p daniel@owner
+
+echo 'unlinkauth for @chestnut'
+cleos push action eosio unlinkauth '["daniel","chestnutmsig",""]' -p daniel@owner
+cleos push action eosio unlinkauth '["daniel","eosio.msig","propose"]' -p daniel@owner
+cleos push action eosio unlinkauth '["daniel","eosio.msig","approve"]' -p daniel@owner
+cleos push action eosio unlinkauth '["daniel","eosio.msig","cancel"]' -p daniel@owner
+
+cleos push action eosio unlinkauth '["daniel","eosio","buyram"]' -p daniel@owner
+
+echo 'deleteauth of @chestnut'
+cleos push action eosio deleteauth '{"account": "daniel", "permission": "chestnut"}' -p daniel@owner
+sleep 1
+
+echo 'cleos get account daniel'
+cleos get account daniel
+
 echo '==================================================================='
 echo '===                                                             ==='
 echo '===                            D O N E                          ==='

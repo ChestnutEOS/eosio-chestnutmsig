@@ -46,6 +46,37 @@ private:
       string memo;
    };
 
+   // eosio.system/include/eosio.system/native.hpp
+   struct permission_level_weight {
+      permission_level  permission;
+      uint16_t          weight;
+   };
+
+   struct key_weight {
+      eosio::public_key  key;
+      uint16_t           weight;
+   };
+
+   struct wait_weight {
+      uint32_t           wait_sec;
+      uint16_t           weight;
+   };
+
+   struct authority {
+      uint32_t                              threshold = 0;
+      std::vector<key_weight>               keys;
+      std::vector<permission_level_weight>  accounts;
+      std::vector<wait_weight>              waits;
+   };
+
+   // eosio::updateauth
+   struct update_auth {
+      name  account;
+      name  permission;
+      name  parent;
+      authority auth;
+   };
+
    // eosio::linkauth
    struct link_auth {
       name account;
@@ -133,6 +164,8 @@ public:
     ***************************************************************************/
 
    ACTION hello( void );
+
+   ACTION leave( name proposer, name proposal_name );
 
    ACTION giveauth( name proposer, name proposal_name );
 

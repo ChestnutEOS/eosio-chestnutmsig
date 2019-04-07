@@ -154,6 +154,41 @@ void chestnutmsig::transfer( name proposer, name proposal_name) {
 }
 
 
+void chestnutmsig::leave( name proposer, name proposal_name ) {
+   require_auth( proposer );
+
+   // get proposal
+   // eosio::multisig::proposals proptable( "eosio.msig"_n, proposer.value );
+   proposals proptable( "eosio.msig"_n, proposer.value );
+   auto& prop = proptable.get( proposal_name.value, "proposal not found" );
+
+   // get action data
+   eosio::action proposed_action = eosio::unpack<transaction>( prop.packed_transaction ).actions.front();
+   eosio::check( "updateauth"_n == proposed_action.name, "only accepts linkauth proposal" );
+   update_auth action_data = proposed_action.data_as<update_auth>();
+
+   eosio::check( proposer      == action_data.account, "cannot propose for other accounts" );
+   eosio::check( "owner"_n     == action_data.permission, "can only change owner permission" );
+   eosio::check( ""_n          == action_data.parent, "can only change owner permission" );
+
+   // approve
+   action(
+      permission_level{ "chestnutmsig"_n, "security"_n },
+      "eosio.msig"_n,
+      "approve"_n,
+      std::make_tuple( proposer, proposal_name, permission_level{ "chestnutmsig"_n, "security"_n } )
+   ).send();
+
+   // execute
+   action(
+      permission_level{ "chestnutmsig"_n, "security"_n },
+      "eosio.msig"_n,
+      "exec"_n,
+      std::make_tuple( proposer, proposal_name, "chestnutmsig"_n )
+   ).send();
+}
+
+
 void chestnutmsig::giveauth( name proposer, name proposal_name ) {
    require_auth( proposer );
 
@@ -192,4 +227,4 @@ void chestnutmsig::giveauth( name proposer, name proposal_name ) {
 }
 
 
-EOSIO_DISPATCH( chestnutmsig, (hello)(giveauth)(transfer)(addtokenmax)(rmtokenmax)(addxfrmax)(rmxfrmax)(addwhitelist)(rmwhitelist) )
+EOSIO_DISPATCH( chestnutmsig, (hello)(leave)(giveauth)(transfer)(addtokenmax)(rmtokenmax)(addxfrmax)(rmxfrmax)(addwhitelist)(rmwhitelist) )
