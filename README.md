@@ -52,6 +52,10 @@ permissions:
 
 ### To Run Demo
 
+Built with:
+eosio v1.7
+eosio.cdt v1.5
+
 To run for the first time
 ```bash
 ./first_time_setup.sh
