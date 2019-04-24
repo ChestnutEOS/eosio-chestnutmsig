@@ -1,5 +1,7 @@
 # chestnutmsig
 
+`code hash: 022eee14aa9aab9fa9266efe4a3d0d4b3600ac057587db105708c9a7245d6c82`
+
 ```bash
 cleos get account chestnutmsig
 created: 2019-03-21T00:52:28.500
