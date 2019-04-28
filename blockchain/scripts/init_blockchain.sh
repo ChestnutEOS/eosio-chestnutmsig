@@ -78,14 +78,6 @@ cleos wallet import -n appwallet --private-key 5JpWT4ehouB2FF9aCfdfnZ5AwbQbTtHBA
 # Active key for appwallet wallet
 cleos wallet import -n appwallet --private-key 5JD9AGTuTeD5BXZwGQ5AtwBqHK21aHmYnTetHgk1B3pjj7krT8N
 
-# `daniels` active/owner private key (see accounts.json)
-cleos wallet import -n appwallet --private-key 5K7mtrinTFrVTduSxizUc5hjXJEtTjVTsqSHeBHes1Viep86FP5
-
-# `danels` new chestnut private key
-# Private key: 5KXKxwkmvFHffqLVMcopKvJiGArQLUtZfZj5LV43Un3yX2t5kMQ
-# Public key: EOS8GKMDqyr9MveUE7RKx11vj2HfS3sMqzn97QtDXd2Fo9X87iB39
-cleos wallet import -n appwallet --private-key 5KXKxwkmvFHffqLVMcopKvJiGArQLUtZfZj5LV43Un3yX2t5kMQ
-
 # keys for `chestnutmsig@security`
 # EOS5s5QRNMeWu4eL5Jdg4PfDHXYxoy1GbMj1C4txc34veeioiL3Zw
 # 5Key1RhpSyJyPkxCwjf8bTQrcNSGqYtQ37yEEkHzDnozMnXtooW
