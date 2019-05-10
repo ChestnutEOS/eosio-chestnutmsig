@@ -45,9 +45,9 @@ echo "=== start of first time setup ==="
 . "$FILE"
 
 # set up node_modules for frontend
-echo "=== npm install package for frontend react app ==="
+# echo "=== npm install package for frontend react app ==="
 # change directory to ./frontend
-cd "./frontend"
-npm install
+# cd "./frontend"
+# npm install
 
 echo "First time setup is complete."

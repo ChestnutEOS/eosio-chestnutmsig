@@ -61,8 +61,8 @@ rm -rf "${SOURCE_DIR}/blockchain/data" || true
 
 echo "=== removing frontend node modules ==="
 
-rm -rf "${SOURCE_DIR}/frontend/node_modules" || true
-rm "${SOURCE_DIR}/frontend/package-lock.json" || true
+# rm -rf "${SOURCE_DIR}/frontend/node_modules" || true
+# rm "${SOURCE_DIR}/frontend/package-lock.json" || true
 
 echo "Would you like to remove the binary packages that were installed?"
 select yn in "Yes" "No"; do
