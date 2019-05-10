@@ -12,7 +12,6 @@ At no point does Chestnut require private information and we cannot make changes
 
 Chestnut provides the peace of mind that so many blockchain curious members of the general public desire before taking the leap into the world of crypto assets.
 
-[Whitepapaer](https://docs.google.com/document/d/1bRbEOm5x5drNrUycpVFmpCc2OTKezwUYf53YufhiAxA/edit?usp=sharing)
 
 ### How It Works
 
