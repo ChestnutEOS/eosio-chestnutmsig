@@ -142,7 +142,8 @@ echo "=== create user accounts ==="
 ${SOURCE_DIR}/blockchain/scripts/create_accounts.sh
 
 # * Replace the script with different form of data that you would pushed into the blockchain when you start your own project
-${SOURCE_DIR}/blockchain/scripts/run_chestnutmsig.sh
+# ${SOURCE_DIR}/blockchain/scripts/run_chestnutmsig.sh
+${SOURCE_DIR}/blockchain/scripts/init_chestnutmsig.sh
 
 echo "=== end of setup blockchain accounts and smart contract ==="
 # create a file to indicate the blockchain has been initialized
